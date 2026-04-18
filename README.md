@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/Zig-0.16.0-F7A41D?style=for-the-badge&logo=zig&logoColor=white" alt="Zig Version"/>
 <img src="https://img.shields.io/badge/Telegram_Bot_API-9.6-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Bot API"/>
-<img src="https://img.shields.io/badge/Status-Usable_(80%25)-yellow?style=for-the-badge" alt="Status Usable 80%"/>
+<img src="https://img.shields.io/badge/Status-Usable_(95%25)-yellow?style=for-the-badge" alt="Status Usable 95%"/>
 <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT"/>
 
 # ✈🤖⚡ ziogram
@@ -16,9 +16,9 @@
 ---
 
 > [!NOTE]
-> **Status: ~80% complete — usable, but not yet feature-complete**
+> **Status: ~95% complete — usable, but not yet feature-complete**
 >
-> The library is ready to use for most bot development tasks. All Telegram object types and enums are fully implemented, and ~90% of API methods are covered. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). The only remaining gap is webhook support.
+> The library is ready to use for most bot development tasks. All Telegram object types, enums, and API methods are fully implemented. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). The only remaining gap is webhook support.
 
 > [!WARNING]
 > Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is" without warranty of any kind. Use at your own discretion.
