@@ -416,33 +416,6 @@ Full error set:
 
 ---
 
-## 🗂 Project Structure
-
-```
-ziogram/
-├── src/
-│   ├── client/
-│   │   ├── session/
-│   │   │   ├── base.zig          # BaseSession: JSON serialization, response validation
-│   │   │   └── http_client.zig   # ClientSession: HTTP transport, multipart upload
-│   │   ├── bot.zig               # Bot: high-level API method wrappers
-│   │   ├── bot_options.zig       # BotOptions: per-bot options
-│   │   └── telegram_api.zig      # TelegramAPI: URL templates, local server support
-│   ├── enums/
-│   ├── methods/                  # One file per Bot API method
-│   ├── types/                    # Telegram object types
-│   ├── enums.zig
-│   ├── errors.zig                # ZiogramError + DetailedError builders
-│   ├── root.zig
-│   └── types.zig
-├── build.zig
-├── build.zig.zon
-├── LICENSE
-└── README.md
-```
-
----
-
 ## 🗺 Roadmap
 
 ### Core
