@@ -1,0 +1,8 @@
+pub const UniqueGiftColors = struct {
+    model_custom_emoji_id: []const u8,
+    symbol_custom_emoji_id: []const u8,
+    light_theme_main_color: i32,
+    light_theme_other_colors: []const i32,
+    dark_theme_main_color: i32,
+    dark_theme_other_colors: []const i32,
+};

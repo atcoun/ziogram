@@ -1,0 +1,8 @@
+pub const ShippingAddress = struct {
+    country_code: []const u8,
+    state: []const u8,
+    city: []const u8,
+    street_line1: []const u8,
+    street_line2: []const u8,
+    post_code: []const u8,
+};

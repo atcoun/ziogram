@@ -1,0 +1,22 @@
+const enums = @import("../enums.zig");
+const types = @import("../types.zig");
+
+pub const Poll = struct {
+    id: []const u8,
+    question: []const u8,
+    question_entities: ?[]const types.MessageEntity = null,
+    options: []const types.PollOption,
+    total_voter_count: i32,
+    is_closed: bool,
+    is_anonymous: bool,
+    type: enums.PollType,
+    allows_multiple_answers: bool,
+    allows_revoting: bool,
+    correct_option_ids: ?[]const i32 = null,
+    explanation: ?[]const u8 = null,
+    explanation_entities: ?[]const types.MessageEntity = null,
+    open_period: ?i32 = null,
+    close_date: ?i32 = null,
+    description: ?[]const u8 = null,
+    description_entities: ?[]const types.MessageEntity = null,
+};
