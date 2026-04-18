@@ -97,6 +97,13 @@ zig fetch --save git+https://github.com/atcoun/ziogram.git
 Find the `b.addExecutable` call and add ziogram to the `.imports` list:
 
 ```zig
+.{ .name = "ziogram", .module = b.dependency("ziogram", .{
+    .target = target,
+    .optimize = optimize,
+}).module("ziogram") },
+```
+
+```zig
 // before
 const exe = b.addExecutable(.{
     .name = "project",
