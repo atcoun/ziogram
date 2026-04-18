@@ -11,6 +11,10 @@
 
 *Zero-overhead abstractions. Compile-time safety. No compromises.*
 
+<br/>
+
+[📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [🔄 Long Polling](#long-polling-loop) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
+
 </div>
 
 ---
