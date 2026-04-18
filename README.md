@@ -11,6 +11,8 @@
 
 *Zero-overhead abstractions. Compile-time safety. No compromises.*
 
+*Tired of runtimes that waste RAM and burn CPU cycles? Your bot deserves better — ziogram runs lean, fast, and predictable from the first line of code.*
+
 <br/>
 
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [🔄 Long Polling](#long-polling-loop) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
