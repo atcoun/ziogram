@@ -17,8 +17,8 @@
 
 > [!NOTE]
 > **Status: ~80% complete — usable, but not yet feature-complete**
-> 
-> The library is ready to use for most bot development tasks. All Telegram object types and enums are fully implemented, and ~90% of API methods are covered. The remaining gaps are webhook support and a file download helper — `getFile` returns file metadata, but downloading the actual bytes from Telegram servers is not yet supported.
+>
+> The library is ready to use for most bot development tasks. All Telegram object types and enums are fully implemented, and ~90% of API methods are covered. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). The only remaining gap is webhook support.
 
 > [!WARNING]
 > Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is" without warranty of any kind. Use at your own discretion.
@@ -170,11 +170,11 @@ while (true) {
     const allocator = arena.allocator();
 
     const updates = try bot.getUpdates(allocator, .{ .offset = offset });
-    
+
     for (updates) |update| {
         // process update...
         offset = update.update_id + 1;
-        
+
         _ = arena.reset(.retain_capacity);
     }
 }
@@ -237,7 +237,7 @@ pub fn main(init: std.process.Init) !void {
     }
 
     var offset: i32 = 0;
-    
+
     while (true) {
         const allocator = arena.allocator();
 
@@ -316,6 +316,36 @@ _ = try bot.sendPhoto(allocator, .{
     .photo = .fromBuffer(io, allocator, buffer),
 });
 ```
+
+---
+
+### Downloading a File
+
+Two methods are available depending on what you already have.
+
+**`Bot.download`** — high-level helper. Pass a `file_id`; the library calls `getFile` internally and streams the bytes to any `std.Io.Writer`.
+
+```zig
+var file = try std.Io.Dir.createFile(.cwd(), session.io, "photo.jpg", .{});
+defer file.close(session.io);
+
+var buf: [65536]u8 = undefined;
+var writer = file.writer(session.io, &buf);
+
+try bot.download(allocator, some_file_id, &writer.interface);
+```
+
+**`Bot.downloadFile`** — low-level variant. Use it when you already have a `file_path` from a `File` object returned by `getFile`.
+
+```zig
+const file_meta = try bot.getFile(allocator, .{ .file_id = some_file_id });
+const path = file_meta.file_path orelse return error.TelegramFileTooLarge;
+
+try bot.downloadFile(allocator, path, &writer.interface);
+```
+
+> [!NOTE]
+> When using a **local Bot API server**, `downloadFile` reads the file directly from the local filesystem instead of making an HTTP request. Configure path mapping on `TelegramAPI` so the server path translates correctly to your local filesystem — see [Using a Local Bot API Server](#using-a-local-bot-api-server).
 
 ---
 
@@ -427,7 +457,7 @@ ziogram/
 - [x] All Telegram object types (100% complete)
 - [ ] Webhook support
 - [x] `getFile` — returns file metadata (`File` object with `file_path`)
-- [ ] File download helper — `fileUrl` is built into `TelegramAPI` but `ClientSession` has no `downloadFile` method yet
+- [x] File download — `Bot.download` (by `file_id`) and `Bot.downloadFile` (by `file_path`), with local Bot API server support
 
 ### API Methods (~90% complete)
 - [x] `sendDocument`, `sendVideo`, `sendAudio`, `sendVoice`
