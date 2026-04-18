@@ -1,0 +1,15 @@
+pub const InlineQueryResultType = enum {
+    audio,
+    document,
+    gif,
+    mpeg4_gif,
+    photo,
+    sticker,
+    video,
+    voice,
+    article,
+    contact,
+    game,
+    location,
+    venue,
+};
