@@ -155,58 +155,6 @@ pub const ClientSession = struct {
         try writer.print("--{s}--\r\n", .{boundary});
     }
 
-    pub fn downloadFile(
-        self: *ClientSession,
-        allocator: std.mem.Allocator,
-        token: []const u8,
-        file_path: []const u8,
-        writer: *std.Io.Writer,
-    ) !void {
-        if (self.base.api.is_local) {
-            const local_path = try self.base.api.wrap_local_file.toLocal(allocator, file_path);
-            defer allocator.free(local_path);
-
-            const file = try std.Io.Dir.openFile(.cwd(), self.io, local_path, .{});
-            defer file.close(self.io);
-
-            var buf: [65536]u8 = undefined;
-            var file_reader = file.reader(self.io, &buf);
-            _ = try writer.sendFileReadingAll(&file_reader.interface, .unlimited);
-            return;
-        }
-
-        const url_str = try self.base.api.fileUrl(allocator, token, file_path);
-        const uri = try std.Uri.parse(url_str);
-
-        var req = try self.client.request(.GET, uri, .{
-            .keep_alive = false,
-        });
-        defer req.deinit();
-
-        try req.sendBodiless();
-
-        var redirect_buf: [8 * 1024]u8 = undefined;
-        var response = try req.receiveHead(&redirect_buf);
-
-        const status_code: u16 = @as(u16, @intFromEnum(response.head.status));
-        if (status_code < 200 or status_code > 226) {
-            return switch (status_code) {
-                401 => ZiogramError.TelegramUnauthorizedError,
-                403 => ZiogramError.TelegramForbiddenError,
-                404 => ZiogramError.TelegramNotFound,
-                500...599 => ZiogramError.TelegramServerError,
-                else => ZiogramError.TelegramAPIError,
-            };
-        }
-
-        var transfer_buf: [65536]u8 = undefined;
-        const reader = response.reader(&transfer_buf);
-        _ = reader.streamRemaining(writer) catch |err| switch (err) {
-            error.ReadFailed => return response.bodyErr().?,
-            error.WriteFailed => return ZiogramError.TelegramNetworkError,
-        };
-    }
-
     pub fn makeRequest(
         self: *ClientSession,
         allocator: std.mem.Allocator,
@@ -277,5 +225,41 @@ pub const ClientSession = struct {
         );
 
         return response.result orelse return error.TelegramBadRequest;
+    }
+
+    pub fn streamContent(
+        self: *ClientSession,
+        url: []const u8,
+        writer: *std.Io.Writer,
+    ) !void {
+        const uri = try std.Uri.parse(url);
+
+        var req = try self.client.request(.GET, uri, .{
+            .keep_alive = false,
+        });
+        defer req.deinit();
+
+        try req.sendBodiless();
+
+        var redirect_buf: [8 * 1024]u8 = undefined;
+        var response = try req.receiveHead(&redirect_buf);
+
+        const status_code: u16 = @as(u16, @intFromEnum(response.head.status));
+        if (status_code < 200 or status_code > 226) {
+            return switch (status_code) {
+                401 => ZiogramError.TelegramUnauthorizedError,
+                403 => ZiogramError.TelegramForbiddenError,
+                404 => ZiogramError.TelegramNotFound,
+                500...599 => ZiogramError.TelegramServerError,
+                else => ZiogramError.TelegramAPIError,
+            };
+        }
+
+        var transfer_buf: [65536]u8 = undefined;
+        const reader = response.reader(&transfer_buf);
+        _ = reader.streamRemaining(writer) catch |err| switch (err) {
+            error.ReadFailed => return response.bodyErr().?,
+            error.WriteFailed => return ZiogramError.TelegramNetworkError,
+        };
     }
 };
