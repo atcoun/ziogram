@@ -459,7 +459,7 @@ ziogram/
 - [x] `getFile` — returns file metadata (`File` object with `file_path`)
 - [x] File download — `Bot.download` (by `file_id`) and `Bot.downloadFile` (by `file_path`), with local Bot API server support
 
-### API Methods (~90% complete)
+### API Methods (100% complete)
 - [x] `sendDocument`, `sendVideo`, `sendAudio`, `sendVoice`
 - [x] `editMessageText`, `deleteMessage`, `copyMessage`
 - [x] `setChatTitle`, `banChatMember`, admin methods
