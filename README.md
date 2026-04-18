@@ -311,9 +311,18 @@ _ = try bot.sendPhoto(allocator, .{
 });
 
 // Upload a file from an in-memory buffer
+// Use fromPathBuffered to read a file into memory first, then pass the buffer.
+// The caller owns the returned allocation.
+const photo_file = try InputFile.fromPathBuffered(session.io, allocator, "media/photo.png");
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 }, // or .{ .username = "@username" }
-    .photo = .fromBuffer(io, allocator, buffer),
+    .photo = photo_file,
+});
+
+// Or wrap an existing in-memory buffer directly:
+_ = try bot.sendPhoto(allocator, .{
+    .chat_id = .{ .id = 1234567890 },
+    .photo = InputFile.fromBuffer(my_buffer, "photo.png"),
 });
 ```
 
@@ -326,7 +335,7 @@ Two methods are available depending on what you already have.
 **`Bot.download`** — high-level helper. Pass a `file_id`; the library calls `getFile` internally and streams the bytes to any `std.Io.Writer`.
 
 ```zig
-var file = try std.Io.Dir.createFile(.cwd(), session.io, "photo.jpg", .{});
+var file = try std.Io.Dir.cwd().createFile(session.io, "photo.jpg", .{});
 defer file.close(session.io);
 
 var buf: [65536]u8 = undefined;
@@ -432,7 +441,7 @@ Full error set:
 - [x] `getFile` — returns file metadata (`File` object with `file_path`)
 - [x] File download — `Bot.download` (by `file_id`) and `Bot.downloadFile` (by `file_path`), with local Bot API server support
 
-### API Methods (100% complete)
+### API Methods (~90% complete)
 - [x] `sendDocument`, `sendVideo`, `sendAudio`, `sendVoice`
 - [x] `editMessageText`, `deleteMessage`, `copyMessage`
 - [x] `setChatTitle`, `banChatMember`, admin methods
@@ -463,6 +472,6 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-Built with ❤️ and ⚡ by [atcoun](https://github.com/atcoun) · [GitHub](https://github.com/atcoun/ziogram)
+Built with ❤️ and ⚡ by [atcoun](https://codeberg.org/atcoun) · [Codeberg](https://codeberg.org/atcoun/ziogram)
 
 </div>
