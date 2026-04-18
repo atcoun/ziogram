@@ -128,6 +128,14 @@ const exe = b.addExecutable(.{
 });
 ```
 
+**4. Write your bot in `src/main.zig`** — see [Quick Start](#-quick-start) or [Long Polling](#long-polling-loop) for examples
+
+**5. Run**
+
+```sh
+zig build run
+```
+
 ---
 
 ## 🚀 Quick Start
