@@ -116,7 +116,9 @@ const exe = b.addExecutable(.{
         },
     }),
 });
+```
 
+```zig
 // after
 const exe = b.addExecutable(.{
     .name = "project",
