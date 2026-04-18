@@ -94,14 +94,14 @@ zig fetch --save git+https://github.com/atcoun/ziogram.git
 
 **3. Open your project's `build.zig` and add ziogram to your executable**
 
-Find the `b.addExecutable` call and add ziogram to the `.imports` list:
-
 ```zig
 .{ .name = "ziogram", .module = b.dependency("ziogram", .{
     .target = target,
     .optimize = optimize,
 }).module("ziogram") },
 ```
+
+Find the `b.addExecutable` call and add ziogram to the `.imports` list:
 
 ```zig
 // before
