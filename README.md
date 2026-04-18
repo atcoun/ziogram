@@ -460,6 +460,6 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-Built with ❤️ and ⚡ by [atcoun](https://codeberg.org/atcoun) · [Codeberg](https://codeberg.org/atcoun/ziogram)
+Built with ❤️ and ⚡ by [atcoun](https://github.com/atcoun) · [GitHub](https://github.com/atcoun/ziogram)
 
 </div>
