@@ -34,6 +34,40 @@ pub const Bot = struct {
         self.allocator.free(self.token);
     }
 
+    pub fn downloadFile(
+        self: Bot,
+        allocator: std.mem.Allocator,
+        file_path: []const u8,
+        writer: *std.Io.Writer,
+    ) !void {
+        if (self.session.base.api.is_local) {
+            const local_path = try self.session.base.api.wrap_local_file.toLocal(allocator, file_path);
+            defer allocator.free(local_path);
+
+            const file = try std.Io.Dir.openFile(.cwd(), self.session.io, local_path, .{});
+            defer file.close(self.session.io);
+
+            var buf: [65536]u8 = undefined;
+            var file_reader = file.reader(self.session.io, &buf);
+            _ = try writer.sendFileReadingAll(&file_reader.interface, .unlimited);
+            return;
+        }
+
+        const url_str = try self.session.base.api.fileUrl(allocator, self.token, file_path);
+        return self.session.streamContent(allocator, url_str, writer);
+    }
+
+    pub fn download(
+        self: Bot,
+        allocator: std.mem.Allocator,
+        file_id: []const u8,
+        writer: *std.Io.Writer,
+    ) !void {
+        const file = try self.getFile(allocator, .{ .file_id = file_id });
+        const path = file.file_path orelse return error.TelegramFileTooLarge;
+        return self.downloadFile(allocator, path, writer);
+    }
+
     pub fn call(
         self: *const Bot,
         allocator: std.mem.Allocator,
