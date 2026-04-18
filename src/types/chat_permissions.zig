@@ -1,0 +1,17 @@
+pub const ChatPermissions = struct {
+    can_send_messages: ?bool = null,
+    can_send_audios: ?bool = null,
+    can_send_documents: ?bool = null,
+    can_send_photos: ?bool = null,
+    can_send_videos: ?bool = null,
+    can_send_video_notes: ?bool = null,
+    can_send_voice_notes: ?bool = null,
+    can_send_polls: ?bool = null,
+    can_send_other_messages: ?bool = null,
+    can_add_web_page_previews: ?bool = null,
+    can_edit_tag: ?bool = null,
+    can_change_info: ?bool = null,
+    can_invite_users: ?bool = null,
+    can_pin_messages: ?bool = null,
+    can_manage_topics: ?bool = null,
+};

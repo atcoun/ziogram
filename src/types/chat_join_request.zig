@@ -1,0 +1,10 @@
+const types = @import("../types.zig");
+
+pub const ChatJoinRequest = struct {
+    chat: types.Chat,
+    from: types.User,
+    user_chat_id: i64,
+    date: i32,
+    bio: ?[]const u8 = null,
+    invite_link: ?types.ChatInviteLink = null,
+};
