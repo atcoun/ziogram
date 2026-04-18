@@ -83,7 +83,7 @@ zig init
 **2. Fetch and save the dependency**
 
 ```sh
-zig fetch --save git+https://codeberg.org/atcoun/ziogram.git
+zig fetch --save git+https://github.com/atcoun/ziogram.git
 ```
 
 **3. Open your project's `build.zig` and add ziogram to your executable**
