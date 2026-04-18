@@ -662,6 +662,14 @@ pub const Bot = struct {
         return try self.call(allocator, methods.GetUserProfilePhotos, options);
     }
 
+    pub fn getWebhookInfo(
+        self: *const Bot,
+        allocator: std.mem.Allocator,
+        options: methods.GetWebhookInfo,
+    ) !types.WebhookInfo {
+        return try self.call(allocator, methods.GetWebhookInfo, options);
+    }
+
     pub fn giftPremiumSubscription(
         self: *const Bot,
         allocator: std.mem.Allocator,
@@ -1242,6 +1250,14 @@ pub const Bot = struct {
         options: methods.SetUserEmojiStatus,
     ) !bool {
         return try self.call(allocator, methods.SetUserEmojiStatus, options);
+    }
+
+    pub fn setWebhook(
+        self: *const Bot,
+        allocator: std.mem.Allocator,
+        options: methods.SetWebhook,
+    ) !bool {
+        return try self.call(allocator, methods.SetWebhook, options);
     }
 
     pub fn stopMessageLiveLocation(
