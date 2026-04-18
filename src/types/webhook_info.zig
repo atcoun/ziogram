@@ -1,0 +1,11 @@
+pub const WebhookInfo = struct {
+    url: []const u8,
+    has_custom_certificate: bool,
+    pending_update_count: i32,
+    ip_address: ?[]const u8 = null,
+    last_error_date: ?i32 = null,
+    last_error_message: ?[]const u8 = null,
+    last_synchronization_error_date: ?i32 = null,
+    max_connections: ?i32 = null,
+    allowed_updates: ?[]const []const u8 = null,
+};
