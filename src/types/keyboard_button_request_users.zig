@@ -1,0 +1,9 @@
+pub const KeyboardButtonRequestUsers = struct {
+    request_id: i32,
+    user_is_bot: ?bool = null,
+    user_is_premium: ?bool = null,
+    max_quantity: ?i32 = null,
+    request_name: ?bool = null,
+    request_username: ?bool = null,
+    request_photo: ?bool = null,
+};

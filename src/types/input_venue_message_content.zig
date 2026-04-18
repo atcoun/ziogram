@@ -1,0 +1,10 @@
+pub const InputVenueMessageContent = struct {
+    latitude: f32,
+    longitude: f32,
+    title: []const u8,
+    address: []const u8,
+    foursquare_id: ?[]const u8 = null,
+    foursquare_type: ?[]const u8 = null,
+    google_place_id: ?[]const u8 = null,
+    google_place_type: ?[]const u8 = null,
+};

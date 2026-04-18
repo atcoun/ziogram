@@ -1,0 +1,7 @@
+pub const Invoice = struct {
+    title: []const u8,
+    description: []const u8,
+    start_parameter: []const u8,
+    currency: []const u8,
+    total_amount: i32,
+};
