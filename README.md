@@ -113,10 +113,10 @@ const exe = b.addExecutable(.{
         .optimize = optimize,
         .imports = &.{
             .{ .name = "project", .module = mod },
-            .{ .name = "ziogram", .module = b.dependency("ziogram", .{ <-
-                .target = target,                                      <-
-                .optimize = optimize,                                  <-
-            }).module("ziogram") },                                    <-
+            .{ .name = "ziogram", .module = b.dependency("ziogram", .{ // <-
+                .target = target,                                      // <-
+                .optimize = optimize,                                  // <-
+            }).module("ziogram") },                                    // <-
         },
     }),
 });
