@@ -1,42 +1,44 @@
 const std = @import("std");
 const http = std.http;
 
-const types = @import("types");
-const InputFile = types.InputFile;
-const Response = types.Response;
-
 const errors = @import("errors");
+const types = @import("types");
+
 const ZiogramError = errors.ZiogramError;
 
 const BotOptions = @import("../client/bot_options.zig");
-const Endpoint = @import("../client/endpoint.zig");
+const ClientOptions = @import("../client/http_options.zig");
+const TelegramAPI = @import("../client/api.zig");
 
-const PRODUCTION = Endpoint.PRODUCTION;
+const InputFile = types.InputFile;
+const Response = types.Response;
+
+const PRODUCTION = TelegramAPI.PRODUCTION;
 
 pub const FilesMap = std.StringHashMapUnmanaged(InputFile);
 
-endpoint: Endpoint = PRODUCTION,
 client: http.Client,
 allocator: std.mem.Allocator,
 io: std.Io,
+api: TelegramAPI = PRODUCTION,
 proxy: ?*http.Client.Proxy = null,
 
-pub fn init(allocator: std.mem.Allocator, io: std.Io, endpoint: ?Endpoint, proxy: ?*const http.Client.Proxy) !*@This() {
+pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*@This() {
     const self = try allocator.create(@This());
     errdefer allocator.destroy(self);
 
     self.* = .{
-        .endpoint = endpoint orelse PRODUCTION,
         .client = http.Client{
             .allocator = allocator,
             .io = io,
         },
         .allocator = allocator,
         .io = io,
+        .api = options.api,
         .proxy = null,
     };
 
-    if (proxy) |p| {
+    if (options.proxy) |p| {
         const p_heap = try allocator.create(http.Client.Proxy);
         errdefer allocator.destroy(p_heap);
 
@@ -331,7 +333,7 @@ pub fn makeRequest(
     bot_options: ?BotOptions,
 ) !@TypeOf(method).ReturnType {
     const Method = @TypeOf(method);
-    const url_str = try self.endpoint.apiUrl(allocator, token, Method.api_method);
+    const url_str = try self.api.apiUrl(allocator, token, Method.api_method);
 
     var has_files = false;
     inline for (std.meta.fields(Method)) |field| {
