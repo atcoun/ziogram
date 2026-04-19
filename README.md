@@ -308,15 +308,21 @@ pub fn handle_update(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
 pub fn handle_message(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
     _ = bot.sendMessage(allocator, .{
         .chat_id = .{ .id = message.chat.id },
-        .text = "Hello from <b>ziogram</b>! ⚡",
+        .text =
+        \\⚡ <b>ziogram</b> — Telegram Bot API library for Zig
+        \\
+        \\Fast, lightweight, and fully typed. Built on top of Zig's
+        \\native HTTP client with arena allocator support.
+        \\
+        \\If you like the library — drop a ⭐ on GitHub!
+        ,
         .reply_markup = .{ .inline_keyboard_markup = .{
             .inline_keyboard = &.{
                 &.{
-                    .{ .text = "Button 1", .callback_data = "btn1" },
-                    .{ .text = "Button 2", .callback_data = "btn2" },
+                    .{ .text = "🤖 Is the bot alive?", .callback_data = "ping" },
                 },
                 &.{
-                    .{ .text = "Open URL", .url = "https://github.com/atcoun/ziogram" },
+                    .{ .text = "⭐ Star on GitHub", .url = "https://github.com/atcoun/ziogram" },
                 },
             },
         } },
@@ -327,12 +333,15 @@ pub fn handle_message(allocator: std.mem.Allocator, bot: Bot, message: Message) 
 }
 
 pub fn handle_callback_query(allocator: std.mem.Allocator, bot: Bot, callback_query: CallbackQuery) !void {
-    const text = if (callback_query.data) |data| data else "unknown";
-    _ = try bot.answerCallbackQuery(allocator, .{
-        .callback_query_id = callback_query.id,
-        .text = text,
-        .show_alert = true,
-    });
+    if (callback_query.data) |data| {
+        if (std.mem.eql(u8, data, "ping")) {
+            _ = try bot.answerCallbackQuery(allocator, .{
+                .callback_query_id = callback_query.id,
+                .text = "Yes, I'm here! 👋 If you like the library — drop a ⭐ on GitHub!",
+                .show_alert = true,
+            });
+        }
+    }
 }
 ```
 
