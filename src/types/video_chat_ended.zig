@@ -1,3 +1,1 @@
-pub const VideoChatEnded = struct {
-    duration: i32,
-};
+duration: i32,

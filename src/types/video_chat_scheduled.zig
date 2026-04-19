@@ -1,3 +1,1 @@
-pub const VideoChatScheduled = struct {
-    start_date: i32,
-};
+start_date: i32,
