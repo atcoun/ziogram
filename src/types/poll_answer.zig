@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 poll_id: []const u8,
 voter_chat: ?types.Chat = null,

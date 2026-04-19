@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 gift_id: []const u8,
 base_name: []const u8,

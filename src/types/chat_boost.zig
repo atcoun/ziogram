@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 boost_id: []const u8,
 add_date: i32,

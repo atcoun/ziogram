@@ -1,5 +1,5 @@
 const std = @import("std");
-const types = @import("../types.zig");
+const types = @import("types");
 
 pub const MessageOrBool = union(enum) {
     message: types.Message,

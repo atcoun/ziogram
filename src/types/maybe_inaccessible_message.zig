@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const types = @import("../types.zig");
+const types = @import("types");
 
 pub const MaybeInaccessibleMessage = union(enum) {
     message: *types.Message,

@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 update_id: i32,
 message: ?types.Message = null,

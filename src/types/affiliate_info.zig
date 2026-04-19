@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 affiliate_user: ?types.User = null,
 affiliate_chat: ?types.Chat = null,

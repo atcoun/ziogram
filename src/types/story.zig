@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 chat: types.Chat,
 id: i32,

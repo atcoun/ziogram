@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 persistent_id: []const u8,
 text: []const u8,

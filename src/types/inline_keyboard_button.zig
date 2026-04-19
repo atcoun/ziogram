@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 text: []const u8,
 icon_custom_emoji_id: ?[]const u8 = null,

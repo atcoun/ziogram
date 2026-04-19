@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 pub fn Response(comptime T: type) type {
     return struct {

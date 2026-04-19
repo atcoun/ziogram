@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 message_text: []const u8,
 parse_mode: ?enums.ParseMode = null,

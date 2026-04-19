@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 currency: []const u8,
 total_amount: i32,

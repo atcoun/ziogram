@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 gift: types.Gift,
 owned_gift_id: ?[]const u8 = null,

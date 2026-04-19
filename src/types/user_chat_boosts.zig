@@ -1,3 +1,3 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 boosts: []const types.ChatBoost,

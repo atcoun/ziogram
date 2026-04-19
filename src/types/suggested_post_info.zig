@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 state: enums.SuggestedPostState,
 price: ?types.SuggestedPostPrice = null,

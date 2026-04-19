@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 message_id: i32,
 chat_id: ?types.ChatId = null,

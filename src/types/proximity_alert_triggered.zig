@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 traveler: types.User,
 watcher: types.User,

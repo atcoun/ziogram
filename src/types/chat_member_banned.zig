@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 status: []const u8 = "kicked",
 user: types.User,

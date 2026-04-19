@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 title: ?[]const u8 = null,
 message: ?[]const u8 = null,

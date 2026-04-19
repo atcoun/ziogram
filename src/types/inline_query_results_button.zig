@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 text: []const u8,
 web_app: ?types.WebAppInfo = null,

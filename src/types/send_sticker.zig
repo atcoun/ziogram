@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 business_connection_id: ?[]const u8 = null,
 chat_id: types.ChatId,

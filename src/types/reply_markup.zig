@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 pub const ReplyMarkup = union(enum) {
     inline_keyboard_markup: types.InlineKeyboardMarkup,

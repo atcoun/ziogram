@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 request_id: i32,
 chat_is_channel: bool,

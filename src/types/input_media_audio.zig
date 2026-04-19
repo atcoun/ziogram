@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 type: enums.InputMediaType = .audio,
 media: []const u8,

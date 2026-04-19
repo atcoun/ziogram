@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 location: types.Location,
 title: []const u8,

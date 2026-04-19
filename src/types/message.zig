@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 message_id: i32,
 message_thread_id: ?i32 = null,

@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 type: enums.StoryAreaKind = .suggested_reaction,
 reaction_type: types.ReactionType,

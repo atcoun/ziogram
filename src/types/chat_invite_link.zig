@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 invite_link: []const u8,
 creator: types.User,

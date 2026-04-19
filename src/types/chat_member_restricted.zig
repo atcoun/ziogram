@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 status: []const u8 = "restricted",
 tag: ?[]const u8 = null,

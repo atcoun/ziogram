@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 keyboard: []const []const types.KeyboardButton,
 is_persistent: ?bool = null,

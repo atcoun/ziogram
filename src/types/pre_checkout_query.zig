@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 id: []const u8,
 from: types.User,

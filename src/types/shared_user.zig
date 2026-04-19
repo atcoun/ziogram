@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 user_id: i64,
 first_name: ?[]const u8 = null,

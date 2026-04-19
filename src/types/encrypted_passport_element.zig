@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 type: enums.PassportElementType,
 data: ?[]const u8 = null,

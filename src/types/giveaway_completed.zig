@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 winner_count: i32,
 unclaimed_prize_count: ?i32 = null,

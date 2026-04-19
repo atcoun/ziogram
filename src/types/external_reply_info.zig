@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 origin: types.MessageOrigin,
 chat: ?types.Chat = null,

@@ -1,7 +1,7 @@
 const std = @import("std");
 
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 pub const ChatBoostSource = union(enum) {
     premium: types.ChatBoostSourcePremium,

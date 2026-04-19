@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const types = @import("../types.zig");
+const types = @import("types");
 
 pub const InputMessageContent = union(enum) {
     text: types.InputTextMessageContent,

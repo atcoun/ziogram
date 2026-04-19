@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 gift: types.UniqueGift,
 origin: enums.UniqueGiftOrigin,

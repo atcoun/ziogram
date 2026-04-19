@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 poll_message: ?types.MaybeInaccessibleMessage = null,
 option_persistent_id: []const u8,

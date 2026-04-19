@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 total_count: i32,
 gifts: []const types.OwnedGift,

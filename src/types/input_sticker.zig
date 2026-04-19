@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 sticker: []const u8,
 format: enums.InputStickerFormat,

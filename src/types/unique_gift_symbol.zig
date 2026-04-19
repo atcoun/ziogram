@@ -1,4 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
 name: []const u8,
 sticker: types.Sticker,

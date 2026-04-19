@@ -1,5 +1,5 @@
 const enums = @import("enums");
-const types = @import("../types.zig");
+const types = @import("types");
 
 type: enums.TransactionPartnerType = .affiliate_program,
 sponsor_user: ?types.User = null,
