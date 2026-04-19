@@ -53,7 +53,8 @@ pub fn validateToken(token: []const u8) TokenError!void {
 
 pub fn extractBotId(token: []const u8) !i64 {
     try validateToken(token);
-    var parts = std.mem.splitScalar(u8, token, ':');
-    const id_str = parts.first();
-    return std.fmt.parseInt(i64, id_str, 10);
+
+    const colon_idx = std.mem.indexOfScalar(u8, token, ':') orelse unreachable;
+
+    return std.fmt.parseInt(i64, token[0..colon_idx], 10);
 }
