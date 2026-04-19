@@ -1,7 +1,5 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const TransactionPartnerFragment = struct {
-    type: enums.TransactionPartnerType = .fragment,
-    withdrawal_state: ?types.RevenueWithdrawalState = null,
-};
+type: enums.TransactionPartnerType = .fragment,
+withdrawal_state: ?types.RevenueWithdrawalState = null,

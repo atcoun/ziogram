@@ -1,3 +1,1 @@
-pub const SentWebAppMessage = struct {
-    inline_message_id: ?[]const u8 = null,
-};
+inline_message_id: ?[]const u8 = null,

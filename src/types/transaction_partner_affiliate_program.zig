@@ -1,8 +1,6 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const TransactionPartnerAffiliateProgram = struct {
-    type: enums.TransactionPartnerType = .affiliate_program,
-    sponsor_user: ?types.User = null,
-    commission_per_mille: i32,
-};
+type: enums.TransactionPartnerType = .affiliate_program,
+sponsor_user: ?types.User = null,
+commission_per_mille: i32,

@@ -1,9 +1,7 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const UniqueGiftModel = struct {
-    name: []const u8,
-    sticker: types.Sticker,
-    rarity_per_mille: i32,
-    rarity: ?enums.GiftRarity = null,
-};
+name: []const u8,
+sticker: types.Sticker,
+rarity_per_mille: i32,
+rarity: ?enums.GiftRarity = null,

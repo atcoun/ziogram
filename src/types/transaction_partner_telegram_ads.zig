@@ -1,5 +1,3 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const TransactionPartnerTelegramAds = struct {
-    type: enums.TransactionPartnerType = .telegram_ads,
-};
+type: enums.TransactionPartnerType = .telegram_ads,

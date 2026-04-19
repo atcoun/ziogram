@@ -1,5 +1,3 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const ReactionTypePaid = struct {
-    type: enums.ReactionTypeKind = .paid,
-};
+type: enums.ReactionTypeKind = .paid,

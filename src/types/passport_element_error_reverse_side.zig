@@ -1,8 +1,6 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const PassportElementErrorReverseSide = struct {
-    source: enums.PassportElementErrorSource = .reverse_side,
-    type: enums.PassportElementType,
-    file_hash: []const u8,
-    message: []const u8,
-};
+source: enums.PassportElementErrorSource = .reverse_side,
+type: enums.PassportElementType,
+file_hash: []const u8,
+message: []const u8,

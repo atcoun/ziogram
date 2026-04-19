@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const SuggestedPostPrice = struct {
-    currency: enums.Currency,
-    amount: i32,
-};
+currency: enums.Currency,
+amount: i32,

@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const ReactionTypeEmoji = struct {
-    type: enums.ReactionTypeKind = .emoji,
-    emoji: enums.ReactionEmoji,
-};
+type: enums.ReactionTypeKind = .emoji,
+emoji: enums.ReactionEmoji,

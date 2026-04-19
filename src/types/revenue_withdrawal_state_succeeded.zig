@@ -1,7 +1,5 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const RevenueWithdrawalStateSucceeded = struct {
-    type: enums.RevenueWithdrawalStateType = .succeeded,
-    date: i32,
-    url: []const u8,
-};
+type: enums.RevenueWithdrawalStateType = .succeeded,
+date: i32,
+url: []const u8,

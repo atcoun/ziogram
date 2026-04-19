@@ -1,11 +1,9 @@
 const types = @import("../types.zig");
 
-pub const PollOption = struct {
-    persistent_id: []const u8,
-    text: []const u8,
-    text_entities: ?[]const types.MessageEntity = null,
-    voter_count: i32,
-    added_by_user: ?types.User = null,
-    added_by_chat: ?types.Chat = null,
-    addition_date: ?i32 = null,
-};
+persistent_id: []const u8,
+text: []const u8,
+text_entities: ?[]const types.MessageEntity = null,
+voter_count: i32,
+added_by_user: ?types.User = null,
+added_by_chat: ?types.Chat = null,
+addition_date: ?i32 = null,

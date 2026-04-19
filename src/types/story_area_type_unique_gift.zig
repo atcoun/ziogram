@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const StoryAreaTypeUniqueGift = struct {
-    type: enums.StoryAreaKind = .unique_gift,
-    name: []const u8,
-};
+type: enums.StoryAreaKind = .unique_gift,
+name: []const u8,

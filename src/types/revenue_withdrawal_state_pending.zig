@@ -1,5 +1,3 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const RevenueWithdrawalStatePending = struct {
-    type: enums.RevenueWithdrawalStateType = .pending,
-};
+type: enums.RevenueWithdrawalStateType = .pending,
