@@ -51,10 +51,9 @@ The name represents the synergy of its foundational technologies:
 Every API method is a plain Zig struct with two comptime constants — `ReturnType` and `api_method` — that drive the generic `Bot.call` dispatcher with zero runtime overhead.
 
 ```zig
-pub const GetMe = struct {
-    pub const ReturnType = User;
-    pub const api_method = "getMe";
-};
+// get_me.zig
+pub const ReturnType = User;
+pub const api_method = "getMe";
 ```
 
 ### Native Networking
@@ -67,7 +66,7 @@ Uses `std.json` with `ArenaAllocator` strategies. Struct fields are reflected at
 `InputFile` is a tagged union supporting filesystem paths, in-memory buffers, `file_id`, and URLs. Files are transparently streamed as `multipart/form-data` — the same `sendPhoto` call works for all input types.
 
 ### Structured Error Handling
-All Telegram API errors map to typed `ZiogramError` variants. Rate limits, group migrations, decode failures, and HTTP errors each produce a `DetailedError` with a human-readable message and a link to the relevant Telegram docs page.
+All Telegram API errors map to typed `ZiogramError` variants. Rate limits, group migrations, decode failures, and HTTP errors each produce a `errors.zig` with a human-readable message and a link to the relevant Telegram docs page.
 
 ---
 
@@ -157,21 +156,21 @@ zig build run
 const std = @import("std");
 const ziogram = @import("ziogram");
 
-const ClientSession = ziogram.ClientSession;
 const Bot = ziogram.Bot;
+const Client = ziogram.Client;
 
 pub fn main(init: std.process.Init) !void {
     const token = "YOUR_BOT_TOKEN";
 
-    var session = try ClientSession.init(init.gpa, init.io, null);
-    defer session.deinit();
+    var client = try Client.init(init.gpa, init.io, null, null);
+    defer client.deinit();
 
-    var bot = try Bot.init(token, session, null);
+    var bot = try Bot.init(token, client, null);
     defer bot.deinit();
 
     const allocator = init.arena.allocator();
 
-    const me = try bot.getMe(allocator);
+    const me = try bot.getMe(allocator, .{});
     const info = try std.json.Stringify.valueAlloc(allocator, me, .{
         .whitespace = .indent_4,
         .emit_null_optional_fields = false,
@@ -228,12 +227,12 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 const std = @import("std");
 const ziogram = @import("ziogram");
 
-const ClientSession = ziogram.ClientSession;
 const Bot = ziogram.Bot;
+const Client = ziogram.Client;
 
 const types = ziogram.types;
-const Message = types.Message;
 const CallbackQuery = types.CallbackQuery;
+const Message = types.Message;
 const Update = types.Update;
 
 pub fn main(init: std.process.Init) !void {
@@ -243,8 +242,8 @@ pub fn main(init: std.process.Init) !void {
 
     const token = "YOUR_BOT_TOKEN";
 
-    const session = try ClientSession.init(gpa, init.io, null);
-    defer session.deinit();
+    const client = try ClientSession.init(gpa, init.io, null, null);
+    defer client.deinit();
 
     const bot = try Bot.init(token, session, .{ .parse_mode = .HTML });
     defer bot.deinit();
@@ -255,7 +254,7 @@ pub fn main(init: std.process.Init) !void {
     {
         const allocator = arena.allocator();
         _ = try bot.deleteWebhook(allocator, .{ .drop_pending_updates = true });
-        const me = try bot.getMe(allocator);
+        const me = try bot.getMe(allocator, .{});
         if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
     }
 
@@ -399,10 +398,9 @@ var bot = try Bot.init(token, session, .{
 ### Using a Local Bot API Server
 
 ```zig
-const local_api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", true);
+const local_api = try Endpoint.fromBase(init.gpa, "http://localhost:8081", true);
 
-var session = try ClientSession.init(init.gpa, init.io, null);
-session.base.api = local_api;
+var client = try Client.init(init.gpa, init.io, local_api, null);
 defer session.deinit();
 ```
 
