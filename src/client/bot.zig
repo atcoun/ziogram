@@ -3,8 +3,8 @@ const std = @import("std");
 const methods = @import("methods");
 const types = @import("types");
 
-const Client = @import("http.zig");
 const BotOptions = @import("bot_options.zig");
+const Client = @import("http.zig");
 
 const token_utils = @import("../utils/token.zig");
 
@@ -14,12 +14,11 @@ id: i64,
 client: *Client,
 bot_options: ?BotOptions = null,
 
-pub fn init(token: []const u8, client: *Client, bot_options: ?BotOptions) !@This() {
+pub fn init(token: []const u8, client: *Client, options: ?BotOptions) !@This() {
     const bot_id = try token_utils.extractBotId(token);
-
     const allocator = client.allocator;
-    var options = bot_options;
-    if (options) |*o| o.resolve();
+    var bot_options = options;
+    if (bot_options) |*o| o.resolve();
     return @This(){
         .allocator = allocator,
         .token = try allocator.dupe(u8, token),
