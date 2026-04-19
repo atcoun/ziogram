@@ -162,7 +162,7 @@ const Client = ziogram.Client;
 pub fn main(init: std.process.Init) !void {
     const token = "YOUR_BOT_TOKEN";
 
-    var client = try Client.init(init.gpa, init.io, null, null);
+    var client = try Client.init(init.gpa, init.io, .{});
     defer client.deinit();
 
     var bot = try Bot.init(token, client, null);
@@ -242,7 +242,7 @@ pub fn main(init: std.process.Init) !void {
 
     const token = "YOUR_BOT_TOKEN";
 
-    const client = try Client.init(gpa, init.io, null, null);
+    const client = try Client.init(gpa, init.io, .{});
     defer client.deinit();
 
     const bot = try Bot.init(token, client, .{ .parse_mode = .HTML });
@@ -398,19 +398,19 @@ var bot = try Bot.init(token, client, .{
 ### Using a Local Bot API Server
 
 ```zig
-const local_api = try Endpoint.fromBase(init.gpa, "http://localhost:8081", true);
+const local_api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", null);
 
-var client = try Client.init(init.gpa, init.io, local_api, null);
+var client = try Client.init(init.gpa, init.io, .{ .api = local_api });
 defer client.deinit();
 ```
 
 For path mapping between the local server and your filesystem:
 
 ```zig
-local_api.wrap_local_file = .{ .simple = .{
+const local_api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", .{
     .server_path = "/var/lib/telegram-bot-api/",
     .local_path  = "/mnt/bot-storage/",
-}};
+});
 ```
 
 ---
