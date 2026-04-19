@@ -357,11 +357,11 @@ Two methods are available depending on what you already have.
 **`Bot.download`** — high-level helper. Pass a `file_id`; the library calls `getFile` internally and streams the bytes to any `std.Io.Writer`.
 
 ```zig
-var file = try std.Io.Dir.cwd().createFile(session.io, "photo.jpg", .{});
-defer file.close(session.io);
+var file = try std.Io.Dir.cwd().createFile(client.io, "photo.jpg", .{});
+defer file.close(client.io);
 
 var buf: [65536]u8 = undefined;
-var writer = file.writer(session.io, &buf);
+var writer = file.writer(client.io, &buf);
 
 try bot.download(allocator, some_file_id, &writer.interface);
 ```
@@ -385,7 +385,7 @@ try bot.downloadFile(allocator, path, &writer.interface);
 Set once on `Bot.init` — applied to every method call that supports the field, unless overridden per-call.
 
 ```zig
-var bot = try Bot.init(token, session, .{
+var bot = try Bot.init(token, client, .{
     .parse_mode               = .MarkdownV2,
     .disable_notification     = true,
     .protect_content          = true,
