@@ -403,6 +403,7 @@ const local_api = try ziogram.TelegramAPI.fromBase(init.gpa, "http://localhost:8
 
 var session = try ClientSession.init(init.gpa, init.io, null);
 session.base.api = local_api;
+defer session.deinit();
 ```
 
 For path mapping between the local server and your filesystem:
