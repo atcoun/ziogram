@@ -20,7 +20,6 @@ base: []const u8,
 file: []const u8,
 is_local: bool = false,
 wrap_local_file: FilesPathWrapper = .bare,
-is_owned: bool = false,
 
 pub fn apiUrl(self: @This(), allocator: std.mem.Allocator, token: []const u8, method: []const u8) ![]const u8 {
     return self.format(allocator, self.base, "{token}", token, "{method}", method);
@@ -44,19 +43,13 @@ pub fn fromBase(allocator: std.mem.Allocator, base_url: []const u8, local_paths:
         .base = try std.fmt.allocPrint(allocator, "{s}/bot{{token}}/{{method}}", .{root}),
         .file = try std.fmt.allocPrint(allocator, "{s}/file/bot{{token}}/{{path}}", .{root}),
         .is_local = is_local,
-        .wrap_local_file = if (local_paths) |p| .{ .simple = .{
-            .server_path = p.server_path,
-            .local_path = p.local_path,
-        } } else .bare,
-        .is_owned = true,
+        .wrap_local_file = if (local_paths) |p| .{ .simple = p } else .bare,
     };
 }
 
 pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
-    if (self.is_owned) {
-        allocator.free(self.base);
-        allocator.free(self.file);
-    }
+    allocator.free(self.base);
+    allocator.free(self.file);
 }
 
 pub const PRODUCTION = @This(){
