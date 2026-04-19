@@ -1,7 +1,5 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const BotCommandScopeChatAdministrators = struct {
-    type: enums.BotCommandScopeType = .chat_administrators,
-    chat_id: types.ChatId,
-};
+type: enums.BotCommandScopeType = .chat_administrators,
+chat_id: types.ChatId,

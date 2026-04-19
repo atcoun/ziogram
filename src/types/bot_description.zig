@@ -1,3 +1,1 @@
-pub const BotDescription = struct {
-    description: []const u8,
-};
+description: []const u8,

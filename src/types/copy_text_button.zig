@@ -1,3 +1,1 @@
-pub const CopyTextButton = struct {
-    text: []const u8,
-};
+text: []const u8,

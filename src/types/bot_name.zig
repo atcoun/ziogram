@@ -1,3 +1,1 @@
-pub const BotName = struct {
-    name: []const u8,
-};
+name: []const u8,

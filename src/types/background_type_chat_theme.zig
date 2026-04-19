@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const BackgroundTypeChatTheme = struct {
-    type: enums.BackgroundTypeKind = .chat_theme,
-    theme_name: []const u8,
-};
+type: enums.BackgroundTypeKind = .chat_theme,
+theme_name: []const u8,

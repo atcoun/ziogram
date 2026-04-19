@@ -1,7 +1,5 @@
-pub const AcceptedGiftTypes = struct {
-    unlimited_gifts: bool,
-    limited_gifts: bool,
-    unique_gifts: bool,
-    premium_subscription: bool,
-    gifts_from_channels: bool,
-};
+unlimited_gifts: bool,
+limited_gifts: bool,
+unique_gifts: bool,
+premium_subscription: bool,
+gifts_from_channels: bool,

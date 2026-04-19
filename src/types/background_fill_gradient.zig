@@ -1,8 +1,6 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const BackgroundFillGradient = struct {
-    type: enums.BackgroundFillType = .gradient,
-    top_color: i32,
-    bottom_color: i32,
-    rotation_angle: i32,
-};
+type: enums.BackgroundFillType = .gradient,
+top_color: i32,
+bottom_color: i32,
+rotation_angle: i32,

@@ -1,3 +1,1 @@
-pub const DeleteStickerFromSet = struct {
-    sticker: []const u8,
-};
+sticker: []const u8,

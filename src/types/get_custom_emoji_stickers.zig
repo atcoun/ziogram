@@ -1,3 +1,1 @@
-pub const GetCustomEmojiStickers = struct {
-    custom_emoji_ids: []const []const u8,
-};
+custom_emoji_ids: []const []const u8,

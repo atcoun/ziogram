@@ -1,5 +1,3 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const BotCommandScopeDefault = struct {
-    type: enums.BotCommandScopeType = .default,
-};
+type: enums.BotCommandScopeType = .default,

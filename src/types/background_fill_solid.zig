@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const BackgroundFillSolid = struct {
-    type: enums.BackgroundFillType = .solid,
-    color: i32,
-};
+type: enums.BackgroundFillType = .solid,
+color: i32,

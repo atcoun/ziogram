@@ -1,3 +1,1 @@
-pub const GetStickerSet = struct {
-    name: []const u8,
-};
+name: []const u8,

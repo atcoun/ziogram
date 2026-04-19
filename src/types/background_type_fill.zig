@@ -1,8 +1,6 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const BackgroundTypeFill = struct {
-    type: enums.BackgroundTypeKind = .fill,
-    fill: types.BackgroundFill,
-    dark_theme_dimming: i32,
-};
+type: enums.BackgroundTypeKind = .fill,
+fill: types.BackgroundFill,
+dark_theme_dimming: i32,

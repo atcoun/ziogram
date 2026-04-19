@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const Dice = struct {
-    emoji: enums.DiceEmoji,
-    value: i32,
-};
+emoji: enums.DiceEmoji,
+value: i32,

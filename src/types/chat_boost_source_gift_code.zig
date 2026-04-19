@@ -1,7 +1,5 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const ChatBoostSourceGiftCode = struct {
-    source: enums.ChatBoostSourceType = .gift_code,
-    user: types.User,
-};
+source: enums.ChatBoostSourceType = .gift_code,
+user: types.User,
