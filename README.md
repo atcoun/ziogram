@@ -401,7 +401,7 @@ var bot = try Bot.init(token, client, .{
 const local_api = try Endpoint.fromBase(init.gpa, "http://localhost:8081", true);
 
 var client = try Client.init(init.gpa, init.io, local_api, null);
-defer session.deinit();
+defer client.deinit();
 ```
 
 For path mapping between the local server and your filesystem:
