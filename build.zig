@@ -40,6 +40,7 @@ pub fn build(b: *std.Build) void {
     methods.addImport("types", types);
 
     types.addImport("enums", enums);
+    types.addImport("types", types);
 
     ziogram.addImport("enums", enums);
     ziogram.addImport("errors", errors);
