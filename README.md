@@ -245,7 +245,7 @@ pub fn main(init: std.process.Init) !void {
     const client = try Client.init(gpa, init.io, null, null);
     defer client.deinit();
 
-    const bot = try Bot.init(token, session, .{ .parse_mode = .HTML });
+    const bot = try Bot.init(token, client, .{ .parse_mode = .HTML });
     defer bot.deinit();
 
     var group = std.Io.Group.init;
