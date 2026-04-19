@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const UnhideGeneralForumTopic = struct {
-    chat_id: types.ChatId,
+pub const ReturnType = bool;
+pub const api_method = "unhideGeneralForumTopic";
 
-    pub const ReturnType = bool;
-    pub const api_method = "unhideGeneralForumTopic";
-};
+chat_id: types.ChatId,

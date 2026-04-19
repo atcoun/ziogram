@@ -1,9 +1,7 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SetChatMenuButton = struct {
-    chat_id: ?i32 = null,
-    menu_button: ?types.MenuButton = null,
+pub const ReturnType = bool;
+pub const api_method = "setChatMenuButton";
 
-    pub const ReturnType = bool;
-    pub const api_method = "setChatMenuButton";
-};
+chat_id: ?i64 = null,
+menu_button: ?types.MenuButton = null,

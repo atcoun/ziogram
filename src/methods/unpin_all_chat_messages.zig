@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const UnpinAllChatMessages = struct {
-    chat_id: types.ChatId,
+pub const ReturnType = bool;
+pub const api_method = "unpinAllChatMessages";
 
-    pub const ReturnType = bool;
-    pub const api_method = "unpinAllChatMessages";
-};
+chat_id: types.ChatId,

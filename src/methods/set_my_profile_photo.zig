@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SetMyProfilePhoto = struct {
-    photo: types.InputProfilePhoto,
+pub const ReturnType = bool;
+pub const api_method = "setMyProfilePhoto";
 
-    pub const ReturnType = bool;
-    pub const api_method = "setMyProfilePhoto";
-};
+photo: types.InputProfilePhoto,

@@ -1,9 +1,7 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SavePreparedKeyboardButton = struct {
-    user_id: i32,
-    button: types.KeyboardButton,
+pub const ReturnType = types.PreparedKeyboardButton;
+pub const api_method = "savePreparedKeyboardButton";
 
-    pub const ReturnType = types.PreparedKeyboardButton;
-    pub const api_method = "savePreparedKeyboardButton";
-};
+user_id: i64,
+button: types.KeyboardButton,

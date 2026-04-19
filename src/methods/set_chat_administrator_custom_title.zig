@@ -1,10 +1,8 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SetChatAdministratorCustomTitle = struct {
-    chat_id: types.ChatId,
-    user_id: i32,
-    custom_title: []const u8,
+pub const ReturnType = bool;
+pub const api_method = "setChatAdministratorCustomTitle";
 
-    pub const ReturnType = bool;
-    pub const api_method = "setChatAdministratorCustomTitle";
-};
+chat_id: types.ChatId,
+user_id: i64,
+custom_title: []const u8,

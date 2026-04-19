@@ -1,9 +1,7 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SetPassportDataErrors = struct {
-    user_id: i32,
-    errors: []const types.PassportElementError,
+pub const ReturnType = bool;
+pub const api_method = "setPassportDataErrors";
 
-    pub const ReturnType = bool;
-    pub const api_method = "setPassportDataErrors";
-};
+user_id: i64,
+errors: []const types.PassportElementError,

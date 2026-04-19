@@ -1,9 +1,7 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SetChatPhoto = struct {
-    chat_id: types.ChatId,
-    photo: types.InputFile,
+pub const ReturnType = bool;
+pub const api_method = "setChatPhoto";
 
-    pub const ReturnType = bool;
-    pub const api_method = "setChatPhoto";
-};
+chat_id: types.ChatId,
+photo: types.InputFile,

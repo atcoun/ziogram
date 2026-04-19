@@ -1,10 +1,8 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const SetChatMemberTag = struct {
-    chat_id: types.ChatId,
-    user_id: i32,
-    tag: ?[]const u8 = null,
+pub const ReturnType = bool;
+pub const api_method = "setChatMemberTag";
 
-    pub const ReturnType = bool;
-    pub const api_method = "setChatMemberTag";
-};
+chat_id: types.ChatId,
+user_id: i64,
+tag: ?[]const u8 = null,
