@@ -231,6 +231,7 @@ const Bot = ziogram.Bot;
 const Client = ziogram.Client;
 
 const types = ziogram.types;
+const CallbackQuery = types.CallbackQuery;
 const Message = types.Message;
 const Update = types.Update;
 
@@ -267,6 +268,7 @@ pub fn main(init: std.process.Init) !void {
             .timeout = 60,
             .allowed_updates = &.{
                 .message,
+                .callback_query,
             },
         }) catch |err| {
             std.log.warn("Network error in getUpdates: {any}. Retrying in 10 seconds...", .{err});
@@ -296,6 +298,10 @@ pub fn handle_update(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
         handle_message(allocator, bot, message) catch |err| {
             std.log.err("Error [handle_message]: {any}", .{err});
         };
+    } else if (update.callback_query) |callback_query| {
+        handle_callback_query(allocator, bot, callback_query) catch |err| {
+            std.log.err("Error [handle_callback_query]: {any}", .{err});
+        };
     }
 }
 
@@ -303,10 +309,30 @@ pub fn handle_message(allocator: std.mem.Allocator, bot: Bot, message: Message) 
     _ = bot.sendMessage(allocator, .{
         .chat_id = .{ .id = message.chat.id },
         .text = "Hello from <b>ziogram</b>! ⚡",
+        .reply_markup = .{ .inline_keyboard_markup = .{
+            .inline_keyboard = &.{
+                &.{
+                    .{ .text = "Button 1", .callback_data = "btn1" },
+                    .{ .text = "Button 2", .callback_data = "btn2" },
+                },
+                &.{
+                    .{ .text = "Open URL", .url = "https://github.com/atcoun/ziogram" },
+                },
+            },
+        } },
     }) catch |err| {
         std.log.err("Error [sendMessage]: {any}", .{err});
         return err;
     };
+}
+
+pub fn handle_callback_query(allocator: std.mem.Allocator, bot: Bot, callback_query: CallbackQuery) !void {
+    const text = if (callback_query.data) |data| data else "unknown";
+    _ = try bot.answerCallbackQuery(allocator, .{
+        .callback_query_id = callback_query.id,
+        .text = text,
+        .show_alert = true,
+    });
 }
 ```
 
