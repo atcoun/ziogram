@@ -242,7 +242,7 @@ pub fn main(init: std.process.Init) !void {
 
     const token = "YOUR_BOT_TOKEN";
 
-    const client = try ClientSession.init(gpa, init.io, null, null);
+    const client = try Client.init(gpa, init.io, null, null);
     defer client.deinit();
 
     const bot = try Bot.init(token, session, .{ .parse_mode = .HTML });
