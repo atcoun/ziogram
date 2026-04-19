@@ -239,7 +239,8 @@ fn writePart(
     if (comptime T == types.InputFile) {
         switch (value) {
             .fs, .buffer => {
-                try writer.print("; filename=\"{s}\"\r\n", .{value.getFilename()});
+                var filename_buf: [512]u8 = undefined;
+                try writer.print("; filename=\"{s}\"\r\n", .{value.getFilename(&filename_buf)});
                 try writer.writeAll("Content-Type: application/octet-stream\r\n\r\n");
                 try value.writeTo(self.io, writer);
             },
@@ -341,13 +342,15 @@ pub fn makeRequest(
     }
 
     const boundary = "----ZiogramBoundary42";
-    var content_type: []const u8 = "application/json";
+    const content_type: []const u8 = if (has_files)
+        "multipart/form-data; boundary=----ZiogramBoundary42"
+    else
+        "application/json";
 
     var payload_aw = std.Io.Writer.Allocating.init(allocator);
     defer payload_aw.deinit();
 
     if (has_files) {
-        content_type = try std.fmt.allocPrint(allocator, "multipart/form-data; boundary={s}", .{boundary});
         try self.writeMultipart(&payload_aw.writer, method, boundary, bot_options);
     } else {
         var jws = std.json.Stringify{
@@ -355,7 +358,6 @@ pub fn makeRequest(
             .options = .{ .emit_null_optional_fields = false },
         };
         var files_map = FilesMap.empty;
-
         try prepareValue(allocator, self.io, &jws, method, &files_map, bot_options);
     }
 
