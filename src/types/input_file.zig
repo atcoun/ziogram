@@ -22,18 +22,19 @@ pub const InputFile = union(enum) {
         };
     }
 
-    pub fn fromBuffer(io: Io, allocator: std.mem.Allocator, path: []const u8) !InputFile {
-        const dir = std.Io.Dir.cwd();
-
-        const limit = Io.Limit.limited(50 * 1024 * 1024);
-        const data = try dir.readFileAlloc(io, path, allocator, limit);
-
+    pub fn fromPathBuffered(io: Io, allocator: std.mem.Allocator, path: []const u8) !InputFile {
+        const limit: Io.Limit = .limited(50 * 1024 * 1024);
+        const data = try std.Io.Dir.cwd().readFileAlloc(io, path, allocator, limit);
         return .{
             .buffer = .{
                 .data = data,
                 .filename = std.fs.path.basename(path),
             },
         };
+    }
+
+    pub fn fromBuffer(data: []const u8, filename: []const u8) InputFile {
+        return .{ .buffer = .{ .data = data, .filename = filename } };
     }
 
     pub fn getFilename(self: InputFile) []const u8 {
@@ -49,17 +50,15 @@ pub const InputFile = union(enum) {
         switch (self) {
             .buffer => |b| try w.writeAll(b.data),
             .fs => |f| {
-                const cwd = std.Io.Dir.cwd();
-                const file = try cwd.openFile(io, f.path, .{ .mode = .read_only });
+                const file = try std.Io.Dir.cwd().openFile(io, f.path, .{});
                 defer file.close(io);
 
                 var buf: [64 * 1024]u8 = undefined;
-                var r = file.reader(io, &buf);
+                var reader = file.reader(io, &buf);
 
-                _ = try r.interface.streamRemaining(w);
+                _ = try w.sendFileAll(&reader, .unlimited);
             },
-            .url => |u| try w.writeAll(u),
-            .file_id => |id| try w.writeAll(id),
+            .url, .file_id => unreachable,
         }
     }
 };

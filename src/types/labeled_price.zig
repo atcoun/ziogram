@@ -1,4 +1,2 @@
-pub const LabeledPrice = struct {
-    label: []const u8,
-    amount: i32,
-};
+label: []const u8,
+amount: i32,

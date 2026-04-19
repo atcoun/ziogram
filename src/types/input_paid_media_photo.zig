@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const InputPaidMediaPhoto = struct {
-    type: enums.InputPaidMediaType = .photo,
-    media: []const u8,
-};
+type: enums.InputPaidMediaType = .photo,
+media: []const u8,

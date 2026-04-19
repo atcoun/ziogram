@@ -1,7 +1,5 @@
-pub const LinkPreviewOptions = struct {
-    is_disabled: ?bool = null,
-    url: ?[]const u8 = null,
-    prefer_small_media: ?bool = null,
-    prefer_large_media: ?bool = null,
-    show_above_text: ?bool = null,
-};
+is_disabled: ?bool = null,
+url: ?[]const u8 = null,
+prefer_small_media: ?bool = null,
+prefer_large_media: ?bool = null,
+show_above_text: ?bool = null,

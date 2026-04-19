@@ -1,7 +1,5 @@
 const types = @import("../types.zig");
 
-pub const InlineQueryResultsButton = struct {
-    text: []const u8,
-    web_app: ?types.WebAppInfo = null,
-    start_parameter: ?[]const u8 = null,
-};
+text: []const u8,
+web_app: ?types.WebAppInfo = null,
+start_parameter: ?[]const u8 = null,

@@ -1,7 +1,5 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const MessageOriginHiddenUser = struct {
-    type: enums.MessageOriginType = .hidden_user,
-    date: i32,
-    sender_user_name: []const u8,
-};
+type: enums.MessageOriginType = .hidden_user,
+date: i32,
+sender_user_name: []const u8,

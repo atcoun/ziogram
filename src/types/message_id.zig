@@ -1,3 +1,1 @@
-pub const MessageId = struct {
-    message_id: i32,
-};
+message_id: i32,

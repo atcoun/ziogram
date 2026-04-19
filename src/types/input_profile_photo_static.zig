@@ -1,6 +1,4 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const InputProfilePhotoStatic = struct {
-    type: enums.InputProfilePhotoType = .static,
-    photo: []const u8,
-};
+type: enums.InputProfilePhotoType = .static,
+photo: []const u8,

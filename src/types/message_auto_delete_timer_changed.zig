@@ -1,3 +1,1 @@
-pub const MessageAutoDeleteTimerChanged = struct {
-    message_auto_delete_time: i32,
-};
+message_auto_delete_time: i32,

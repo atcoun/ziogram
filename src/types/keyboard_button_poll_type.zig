@@ -1,5 +1,3 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const KeyboardButtonPollType = struct {
-    type: ?enums.PollType = null,
-};
+type: ?enums.PollType = null,

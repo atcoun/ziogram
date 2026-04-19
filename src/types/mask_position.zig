@@ -1,8 +1,6 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const MaskPosition = struct {
-    point: enums.MaskPositionPoint,
-    x_shift: f32,
-    y_shift: f32,
-    scale: f32,
-};
+point: enums.MaskPositionPoint,
+x_shift: f32,
+y_shift: f32,
+scale: f32,

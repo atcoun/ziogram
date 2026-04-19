@@ -1,5 +1,3 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 
-pub const MenuButtonDefault = struct {
-    type: enums.MenuButtonType = .default,
-};
+type: enums.MenuButtonType = .default,

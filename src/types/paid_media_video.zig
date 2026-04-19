@@ -1,7 +1,5 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const PaidMediaVideo = struct {
-    type: enums.PaidMediaType = .video,
-    video: types.Video,
-};
+type: enums.PaidMediaType = .video,
+video: types.Video,

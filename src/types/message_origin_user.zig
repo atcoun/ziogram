@@ -1,8 +1,6 @@
-const enums = @import("../enums.zig");
+const enums = @import("enums");
 const types = @import("../types.zig");
 
-pub const MessageOriginUser = struct {
-    type: enums.MessageOriginType = .user,
-    date: i32,
-    sender_user: types.User,
-};
+type: enums.MessageOriginType = .user,
+date: i32,
+sender_user: types.User,
