@@ -1,0 +1,427 @@
+const std = @import("std");
+const http = std.http;
+
+const types = @import("types");
+const InputFile = types.InputFile;
+const Response = types.Response;
+
+const errors = @import("errors");
+const ZiogramError = errors.ZiogramError;
+
+const BotOptions = @import("../client/bot_options.zig");
+const Endpoint = @import("../client/endpoint.zig");
+
+const PRODUCTION = Endpoint.PRODUCTION;
+
+pub const FilesMap = std.StringHashMapUnmanaged(InputFile);
+
+endpoint: Endpoint = PRODUCTION,
+client: http.Client,
+allocator: std.mem.Allocator,
+io: std.Io,
+proxy: ?*http.Client.Proxy = null,
+
+pub fn init(allocator: std.mem.Allocator, io: std.Io, endpoint: ?Endpoint, proxy: ?*const http.Client.Proxy) !*@This() {
+    const self = try allocator.create(@This());
+    errdefer allocator.destroy(self);
+
+    self.* = .{
+        .endpoint = endpoint orelse PRODUCTION,
+        .client = http.Client{
+            .allocator = allocator,
+            .io = io,
+        },
+        .allocator = allocator,
+        .io = io,
+        .proxy = null,
+    };
+
+    if (proxy) |p| {
+        const p_heap = try allocator.create(http.Client.Proxy);
+        errdefer allocator.destroy(p_heap);
+
+        p_heap.* = p.*;
+
+        self.proxy = p_heap;
+        self.client.http_proxy = p_heap;
+        self.client.https_proxy = p_heap;
+    }
+
+    return self;
+}
+
+pub fn deinit(self: *@This()) void {
+    self.client.deinit();
+    if (self.proxy) |p| {
+        self.allocator.destroy(p);
+    }
+    const allocator = self.allocator;
+    allocator.destroy(self);
+}
+
+pub fn checkResponse(
+    allocator: std.mem.Allocator,
+    method: anytype,
+    status_code: u16,
+    content: []const u8,
+) !Response(@TypeOf(method).ReturnType) {
+    const Method = @TypeOf(method);
+    const T = Method.ReturnType;
+
+    const response = std.json.parseFromSliceLeaky(
+        Response(T),
+        allocator,
+        content,
+        .{
+            .ignore_unknown_fields = true,
+            .allocate = .alloc_always,
+        },
+    ) catch |err| {
+        var decode_err = try errors.makeDecodeError(allocator, err, content);
+        std.log.err("{s}: {s}", .{ decode_err.label, decode_err.message });
+        defer decode_err.deinit();
+        return ZiogramError.ClientDecodeError;
+    };
+
+    if (status_code >= 200 and status_code <= 226 and response.ok) {
+        return response;
+    }
+
+    const description = response.description orelse "no description";
+    const error_code = response.error_code orelse 0;
+
+    if (response.parameters) |params| {
+        const method_chat_id = if (@hasField(Method, "chat_id")) method.chat_id else null;
+
+        if (params.retry_after) |ra| {
+            var err_detail = try errors.makeRetryAfter(
+                allocator,
+                Method.api_method,
+                method_chat_id,
+                @intCast(ra),
+                description,
+            );
+            std.log.err("{s}: {s}", .{ err_detail.label, err_detail.message });
+            defer err_detail.deinit();
+            return ZiogramError.TelegramRetryAfter;
+        }
+
+        if (params.migrate_to_chat_id) |mid| {
+            var err_detail = try errors.makeMigrateToChat(
+                allocator,
+                method_chat_id,
+                mid,
+                description,
+            );
+            defer err_detail.deinit();
+            std.log.err("{s}: {s}", .{ err_detail.label, err_detail.message });
+            return ZiogramError.TelegramMigrateToChat;
+        }
+    }
+
+    var api_err = try errors.makeTelegramError(allocator, Method.api_method, error_code, description);
+    defer api_err.deinit();
+    std.log.err("{s}: {s}\n  └─ Info: {s}", .{ api_err.label, api_err.message, api_err.url orelse "N/A" });
+
+    return switch (status_code) {
+        400 => ZiogramError.TelegramBadRequest,
+        401 => ZiogramError.TelegramUnauthorizedError,
+        403 => ZiogramError.TelegramForbiddenError,
+        404 => ZiogramError.TelegramNotFound,
+        409 => ZiogramError.TelegramConflictError,
+        413 => ZiogramError.TelegramEntityTooLarge,
+        500...599 => ZiogramError.TelegramServerError,
+        else => ZiogramError.TelegramAPIError,
+    };
+}
+
+pub fn prepareValue(
+    allocator: std.mem.Allocator,
+    io: std.Io,
+    jw: anytype,
+    value: anytype,
+    files: *FilesMap,
+    bot_options: ?BotOptions,
+) !void {
+    const T = @TypeOf(value);
+
+    switch (@typeInfo(T)) {
+        .optional => {
+            if (value) |v| try prepareValue(allocator, io, jw, v, files, bot_options) else try jw.write(null);
+        },
+
+        .@"union" => {
+            if (comptime T == InputFile) {
+                switch (value) {
+                    .file_id, .url => |str| try jw.write(str),
+                    inline .fs, .buffer => {
+                        var random_bytes: [8]u8 = undefined;
+                        std.Io.random(io, &random_bytes);
+
+                        const hex_name = std.fmt.bytesToHex(random_bytes, .lower);
+
+                        const key = try std.fmt.allocPrint(allocator, "f_{s}", .{hex_name});
+                        try files.put(allocator, key, value);
+
+                        const attach_str = try std.fmt.allocPrint(allocator, "attach://{s}", .{key});
+                        defer allocator.free(attach_str);
+                        try jw.write(attach_str);
+                    },
+                }
+                return;
+            }
+            switch (value) {
+                inline else => |payload| try jw.write(payload),
+            }
+        },
+
+        .@"struct" => {
+            try jw.beginObject();
+            inline for (std.meta.fields(T)) |field| {
+                if (comptime isMetaField(field.name)) continue;
+
+                var field_val = @field(value, field.name);
+                const is_optional = comptime @typeInfo(field.type) == .optional;
+
+                if (comptime is_optional) {
+                    if (bot_options) |o| {
+                        if (field_val == null) {
+                            if (comptime @hasField(BotOptions, field.name)) {
+                                field_val = @field(o, field.name);
+                            }
+                        }
+                    }
+
+                    if (field_val) |v| {
+                        try jw.objectField(field.name);
+                        try prepareValue(allocator, io, jw, v, files, null);
+                    }
+                } else {
+                    try jw.objectField(field.name);
+                    try prepareValue(allocator, io, jw, field_val, files, null);
+                }
+            }
+            try jw.endObject();
+        },
+
+        .pointer => |ptr| {
+            if (comptime ptr.size == .slice and ptr.child == u8) {
+                try jw.write(value);
+            } else if (comptime ptr.size == .slice) {
+                try jw.beginArray();
+                for (value) |item| try prepareValue(allocator, io, jw, item, files, null);
+                try jw.endArray();
+            } else {
+                try prepareValue(allocator, io, jw, value.*, files, null);
+            }
+        },
+
+        inline else => try jw.write(value),
+    }
+}
+
+fn isMetaField(comptime name: []const u8) bool {
+    return std.mem.eql(u8, name, "ReturnType") or std.mem.eql(u8, name, "api_method");
+}
+
+fn writePart(
+    self: *@This(),
+    writer: *std.Io.Writer,
+    name: []const u8,
+    value: anytype,
+    boundary: []const u8,
+) !void {
+    const T = @TypeOf(value);
+
+    try writer.print("--{s}\r\n", .{boundary});
+    try writer.print("Content-Disposition: form-data; name=\"{s}\"", .{name});
+
+    if (comptime T == types.InputFile) {
+        switch (value) {
+            .fs, .buffer => {
+                try writer.print("; filename=\"{s}\"\r\n", .{value.getFilename()});
+                try writer.writeAll("Content-Type: application/octet-stream\r\n\r\n");
+                try value.writeTo(self.io, writer);
+            },
+            .url, .file_id => |str| {
+                try writer.writeAll("\r\n\r\n");
+                try writer.writeAll(str);
+            },
+        }
+    } else {
+        try writer.writeAll("\r\n\r\n");
+
+        switch (@typeInfo(T)) {
+            .optional => if (value) |v| try writePart(self, writer, name, v, boundary),
+            .@"union" => {
+                if (comptime T == types.ChatId) {
+                    switch (value) {
+                        .id => |id| try writer.print("{d}", .{id}),
+                        .username => |u| try writer.writeAll(u),
+                    }
+                } else {
+                    var stringifier = std.json.Stringify{
+                        .writer = writer,
+                        .options = .{ .emit_null_optional_fields = false },
+                    };
+                    try stringifier.write(value);
+                }
+            },
+            .@"struct" => {
+                var stringifier = std.json.Stringify{
+                    .writer = writer,
+                    .options = .{ .emit_null_optional_fields = false },
+                };
+                try stringifier.write(value);
+            },
+            .@"enum" => try writer.writeAll(@tagName(value)),
+            .bool => try writer.writeAll(if (value) "true" else "false"),
+            .int, .float => try writer.print("{d}", .{value}),
+            .pointer => |ptr| {
+                if (ptr.size == .slice and ptr.child == u8) {
+                    try writer.writeAll(value);
+                } else {
+                    try writer.print("{any}", .{value});
+                }
+            },
+            else => try writer.print("{any}", .{value}),
+        }
+    }
+    try writer.writeAll("\r\n");
+}
+
+fn writeMultipart(
+    self: *@This(),
+    writer: *std.Io.Writer,
+    method: anytype,
+    boundary: []const u8,
+    bot_options: ?BotOptions,
+) !void {
+    const MethodType = @TypeOf(method);
+
+    inline for (std.meta.fields(MethodType)) |field| {
+        if (comptime isMetaField(field.name)) continue;
+
+        var value = @field(method, field.name);
+        const is_optional = comptime @typeInfo(field.type) == .optional;
+
+        if (comptime is_optional) {
+            if (value == null and bot_options != null) {
+                if (comptime @hasField(BotOptions, field.name)) {
+                    value = @field(bot_options.?, field.name);
+                }
+            }
+
+            if (value) |final_value| {
+                try self.writePart(writer, field.name, final_value, boundary);
+            }
+        } else {
+            try self.writePart(writer, field.name, value, boundary);
+        }
+    }
+    try writer.print("--{s}--\r\n", .{boundary});
+}
+
+pub fn makeRequest(
+    self: *@This(),
+    allocator: std.mem.Allocator,
+    token: []const u8,
+    method: anytype,
+    bot_options: ?BotOptions,
+) !@TypeOf(method).ReturnType {
+    const Method = @TypeOf(method);
+    const url_str = try self.endpoint.apiUrl(allocator, token, Method.api_method);
+
+    var has_files = false;
+    inline for (std.meta.fields(Method)) |field| {
+        if (field.type == types.InputFile or field.type == ?types.InputFile) {
+            has_files = true;
+            break;
+        }
+    }
+
+    const boundary = "----ZiogramBoundary42";
+    var content_type: []const u8 = "application/json";
+
+    var payload_aw = std.Io.Writer.Allocating.init(allocator);
+    defer payload_aw.deinit();
+
+    if (has_files) {
+        content_type = try std.fmt.allocPrint(allocator, "multipart/form-data; boundary={s}", .{boundary});
+        try self.writeMultipart(&payload_aw.writer, method, boundary, bot_options);
+    } else {
+        var jws = std.json.Stringify{
+            .writer = &payload_aw.writer,
+            .options = .{ .emit_null_optional_fields = false },
+        };
+        var files_map = FilesMap.empty;
+
+        try prepareValue(allocator, self.io, &jws, method, &files_map, bot_options);
+    }
+
+    const payload_data = payload_aw.written();
+
+    var response_aw = std.Io.Writer.Allocating.init(allocator);
+    defer response_aw.deinit();
+
+    const result = self.client.fetch(.{
+        .location = .{ .url = url_str },
+        .method = if (payload_data.len > 0) .POST else .GET,
+        .payload = if (payload_data.len > 0) payload_data else null,
+        .response_writer = &response_aw.writer,
+        .headers = .{
+            .content_type = .{ .override = content_type },
+            .connection = .{ .override = "close" },
+        },
+    }) catch |err| {
+        if (err == error.NameServerFailure or err == error.TemporaryNameServerFailure) {
+            std.log.err("DNS resolution failed. Check your internet connection.", .{});
+            return ZiogramError.NameServerFailure;
+        }
+        std.log.err("Network error while calling '{s}': {s}", .{ Method.api_method, @errorName(err) });
+        return ZiogramError.TelegramNetworkError;
+    };
+
+    const status_code: u16 = @as(u16, @intFromEnum(result.status));
+    const response_content = response_aw.written();
+
+    const response = try checkResponse(allocator, method, status_code, response_content);
+
+    return response.result orelse return error.TelegramBadRequest;
+}
+
+pub fn streamContent(
+    self: *@This(),
+    url: []const u8,
+    writer: *std.Io.Writer,
+) !void {
+    const uri = try std.Uri.parse(url);
+
+    var req = try self.client.request(.GET, uri, .{
+        .keep_alive = false,
+    });
+    defer req.deinit();
+
+    try req.sendBodiless();
+
+    var redirect_buf: [8 * 1024]u8 = undefined;
+    var response = try req.receiveHead(&redirect_buf);
+
+    const status_code: u16 = @as(u16, @intFromEnum(response.head.status));
+    if (status_code < 200 or status_code > 226) {
+        return switch (status_code) {
+            401 => ZiogramError.TelegramUnauthorizedError,
+            403 => ZiogramError.TelegramForbiddenError,
+            404 => ZiogramError.TelegramNotFound,
+            500...599 => ZiogramError.TelegramServerError,
+            else => ZiogramError.TelegramAPIError,
+        };
+    }
+
+    var transfer_buf: [65536]u8 = undefined;
+    const reader = response.reader(&transfer_buf);
+    _ = reader.streamRemaining(writer) catch |err| switch (err) {
+        error.ReadFailed => return response.bodyErr().?,
+        error.WriteFailed => return ZiogramError.TelegramNetworkError,
+    };
+}
