@@ -399,7 +399,7 @@ var bot = try Bot.init(token, session, .{
 ### Using a Local Bot API Server
 
 ```zig
-const local_api = try ziogram.TelegramAPI.fromBase(init.gpa, "http://localhost:8081", true);
+const local_api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", true);
 
 var session = try ClientSession.init(init.gpa, init.io, null);
 session.base.api = local_api;
