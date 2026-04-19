@@ -37,13 +37,22 @@ pub const InputFile = union(enum) {
         return .{ .buffer = .{ .data = data, .filename = filename } };
     }
 
-    pub fn getFilename(self: InputFile) []const u8 {
-        return switch (self) {
-            .fs => |f| f.filename,
-            .buffer => |b| b.filename,
-            .url => |u| std.fs.path.basename(u),
-            .file_id => "file",
-        };
+    pub fn getFilename(self: InputFile, buf: []u8) []const u8 {
+        switch (self) {
+            .fs => |f| return f.filename,
+            .buffer => |b| return b.filename,
+            .file_id => return "file",
+            .url => |u| {
+                const uri = std.Uri.parse(u) catch return "file";
+                const raw_path = switch (uri.path) {
+                    .raw, .percent_encoded => |s| s,
+                };
+                const encoded_name = std.fs.path.basenamePosix(raw_path);
+                if (encoded_name.len == 0) return "file";
+                const component: std.Uri.Component = .{ .percent_encoded = encoded_name };
+                return component.toRaw(buf) catch encoded_name;
+            },
+        }
     }
 
     pub fn writeTo(self: InputFile, io: Io, w: *Io.Writer) !void {
