@@ -231,7 +231,6 @@ const Bot = ziogram.Bot;
 const Client = ziogram.Client;
 
 const types = ziogram.types;
-const CallbackQuery = types.CallbackQuery;
 const Message = types.Message;
 const Update = types.Update;
 
@@ -398,16 +397,17 @@ var bot = try Bot.init(token, client, .{
 ### Using a Local Bot API Server
 
 ```zig
-const local_api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", null);
+var api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", null);
+defer api.deinit(gpa);
 
-var client = try Client.init(init.gpa, init.io, .{ .api = local_api });
+var client = try Client.init(init.gpa, init.io, .{ .api = api });
 defer client.deinit();
 ```
 
 For path mapping between the local server and your filesystem:
 
 ```zig
-const local_api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", .{
+var api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", .{
     .server_path = "/var/lib/telegram-bot-api/",
     .local_path  = "/mnt/bot-storage/",
 });
