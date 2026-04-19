@@ -1,11 +1,10 @@
 const std = @import("std");
 
+const LocalPaths = @import("local_paths.zig");
+
 pub const FilesPathWrapper = union(enum) {
     bare: void,
-    simple: struct {
-        server_path: []const u8,
-        local_path: []const u8,
-    },
+    simple: LocalPaths,
 
     pub fn toLocal(self: @This(), allocator: std.mem.Allocator, path: []const u8) ![]const u8 {
         if (self == .bare) return try allocator.dupe(u8, path);
@@ -38,13 +37,17 @@ fn format(self: @This(), allocator: std.mem.Allocator, template: []const u8, k1:
     return try std.fmt.allocPrint(allocator, "{s}{s}{s}{s}{s}", .{ c1.@"0", v1, c2.@"0", v2, c2.@"1" });
 }
 
-pub fn fromBase(allocator: std.mem.Allocator, base_url: []const u8, is_local: bool, wrap_local_file: ?FilesPathWrapper) !@This() {
+pub fn fromBase(allocator: std.mem.Allocator, base_url: []const u8, local_paths: ?LocalPaths) !@This() {
     const root = std.mem.trimEnd(u8, base_url, "/");
+    const is_local = std.mem.startsWith(u8, root, "http://");
     return .{
         .base = try std.fmt.allocPrint(allocator, "{s}/bot{{token}}/{{method}}", .{root}),
         .file = try std.fmt.allocPrint(allocator, "{s}/file/bot{{token}}/{{path}}", .{root}),
         .is_local = is_local,
-        .wrap_local_file = wrap_local_file orelse .bare,
+        .wrap_local_file = if (local_paths) |p| .{ .simple = .{
+            .server_path = p.server_path,
+            .local_path = p.local_path,
+        } } else .bare,
         .is_owned = true,
     };
 }
