@@ -1,6 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetForumTopicIconStickers = struct {
-    pub const ReturnType = []const types.Sticker;
-    pub const api_method = "getForumTopicIconStickers";
-};
+pub const ReturnType = []const types.Sticker;
+pub const api_method = "getForumTopicIconStickers";

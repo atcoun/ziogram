@@ -1,6 +1,4 @@
-pub const GetManagedBotToken = struct {
-    user_id: i32,
+user_id: i64,
 
-    pub const ReturnType = []const u8;
-    pub const api_method = "getManagedBotToken";
-};
+pub const ReturnType = []const u8;
+pub const api_method = "getManagedBotToken";

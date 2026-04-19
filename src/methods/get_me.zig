@@ -1,6 +1,4 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetMe = struct {
-    pub const ReturnType = types.User;
-    pub const api_method = "getMe";
-};
+pub const ReturnType = types.User;
+pub const api_method = "getMe";

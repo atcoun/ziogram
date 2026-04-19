@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetChatMenuButton = struct {
-    chat_id: ?i32 = null,
+pub const ReturnType = types.MenuButton;
+pub const api_method = "getChatMenuButton";
 
-    pub const ReturnType = types.MenuButton;
-    pub const api_method = "getChatMenuButton";
-};
+chat_id: ?i64 = null,

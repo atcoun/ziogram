@@ -1,11 +1,9 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetGameHighScores = struct {
-    user_id: i32,
-    chat_id: ?i32 = null,
-    message_id: ?i32 = null,
-    inline_message_id: ?[]const u8 = null,
+pub const ReturnType = []const types.GameHighScore;
+pub const api_method = "getGameHighScores";
 
-    pub const ReturnType = []const types.GameHighScore;
-    pub const api_method = "getGameHighScores";
-};
+user_id: i64,
+chat_id: ?i64 = null,
+message_id: ?i32 = null,
+inline_message_id: ?[]const u8 = null,

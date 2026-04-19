@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetStickerSet = struct {
-    name: []const u8,
+pub const ReturnType = types.StickerSet;
+pub const api_method = "getStickerSet";
 
-    pub const ReturnType = types.StickerSet;
-    pub const api_method = "getStickerSet";
-};
+name: []const u8,

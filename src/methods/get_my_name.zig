@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetMyName = struct {
-    language_code: ?[]const u8 = null,
+pub const ReturnType = types.BotName;
+pub const api_method = "getMyName";
 
-    pub const ReturnType = types.BotName;
-    pub const api_method = "getMyName";
-};
+language_code: ?[]const u8 = null,

@@ -1,9 +1,7 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const DeclineChatJoinRequest = struct {
-    chat_id: types.ChatId,
-    user_id: i32,
+pub const ReturnType = bool;
+pub const api_method = "declineChatJoinRequest";
 
-    pub const ReturnType = bool;
-    pub const api_method = "declineChatJoinRequest";
-};
+chat_id: types.ChatId,
+user_id: i64,

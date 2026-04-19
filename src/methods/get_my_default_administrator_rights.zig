@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetMyDefaultAdministratorRights = struct {
-    for_channels: ?bool = null,
+pub const ReturnType = types.ChatAdministratorRights;
+pub const api_method = "getMyDefaultAdministratorRights";
 
-    pub const ReturnType = types.ChatAdministratorRights;
-    pub const api_method = "getMyDefaultAdministratorRights";
-};
+for_channels: ?bool = null,

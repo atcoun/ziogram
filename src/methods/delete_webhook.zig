@@ -1,6 +1,4 @@
-pub const DeleteWebhook = struct {
-    drop_pending_updates: ?bool = null,
+pub const ReturnType = bool;
+pub const api_method = "deleteWebhook";
 
-    pub const ReturnType = bool;
-    pub const api_method = "deleteWebhook";
-};
+drop_pending_updates: ?bool = null,

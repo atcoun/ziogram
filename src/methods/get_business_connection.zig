@@ -1,8 +1,6 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const GetBusinessConnection = struct {
-    business_connection_id: []const u8,
+pub const ReturnType = types.BusinessConnection;
+pub const api_method = "getBusinessConnection";
 
-    pub const ReturnType = types.BusinessConnection;
-    pub const api_method = "getBusinessConnection";
-};
+business_connection_id: []const u8,

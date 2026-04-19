@@ -1,15 +1,13 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const CopyMessages = struct {
-    chat_id: types.ChatId,
-    from_chat_id: types.ChatId,
-    message_ids: []const i32,
-    message_thread_id: ?i32 = null,
-    direct_messages_topic_id: ?i32 = null,
-    disable_notification: ?bool = null,
-    protect_content: ?bool = null,
-    remove_caption: ?bool = null,
+pub const ReturnType = []const types.MessageId;
+pub const api_method = "copyMessages";
 
-    pub const ReturnType = []const types.MessageId;
-    pub const api_method = "copyMessages";
-};
+chat_id: types.ChatId,
+from_chat_id: types.ChatId,
+message_ids: []const i32,
+message_thread_id: ?i32 = null,
+direct_messages_topic_id: ?i32 = null,
+disable_notification: ?bool = null,
+protect_content: ?bool = null,
+remove_caption: ?bool = null,

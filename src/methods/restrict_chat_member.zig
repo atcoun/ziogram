@@ -1,12 +1,10 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const RestrictChatMember = struct {
-    chat_id: types.ChatId,
-    user_id: i64,
-    permissions: types.ChatPermissions,
-    use_independent_chat_permissions: ?bool = null,
-    until_date: ?i32 = null,
+pub const ReturnType = bool;
+pub const api_method = "restrictChatMember";
 
-    pub const ReturnType = bool;
-    pub const api_method = "restrictChatMember";
-};
+chat_id: types.ChatId,
+user_id: i64,
+permissions: types.ChatPermissions,
+use_independent_chat_permissions: ?bool = null,
+until_date: ?i32 = null,

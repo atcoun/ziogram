@@ -1,9 +1,7 @@
-const types = @import("../types.zig");
+const types = @import("types");
 
-pub const DeleteMessage = struct {
-    chat_id: types.ChatId,
-    message_id: i32,
+pub const ReturnType = bool;
+pub const api_method = "deleteMessage";
 
-    pub const ReturnType = bool;
-    pub const api_method = "deleteMessage";
-};
+chat_id: types.ChatId,
+message_id: i32,
