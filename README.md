@@ -66,7 +66,7 @@ Uses `std.json` with `ArenaAllocator` strategies. Struct fields are reflected at
 `InputFile` is a tagged union supporting filesystem paths, in-memory buffers, `file_id`, and URLs. Files are transparently streamed as `multipart/form-data` — the same `sendPhoto` call works for all input types.
 
 ### Structured Error Handling
-All Telegram API errors map to typed `ZiogramError` variants. Rate limits, group migrations, decode failures, and HTTP errors each produce a `errors.zig` with a human-readable message and a link to the relevant Telegram docs page.
+All Telegram API errors map to typed `ZiogramError` variants. Rate limits, group migrations, decode failures, and HTTP errors each produce an entry in `errors.zig` with a human-readable message and a link to the relevant Telegram docs page.
 
 ---
 
@@ -150,7 +150,7 @@ zig build run
 
 ### Initialization
 
-`Bot` is created from a token and a `ClientSession`. The session owns the HTTP client and the allocator.
+`Bot` is created from a token and a `Client`. The session owns the HTTP client and the allocator.
 
 ```zig
 const std = @import("std");
