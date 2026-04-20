@@ -432,7 +432,6 @@ fn handleRequest(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, req
         return;
     }
 
-    // Verify secret token
     var found_secret: ?[]const u8 = null;
     var it = req.iterateHeaders();
     while (it.next()) |header| {
