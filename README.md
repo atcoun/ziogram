@@ -278,7 +278,7 @@ pub fn main(init: std.process.Init) !void {
         };
 
         for (updates) |update| {
-            try group.concurrent(io, handle_update, .{ gpa, bot, update });
+            try group.concurrent(io, handleUpdate, .{ gpa, bot, update });
             offset = update.update_id + 1;
         }
 
@@ -288,24 +288,24 @@ pub fn main(init: std.process.Init) !void {
     }
 }
 
-pub fn handle_update(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
+pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
     var arena = std.heap.ArenaAllocator.init(gpa);
     defer arena.deinit();
 
     const allocator = arena.allocator();
 
     if (update.message) |message| {
-        handle_message(allocator, bot, message) catch |err| {
-            std.log.err("Error [handle_message]: {any}", .{err});
+        handleMessage(allocator, bot, message) catch |err| {
+            std.log.err("Error [handleMessage]: {any}", .{err});
         };
     } else if (update.callback_query) |callback_query| {
-        handle_callback_query(allocator, bot, callback_query) catch |err| {
-            std.log.err("Error [handle_callback_query]: {any}", .{err});
+        handleCallbackQuery(allocator, bot, callback_query) catch |err| {
+            std.log.err("Error [handleCallbackQuery]: {any}", .{err});
         };
     }
 }
 
-pub fn handle_message(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
+pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
     _ = bot.sendMessage(allocator, .{
         .chat_id = .{ .id = message.chat.id },
         .text =
@@ -332,11 +332,11 @@ pub fn handle_message(allocator: std.mem.Allocator, bot: Bot, message: Message) 
     };
 }
 
-pub fn handle_callback_query(allocator: std.mem.Allocator, bot: Bot, callback_query: CallbackQuery) !void {
-    if (callback_query.data) |data| {
+pub fn handleCallbackQuery(allocator: std.mem.Allocator, bot: Bot, callbackQuery: CallbackQuery) !void {
+    if (callbackQuery.data) |data| {
         if (std.mem.eql(u8, data, "ping")) {
             _ = try bot.answerCallbackQuery(allocator, .{
-                .callback_query_id = callback_query.id,
+                .callback_query_id = callbackQuery.id,
                 .text = "Yes, I'm here! 👋 If you like the library — drop a ⭐ on GitHub!",
                 .show_alert = true,
             });
