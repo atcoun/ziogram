@@ -332,11 +332,11 @@ pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !
     };
 }
 
-pub fn handleCallbackQuery(allocator: std.mem.Allocator, bot: Bot, callbackQuery: CallbackQuery) !void {
-    if (callbackQuery.data) |data| {
+pub fn handleCallbackQuery(allocator: std.mem.Allocator, bot: Bot, callback_query: CallbackQuery) !void {
+    if (callback_query.data) |data| {
         if (std.mem.eql(u8, data, "ping")) {
             _ = try bot.answerCallbackQuery(allocator, .{
-                .callback_query_id = callbackQuery.id,
+                .callback_query_id = callback_query.id,
                 .text = "Yes, I'm here! 👋 If you like the library — drop a ⭐ on GitHub!",
                 .show_alert = true,
             });
