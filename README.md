@@ -349,7 +349,7 @@ pub fn handleCallbackQuery(allocator: std.mem.Allocator, bot: Bot, callbackQuery
 
 ### Webhook
 
-To use webhook mode, you need a public HTTPS URL (e.g. via [localtunnel](https://theboroer.github.io/localtunnel-www/) or a real server).
+To use webhook mode, you need a public HTTPS URL (e.g. via [localhost.run](https://localhost.run) or a real server).
 
 ```zig
 const std = @import("std");
