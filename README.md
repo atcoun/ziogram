@@ -24,7 +24,7 @@
 > [!NOTE]
 > **Status: ~95% complete — usable, but not yet feature-complete**
 >
-> The library is ready to use for most bot development tasks. All Telegram object types, enums, and API methods are fully implemented. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). The only remaining gap is webhook support.
+> The library is ready to use for most bot development tasks. All Telegram object types, enums, and API methods are fully implemented. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). Webhook support is also available — see [Webhook](#webhook).
 
 > [!WARNING]
 > Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is" without warranty of any kind. Use at your own discretion.
@@ -347,6 +347,166 @@ pub fn handle_callback_query(allocator: std.mem.Allocator, bot: Bot, callback_qu
 
 ---
 
+### Webhook
+
+To use webhook mode, you need a public HTTPS URL (e.g. via [localtunnel](https://theboroer.github.io/localtunnel-www/) or a real server).
+
+```zig
+const std = @import("std");
+const Io = std.Io;
+const ziogram = @import("ziogram");
+
+const Client = ziogram.Client;
+const Bot = ziogram.Bot;
+
+const types = ziogram.types;
+const Message = types.Message;
+const Update = types.Update;
+
+const secret_token = "YOUR_SECRET_TOKEN";
+
+pub fn main(init: std.process.Init) !void {
+    const arena = init.arena;
+    const gpa = init.gpa;
+    const io = init.io;
+
+    const token = "YOUR_BOT_TOKEN";
+
+    const client = try Client.init(gpa, init.io, .{});
+    defer client.deinit();
+
+    const bot = try Bot.init(token, client, .{});
+    defer bot.deinit();
+
+    const allocator = arena.allocator();
+
+    _ = bot.setWebhook(allocator, .{
+        .url = "https://example.com/webhook",
+        .drop_pending_updates = true,
+        .secret_token = secret_token,
+    }) catch |err| {
+        std.log.err("Failed to set webhook: {any}", .{err});
+        return err;
+    };
+
+    try startWebhook(io, gpa, bot, 8080);
+}
+
+pub fn startWebhook(io: Io, gpa: std.mem.Allocator, bot: Bot, port: u16) !void {
+    const addr = try Io.net.IpAddress.parseIp4("0.0.0.0", port);
+    var server = try addr.listen(io, .{});
+    defer server.deinit(io);
+
+    std.log.info("Webhook listening on :{d}", .{port});
+
+    var group = Io.Group.init;
+    defer group.await(io) catch {};
+
+    while (true) {
+        const stream = try server.accept(io);
+        try group.concurrent(io, handleConn, .{ gpa, io, bot, &group, stream });
+    }
+}
+
+fn handleConn(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, stream: Io.net.Stream) !void {
+    defer stream.close(io);
+
+    var read_buf: [8192]u8 = undefined;
+    var write_buf: [4096]u8 = undefined;
+
+    var net_reader = stream.reader(io, &read_buf);
+    var net_writer = stream.writer(io, &write_buf);
+
+    var http = std.http.Server.init(&net_reader.interface, &net_writer.interface);
+
+    while (true) {
+        var req = http.receiveHead() catch break;
+        handleRequest(gpa, io, bot, group, &req) catch break;
+        if (!req.head.keep_alive) break;
+    }
+}
+
+fn handleRequest(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, req: *std.http.Server.Request) !void {
+    if (req.head.method != .POST or !std.mem.eql(u8, req.head.target, "/webhook")) {
+        try req.respond("Not Found", .{ .status = .not_found });
+        return;
+    }
+
+    // Verify secret token
+    var found_secret: ?[]const u8 = null;
+    var it = req.iterateHeaders();
+    while (it.next()) |header| {
+        if (std.ascii.eqlIgnoreCase(header.name, "x-telegram-bot-api-secret-token")) {
+            found_secret = header.value;
+            break;
+        }
+    }
+
+    const secret = found_secret orelse {
+        try req.respond("Forbidden", .{ .status = .forbidden });
+        return;
+    };
+    if (!std.mem.eql(u8, secret, secret_token)) {
+        try req.respond("Forbidden", .{ .status = .forbidden });
+        return;
+    }
+
+    var body_buf: [65536]u8 = undefined;
+    const body_reader = try req.readerExpectContinue(&body_buf);
+    const n = try body_reader.readSliceShort(&body_buf);
+    const body = body_buf[0..n];
+
+    try req.respond("", .{ .status = .ok });
+
+    const parsed = std.json.parseFromSlice(
+        Update,
+        gpa,
+        body,
+        .{ .ignore_unknown_fields = true },
+    ) catch |err| {
+        std.log.err("json parse: {any}", .{err});
+        return;
+    };
+
+    group.async(io, handleUpdate, .{ gpa, bot, parsed.value, parsed });
+}
+
+pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update, parsed: std.json.Parsed(Update)) !void {
+    defer parsed.deinit();
+
+    var arena = std.heap.ArenaAllocator.init(gpa);
+    defer arena.deinit();
+
+    const allocator = arena.allocator();
+
+    if (update.message) |message| {
+        handleMessage(allocator, bot, message) catch |err| {
+            std.log.err("Error [handleMessage]: {any}", .{err});
+        };
+    }
+}
+
+fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
+    if (message.text) |text| {
+        _ = bot.sendMessage(allocator, .{
+            .chat_id = .{ .id = message.chat.id },
+            .text = text,
+        }) catch |err| {
+            std.log.err("Error [sendMessage]: {any}", .{err});
+            return err;
+        };
+    }
+}
+```
+
+> [!TIP]
+> Each incoming update is processed concurrently via `group.async` — the HTTP handler responds to Telegram immediately and dispatches the update without blocking the next request.
+
+> [!NOTE]
+> The `secret_token` field in `setWebhook` is optional but strongly recommended. It ensures that only Telegram can send updates to your endpoint.
+
+---
+
 ### Sending a Photo
 
 `InputFile` accepts a filesystem path, an in-memory buffer, a `file_id`, or a URL — the transport (multipart vs JSON) is selected automatically.
@@ -494,7 +654,7 @@ Full error set:
 - [x] Local Bot API server support with path mapping
 - [x] Structured error handling with `DetailedError`
 - [x] All Telegram object types (100% complete)
-- [ ] Webhook support
+- [x] Webhook support
 - [x] `getFile` — returns file metadata (`File` object with `file_path`)
 - [x] File download — `Bot.download` (by `file_id`) and `Bot.downloadFile` (by `file_path`), with local Bot API server support
 
