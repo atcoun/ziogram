@@ -61,3 +61,87 @@ pub const TEST = @This(){
     .base = "https://api.telegram.org/bot{token}/test/{method}",
     .file = "https://api.telegram.org/file/bot{token}/test/{path}",
 };
+
+test "PRODUCTION apiUrl" {
+    const allocator = std.testing.allocator;
+    const url = try PRODUCTION.apiUrl(allocator, "TOKEN", "getMe");
+    defer allocator.free(url);
+    try std.testing.expectEqualStrings(
+        "https://api.telegram.org/botTOKEN/getMe",
+        url,
+    );
+}
+
+test "PRODUCTION fileUrl" {
+    const allocator = std.testing.allocator;
+    const url = try PRODUCTION.fileUrl(allocator, "TOKEN", "photos/file_0.jpg");
+    defer allocator.free(url);
+    try std.testing.expectEqualStrings(
+        "https://api.telegram.org/file/botTOKEN/photos/file_0.jpg",
+        url,
+    );
+}
+
+test "TEST apiUrl" {
+    const allocator = std.testing.allocator;
+    const url = try TEST.apiUrl(allocator, "TOKEN", "sendMessage");
+    defer allocator.free(url);
+    try std.testing.expectEqualStrings(
+        "https://api.telegram.org/botTOKEN/test/sendMessage",
+        url,
+    );
+}
+
+test "fromBase http is_local=true" {
+    const allocator = std.testing.allocator;
+    var api = try fromBase(allocator, "http://localhost:8081", null);
+    defer api.deinit(allocator);
+    try std.testing.expect(api.is_local == true);
+}
+
+test "fromBase https is_local=false" {
+    const allocator = std.testing.allocator;
+    var api = try fromBase(allocator, "https://api.telegram.org", null);
+    defer api.deinit(allocator);
+    try std.testing.expect(api.is_local == false);
+}
+
+test "fromBase trailing slash stripped" {
+    const allocator = std.testing.allocator;
+    var api = try fromBase(allocator, "http://localhost:8081/", null);
+    defer api.deinit(allocator);
+    const url = try api.apiUrl(allocator, "TOKEN", "getMe");
+    defer allocator.free(url);
+    try std.testing.expectEqualStrings("http://localhost:8081/botTOKEN/getMe", url);
+}
+
+test "toLocal bare returns same path" {
+    const allocator = std.testing.allocator;
+    const wrapper = FilesPathWrapper{ .bare = {} };
+    const result = try wrapper.toLocal(allocator, "/some/path/file.jpg");
+    defer allocator.free(result);
+    try std.testing.expectEqualStrings("/some/path/file.jpg", result);
+}
+
+test "toLocal simple remaps server path" {
+    const allocator = std.testing.allocator;
+    const wrapper = FilesPathWrapper{ .simple = .{
+        .server_path = "/var/lib/telegram-bot-api/",
+        .local_path = "/mnt/storage/",
+    } };
+    const result = try wrapper.toLocal(allocator, "/var/lib/telegram-bot-api/photos/file.jpg");
+    defer allocator.free(result);
+    try std.testing.expect(std.mem.endsWith(u8, result, "photos/file.jpg"));
+    try std.testing.expect(std.mem.startsWith(u8, result, "/mnt/storage"));
+}
+
+test "toLocal simple unknown path returns as-is" {
+    const allocator = std.testing.allocator;
+    const wrapper = FilesPathWrapper{ .simple = .{
+        .server_path = "/var/lib/telegram-bot-api/",
+        .local_path = "/mnt/storage/",
+    } };
+    const result = try wrapper.toLocal(allocator, "/other/path/file.jpg");
+    defer allocator.free(result);
+    try std.testing.expectEqualStrings("/other/path/file.jpg", result);
+}
