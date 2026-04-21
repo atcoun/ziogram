@@ -207,7 +207,7 @@ Ready-to-use examples are available in the [`examples/`](examples/) directory:
 
 | File | Description |
 |------|-------------|
-| [`echo_bot.zig`](examples/echo_bot.zig) | Long polling — receives updates via `getUpdates`, handles messages and callback queries |
+| [`echo_bot.zig`](examples/echo_bot.zig) | Long polling — receives updates via `getUpdates` |
 | [`echo_bot_webhook.zig`](examples/echo_bot_webhook.zig) | Webhook — listens for incoming HTTPS requests from Telegram |
 
 ---
