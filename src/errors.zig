@@ -140,3 +140,83 @@ pub fn makeTelegramError(
         .url_owned = true,
     };
 }
+
+test "makeTelegramError message contains method name and code" {
+    const allocator = std.testing.allocator;
+    var err = try makeTelegramError(allocator, "sendMessage", 403, "Forbidden");
+    defer err.deinit();
+
+    try std.testing.expectEqualStrings("Telegram API Error", err.label);
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "sendMessage"));
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "403"));
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "Forbidden"));
+}
+
+test "makeTelegramError url points to lowercase method" {
+    const allocator = std.testing.allocator;
+    var err = try makeTelegramError(allocator, "sendMessage", 400, "Bad Request");
+    defer err.deinit();
+
+    const url = err.url orelse return error.MissingUrl;
+    try std.testing.expect(std.mem.containsAtLeast(u8, url, 1, "sendmessage"));
+    try std.testing.expect(std.mem.startsWith(u8, url, "https://core.telegram.org/bots/api#"));
+}
+
+test "makeRetryAfter no chat_id" {
+    const allocator = std.testing.allocator;
+    var err = try makeRetryAfter(allocator, "sendMessage", null, 30, "Too Many Requests");
+    defer err.deinit();
+
+    try std.testing.expectEqualStrings("Telegram server says", err.label);
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "30"));
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "sendMessage"));
+    try std.testing.expectEqual(@as(u32, 30), err.extra.retry_after);
+}
+
+test "makeRetryAfter with numeric chat_id" {
+    const allocator = std.testing.allocator;
+    var err = try makeRetryAfter(allocator, "sendMessage", .{ .id = 123456 }, 15, "Too Many Requests");
+    defer err.deinit();
+
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "123456"));
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "15"));
+    try std.testing.expectEqual(@as(u32, 15), err.extra.retry_after);
+}
+
+test "makeRetryAfter with username chat_id" {
+    const allocator = std.testing.allocator;
+    var err = try makeRetryAfter(allocator, "sendMessage", .{ .username = "@mychannel" }, 5, "Too Many Requests");
+    defer err.deinit();
+
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "@mychannel"));
+}
+
+test "makeMigrateToChat no chat_id" {
+    const allocator = std.testing.allocator;
+    var err = try makeMigrateToChat(allocator, null, 9999999, "Migrate");
+    defer err.deinit();
+
+    try std.testing.expectEqualStrings("Telegram server says", err.label);
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "9999999"));
+    try std.testing.expectEqual(@as(i64, 9999999), err.extra.migrate_to_chat_id);
+}
+
+test "makeMigrateToChat with numeric chat_id" {
+    const allocator = std.testing.allocator;
+    var err = try makeMigrateToChat(allocator, .{ .id = 111 }, 9999999, "Migrate");
+    defer err.deinit();
+
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "111"));
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "9999999"));
+}
+
+test "makeDecodeError contains error name and content" {
+    const allocator = std.testing.allocator;
+    var err = try makeDecodeError(allocator, error.UnexpectedToken, "{bad json}");
+    defer err.deinit();
+
+    try std.testing.expectEqualStrings("Client Error", err.label);
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "UnexpectedToken"));
+    try std.testing.expect(std.mem.containsAtLeast(u8, err.message, 1, "{bad json}"));
+    try std.testing.expectEqualStrings("UnexpectedToken", err.extra.decode_info.err_name);
+}
