@@ -12,7 +12,7 @@ allocator: std.mem.Allocator,
 token: []const u8,
 id: i64,
 client: *Client,
-bot_options: ?BotOptions = null,
+options: ?BotOptions = null,
 
 pub fn init(token: []const u8, client: *Client, options: ?BotOptions) !@This() {
     const bot_id = try token_utils.extractBotId(token);
@@ -24,7 +24,7 @@ pub fn init(token: []const u8, client: *Client, options: ?BotOptions) !@This() {
         .token = try allocator.dupe(u8, token),
         .id = bot_id,
         .client = client,
-        .bot_options = bot_options,
+        .options = bot_options,
     };
 }
 
@@ -75,7 +75,7 @@ pub fn call(
         allocator,
         self.token,
         method,
-        self.bot_options,
+        self.options,
     );
 }
 
