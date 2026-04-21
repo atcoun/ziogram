@@ -15,7 +15,7 @@
 
 <br/>
 
-[📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [🔄 Long Polling](#long-polling-loop) • [🪝 Webhook](#webhook) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
+[📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
 </div>
 
@@ -24,7 +24,7 @@
 > [!NOTE]
 > **Status: ~95% complete — usable, but not yet feature-complete**
 >
-> The library is ready to use for most bot development tasks. All Telegram object types, enums, and API methods are fully implemented. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). Webhook support is also available — see [Webhook](#webhook).
+> The library is ready to use for most bot development tasks. All Telegram object types, enums, and API methods are fully implemented. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). Webhook support is also available — see [Examples](#-examples).
 
 > [!WARNING]
 > Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is" without warranty of any kind. Use at your own discretion.
@@ -136,7 +136,7 @@ const exe = b.addExecutable(.{
 });
 ```
 
-**4. Write your bot in `src/main.zig`** — see [Quick Start](#-quick-start), [Long Polling](#long-polling-loop), or [Webhook](#webhook) for examples
+**4. Write your bot in `src/main.zig`** — see [Examples](#-examples) for ready-to-use code
 
 **5. Run**
 
@@ -182,26 +182,6 @@ pub fn main(init: std.process.Init) !void {
 > [!TIP]
 > Use an `ArenaAllocator` per update/request — all returned slices and structs are allocated into it and freed in one shot. In a loop, prefer `arena.reset(.retain_capacity)` over `deinit` + `init` to reuse the allocated buffer across iterations.
 
-```zig
-var arena = std.heap.ArenaAllocator.init(gpa);
-defer arena.deinit();
-
-var offset: i32 = 0;
-
-while (true) {
-    const allocator = arena.allocator();
-
-    const updates = try bot.getUpdates(allocator, .{ .offset = offset });
-
-    for (updates) |update| {
-        // process update...
-        offset = update.update_id + 1;
-
-        _ = arena.reset(.retain_capacity);
-    }
-}
-```
-
 ---
 
 ### Sending a Message
@@ -221,288 +201,14 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 
 ---
 
-### Long Polling Loop
+## 📂 Examples
 
-```zig
-const std = @import("std");
-const ziogram = @import("ziogram");
+Ready-to-use examples are available in the [`examples/`](examples/) directory:
 
-const Bot = ziogram.Bot;
-const Client = ziogram.Client;
-
-const types = ziogram.types;
-const CallbackQuery = types.CallbackQuery;
-const Message = types.Message;
-const Update = types.Update;
-
-pub fn main(init: std.process.Init) !void {
-    const arena = init.arena;
-    const gpa = init.gpa;
-    const io = init.io;
-
-    const token = "YOUR_BOT_TOKEN";
-
-    const client = try Client.init(gpa, init.io, .{});
-    defer client.deinit();
-
-    const bot = try Bot.init(token, client, .{ .parse_mode = .HTML });
-    defer bot.deinit();
-
-    var group = std.Io.Group.init;
-    defer group.await(io) catch {};
-
-    {
-        const allocator = arena.allocator();
-        _ = try bot.deleteWebhook(allocator, .{ .drop_pending_updates = true });
-        const me = try bot.getMe(allocator, .{});
-        if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
-    }
-
-    var offset: i32 = 0;
-
-    while (true) {
-        const allocator = arena.allocator();
-
-        const updates = bot.getUpdates(allocator, .{
-            .offset = offset,
-            .timeout = 60,
-            .allowed_updates = &.{
-                .message,
-                .callback_query,
-            },
-        }) catch |err| {
-            std.log.warn("Network error in getUpdates: {any}. Retrying in 10 seconds...", .{err});
-            const delay = std.Io.Duration.fromSeconds(10);
-            try io.sleep(delay, .awake);
-            continue;
-        };
-
-        for (updates) |update| {
-            try group.concurrent(io, handleUpdate, .{ gpa, bot, update });
-            offset = update.update_id + 1;
-        }
-
-        try group.await(io);
-
-        _ = arena.reset(.retain_capacity);
-    }
-}
-
-pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
-    var arena = std.heap.ArenaAllocator.init(gpa);
-    defer arena.deinit();
-
-    const allocator = arena.allocator();
-
-    if (update.message) |message| {
-        handleMessage(allocator, bot, message) catch |err| {
-            std.log.err("Error [handleMessage]: {any}", .{err});
-        };
-    } else if (update.callback_query) |callback_query| {
-        handleCallbackQuery(allocator, bot, callback_query) catch |err| {
-            std.log.err("Error [handleCallbackQuery]: {any}", .{err});
-        };
-    }
-}
-
-pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
-    _ = bot.sendMessage(allocator, .{
-        .chat_id = .{ .id = message.chat.id },
-        .text =
-        \\⚡ <b>ziogram</b> — Telegram Bot API library for Zig
-        \\
-        \\Fast, lightweight, and fully typed. Built on top of Zig's
-        \\native HTTP client with arena allocator support.
-        \\
-        \\If you like the library — drop a ⭐ on GitHub!
-        ,
-        .reply_markup = .{ .inline_keyboard_markup = .{
-            .inline_keyboard = &.{
-                &.{
-                    .{ .text = "🤖 Is the bot alive?", .callback_data = "ping" },
-                },
-                &.{
-                    .{ .text = "⭐ Star on GitHub", .url = "https://github.com/atcoun/ziogram" },
-                },
-            },
-        } },
-    }) catch |err| {
-        std.log.err("Error [sendMessage]: {any}", .{err});
-        return err;
-    };
-}
-
-pub fn handleCallbackQuery(allocator: std.mem.Allocator, bot: Bot, callback_query: CallbackQuery) !void {
-    if (callback_query.data) |data| {
-        if (std.mem.eql(u8, data, "ping")) {
-            _ = try bot.answerCallbackQuery(allocator, .{
-                .callback_query_id = callback_query.id,
-                .text = "Yes, I'm here! 👋 If you like the library — drop a ⭐ on GitHub!",
-                .show_alert = true,
-            });
-        }
-    }
-}
-```
-
----
-
-### Webhook
-
-To use webhook mode, you need a public HTTPS URL.
-
-```zig
-const std = @import("std");
-const Io = std.Io;
-const ziogram = @import("ziogram");
-
-const Client = ziogram.Client;
-const Bot = ziogram.Bot;
-
-const types = ziogram.types;
-const Message = types.Message;
-const Update = types.Update;
-
-const secret_token = "YOUR_SECRET_TOKEN";
-
-pub fn main(init: std.process.Init) !void {
-    const arena = init.arena;
-    const gpa = init.gpa;
-    const io = init.io;
-
-    const token = "YOUR_BOT_TOKEN";
-
-    const client = try Client.init(gpa, init.io, .{});
-    defer client.deinit();
-
-    const bot = try Bot.init(token, client, .{});
-    defer bot.deinit();
-
-    const allocator = arena.allocator();
-
-    _ = bot.setWebhook(allocator, .{
-        .url = "https://example.com/webhook",
-        .drop_pending_updates = true,
-        .secret_token = secret_token,
-    }) catch |err| {
-        std.log.err("Failed to set webhook: {any}", .{err});
-        return err;
-    };
-
-    try startWebhook(io, gpa, bot, 8080);
-}
-
-pub fn startWebhook(io: Io, gpa: std.mem.Allocator, bot: Bot, port: u16) !void {
-    const addr = try Io.net.IpAddress.parseIp4("0.0.0.0", port);
-    var server = try addr.listen(io, .{});
-    defer server.deinit(io);
-
-    std.log.info("Webhook listening on :{d}", .{port});
-
-    var group = Io.Group.init;
-    defer group.await(io) catch {};
-
-    while (true) {
-        const stream = try server.accept(io);
-        try group.concurrent(io, handleConn, .{ gpa, io, bot, &group, stream });
-    }
-}
-
-fn handleConn(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, stream: Io.net.Stream) !void {
-    defer stream.close(io);
-
-    var read_buf: [8192]u8 = undefined;
-    var write_buf: [4096]u8 = undefined;
-
-    var net_reader = stream.reader(io, &read_buf);
-    var net_writer = stream.writer(io, &write_buf);
-
-    var http = std.http.Server.init(&net_reader.interface, &net_writer.interface);
-
-    while (true) {
-        var req = http.receiveHead() catch break;
-        handleRequest(gpa, io, bot, group, &req) catch break;
-        if (!req.head.keep_alive) break;
-    }
-}
-
-fn handleRequest(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, req: *std.http.Server.Request) !void {
-    if (req.head.method != .POST or !std.mem.eql(u8, req.head.target, "/webhook")) {
-        try req.respond("Not Found", .{ .status = .not_found });
-        return;
-    }
-
-    var found_secret: ?[]const u8 = null;
-    var it = req.iterateHeaders();
-    while (it.next()) |header| {
-        if (std.ascii.eqlIgnoreCase(header.name, "x-telegram-bot-api-secret-token")) {
-            found_secret = header.value;
-            break;
-        }
-    }
-
-    const secret = found_secret orelse {
-        try req.respond("Forbidden", .{ .status = .forbidden });
-        return;
-    };
-    if (!std.mem.eql(u8, secret, secret_token)) {
-        try req.respond("Forbidden", .{ .status = .forbidden });
-        return;
-    }
-
-    var body_buf: [65536]u8 = undefined;
-    const body_reader = try req.readerExpectContinue(&body_buf);
-    const n = try body_reader.readSliceShort(&body_buf);
-    const body = body_buf[0..n];
-
-    try req.respond("", .{ .status = .ok });
-
-    const parsed = std.json.parseFromSlice(
-        Update,
-        gpa,
-        body,
-        .{ .ignore_unknown_fields = true },
-    ) catch |err| {
-        std.log.err("json parse: {any}", .{err});
-        return;
-    };
-
-    group.async(io, handleUpdate, .{ gpa, bot, parsed.value, parsed });
-}
-
-pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update, parsed: std.json.Parsed(Update)) !void {
-    defer parsed.deinit();
-
-    var arena = std.heap.ArenaAllocator.init(gpa);
-    defer arena.deinit();
-
-    const allocator = arena.allocator();
-
-    if (update.message) |message| {
-        handleMessage(allocator, bot, message) catch |err| {
-            std.log.err("Error [handleMessage]: {any}", .{err});
-        };
-    }
-}
-
-fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
-    if (message.text) |text| {
-        _ = bot.sendMessage(allocator, .{
-            .chat_id = .{ .id = message.chat.id },
-            .text = text,
-        }) catch |err| {
-            std.log.err("Error [sendMessage]: {any}", .{err});
-            return err;
-        };
-    }
-}
-```
-
-> [!TIP]
-> Each incoming update is processed concurrently via `group.async` — the HTTP handler responds to Telegram immediately and dispatches the update without blocking the next request.
-
-> [!NOTE]
-> The `secret_token` field in `setWebhook` is optional but strongly recommended. It ensures that only Telegram can send updates to your endpoint.
+| File | Description |
+|------|-------------|
+| [`echo_bot.zig`](examples/echo_bot.zig) | Long polling — receives updates via `getUpdates`, handles messages and callback queries |
+| [`echo_bot_webhook.zig`](examples/echo_bot_webhook.zig) | Webhook — listens for incoming HTTPS requests from Telegram |
 
 ---
 
@@ -519,18 +225,15 @@ _ = try bot.sendPhoto(allocator, .{
 });
 
 // Send a photo using a remote URL or an existing file_id
-// (Telegram servers will download the file from the URL or reuse the file_id)
 _ = try bot.sendPhoto(allocator, .{
-    .chat_id = .{ .id = 1234567890 }, // or .{ .username = "@username" }
+    .chat_id = .{ .id = 1234567890 },
     .photo = .{ .url = "https://example.com" }, // or .file_id = "..."
 });
 
 // Upload a file from an in-memory buffer
-// Use fromPathBuffered to read a file into memory first, then pass the buffer.
-// The caller owns the returned allocation.
 const photo_file = try InputFile.fromPathBuffered(session.io, allocator, "media/photo.png");
 _ = try bot.sendPhoto(allocator, .{
-    .chat_id = .{ .id = 1234567890 }, // or .{ .username = "@username" }
+    .chat_id = .{ .id = 1234567890 },
     .photo = photo_file,
 });
 
@@ -567,9 +270,6 @@ const path = file_meta.file_path orelse return error.TelegramFileTooLarge;
 
 try bot.downloadFile(allocator, path, &writer.interface);
 ```
-
-> [!NOTE]
-> When using a **local Bot API server**, `downloadFile` reads the file directly from the local filesystem instead of making an HTTP request. Configure path mapping on `TelegramAPI` so the server path translates correctly to your local filesystem — see [Using a Local Bot API Server](#using-a-local-bot-api-server).
 
 ---
 
@@ -669,14 +369,7 @@ Full error set:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Since this is an early-stage project, feel free to:
-
-1. Open an **issue** to discuss a feature, bug, or design question
-2. Submit a **pull request** for fixes or new method implementations
-
-Adding a new method? Follow the existing pattern:
-- One struct in `src/methods/` with `ReturnType` and `api_method`
-- One wrapper function in `src/client/bot.zig`
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
 
 ---
 
