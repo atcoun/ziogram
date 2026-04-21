@@ -20,8 +20,7 @@ pub const FilesMap = std.StringHashMapUnmanaged(InputFile);
 client: http.Client,
 allocator: std.mem.Allocator,
 io: std.Io,
-api: TelegramAPI = PRODUCTION,
-proxy: ?*http.Client.Proxy = null,
+options: ClientOptions,
 
 pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*@This() {
     const self = try allocator.create(@This());
@@ -34,8 +33,7 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*
         },
         .allocator = allocator,
         .io = io,
-        .api = options.api,
-        .proxy = null,
+        .options = options,
     };
 
     if (options.proxy) |p| {
@@ -44,7 +42,7 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*
 
         p_heap.* = p.*;
 
-        self.proxy = p_heap;
+        self.options.proxy = p_heap;
         self.client.http_proxy = p_heap;
         self.client.https_proxy = p_heap;
     }
@@ -54,7 +52,7 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*
 
 pub fn deinit(self: *@This()) void {
     self.client.deinit();
-    if (self.proxy) |p| {
+    if (self.options.proxy) |p| {
         self.allocator.destroy(p);
     }
     const allocator = self.allocator;
@@ -333,7 +331,7 @@ pub fn makeRequest(
     bot_options: ?BotOptions,
 ) !@TypeOf(method).ReturnType {
     const Method = @TypeOf(method);
-    const url_str = try self.api.apiUrl(allocator, token, Method.api_method);
+    const url_str = try self.options.api.apiUrl(allocator, token, Method.api_method);
 
     var has_files = false;
     inline for (std.meta.fields(Method)) |field| {
