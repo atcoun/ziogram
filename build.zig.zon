@@ -5,10 +5,15 @@
     .minimum_zig_version = "0.16.0",
     .dependencies = .{},
     .paths = .{
+        ".github",
+        "examples",
         "src",
         "build.zig",
         "build.zig.zon",
         "LICENSE",
+        "CODE_OF_CONDUCT.md",
+        "CONTRIBUTING.md",
         "README.md",
+        "SECURITY.md",
     },
 }
