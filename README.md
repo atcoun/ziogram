@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/ziogram.png" width="600" alt="ziogram logo"/>
+<img src="assets/ziogram.png" width="1000" alt="ziogram logo"/>
 
 <br>
 
