@@ -7,6 +7,8 @@
 
 <img src="assets/ziogram.png" width="900" alt="ziogram logo"/>
 
+<br>
+
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
 </div>
