@@ -31,7 +31,7 @@ pub fn main(init: std.process.Init) !void {
         _ = try bot.deleteWebhook(allocator, .{ .drop_pending_updates = true });
         const me = try bot.getMe(allocator, .{});
         if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
-        std.log.info("\n🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
+        std.log.info("🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
     }
 
     var group = Io.Group.init;
