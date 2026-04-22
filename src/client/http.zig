@@ -242,7 +242,7 @@ fn writePart(
                 var filename_buf: [512]u8 = undefined;
                 try writer.print("; filename=\"{s}\"\r\n", .{value.getFilename(&filename_buf)});
                 try writer.writeAll("Content-Type: application/octet-stream\r\n\r\n");
-                try value.writeTo(self.io, writer);
+                try value.writeTo(self.client.io, writer);
             },
             .url, .file_id => |str| {
                 try writer.writeAll("\r\n\r\n");
