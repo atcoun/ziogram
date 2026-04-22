@@ -219,7 +219,7 @@ var bot = try Bot.init(token, client, .{
 ### Using a Local Bot API Server
 
 ```zig
-var api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", null);
+var api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", .{});
 defer api.deinit(gpa);
 
 var client = try Client.init(init.gpa, init.io, .{ .api = api });
