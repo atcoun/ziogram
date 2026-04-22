@@ -19,7 +19,6 @@ pub const FilesMap = std.StringHashMapUnmanaged(InputFile);
 
 client: http.Client,
 allocator: std.mem.Allocator,
-io: std.Io,
 options: ClientOptions,
 
 pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*@This() {
@@ -34,11 +33,8 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*
             .write_buffer_size = options.write_buffer_size,
         },
         .allocator = allocator,
-        .io = io,
         .options = options,
     };
-
-    self.client.connection_pool.resize(io, allocator, options.pool_size);
 
     if (options.proxy) |p| {
         const p_heap = try allocator.create(http.Client.Proxy);
