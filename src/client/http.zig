@@ -28,14 +28,14 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*
 
     self.* = .{
         .client = http.Client{
-            .allocator        = allocator,
-            .io               = io,
-            .read_buffer_size  = options.read_buffer_size,
+            .allocator = allocator,
+            .io = io,
+            .read_buffer_size = options.read_buffer_size,
             .write_buffer_size = options.write_buffer_size,
         },
         .allocator = allocator,
-        .io        = io,
-        .options   = options,
+        .io = io,
+        .options = options,
     };
 
     self.client.connection_pool.resize(io, allocator, options.pool_size);
