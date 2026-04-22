@@ -5,7 +5,7 @@
 ![Status](https://img.shields.io/badge/status-usable_%2895%25%29-22c55e?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-4ade80?style=flat-square)
 
-<img src="assets/ziogram.png" width="80%" alt="ziogram"/>
+<img src="assets/ziogram.png" width="100%" alt="ziogram"/>
 
 **A Telegram Bot API library written in Zig ⚡**
  
