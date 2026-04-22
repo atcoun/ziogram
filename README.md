@@ -5,15 +5,7 @@
 <img src="https://img.shields.io/badge/Status-Usable_(95%25)-brightgreen?style=for-the-badge" alt="Status Usable 95%"/>
 <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT"/>
 
-# ✈🤖⚡ ziogram
-
-**A high-performance, strictly-typed framework for the [Telegram Bot API](https://core.telegram.org/bots/api), engineered in [Zig](https://ziglang.org).**
-
-*Zero-overhead abstractions. Compile-time safety. No compromises.*
-
-*Tired of runtimes that waste RAM and burn CPU cycles? Your bot deserves better — ziogram runs lean, fast, and predictable from the first line of code.*
-
-<br/>
+# ziogram
 
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
