@@ -358,7 +358,7 @@ pub fn makeRequest(
             .options = .{ .emit_null_optional_fields = false },
         };
         var files_map = FilesMap.empty;
-        try prepareValue(allocator, self.io, &jws, method, &files_map, bot_options);
+        try prepareValue(allocator, self.client.io, &jws, method, &files_map, bot_options);
     }
 
     const payload_data = payload_aw.written();
