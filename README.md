@@ -7,7 +7,7 @@
 
 # ziogram
 
-**The ziogram library interfaces with the [Telegram Bot API](https://core.telegram.org/bots/api) using the [Zig](https://ziglang.org) programming language.**
+**ziogram is a [Zig](https://ziglang.org) library for interacting with the [Telegram Bot API](https://core.telegram.org/bots/api).**
 
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
@@ -16,7 +16,7 @@
 ---
 
 > [!WARNING]
-> Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is" without warranty of any kind. Use at your own discretion.
+> Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is", without warranty of any kind, express or implied. Use at your own risk.
 
 ---
 
