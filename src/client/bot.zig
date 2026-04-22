@@ -14,11 +14,13 @@ id: i64,
 client: *Client,
 options: ?BotOptions = null,
 
-pub fn init(token: []const u8, client: *Client, options: ?BotOptions) !@This() {
+pub fn init(token: []const u8, client: *Client, options: BotOptions) !@This() {
     const bot_id = try token_utils.extractBotId(token);
     const allocator = client.allocator;
+
     var bot_options = options;
-    if (bot_options) |*o| o.resolve();
+    bot_options.resolve();
+
     return @This(){
         .allocator = allocator,
         .token = try allocator.dupe(u8, token),
