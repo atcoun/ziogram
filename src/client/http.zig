@@ -36,6 +36,8 @@ pub fn init(allocator: std.mem.Allocator, io: std.Io, options: ClientOptions) !*
         .options = options,
     };
 
+    self.client.connection_pool.resize(io, allocator, options.pool_size);
+
     if (options.proxy) |p| {
         const p_heap = try allocator.create(http.Client.Proxy);
         errdefer allocator.destroy(p_heap);
