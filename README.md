@@ -1,7 +1,6 @@
 <div align="center">
 
 <img src="assets/ziogram.png" width="100%" alt="ziogram logo"/>
-
 <br><br>
 
 # ziogram
