@@ -1,16 +1,20 @@
 <div align="center">
+    
+<img src="assets/ziogram.png" width="80%" alt="ziogram"/>
 
-<img src="assets/ziogram.png" width="100%" alt="ziogram logo"/>
+<br/>
 
-<img src="https://img.shields.io/badge/Zig-0.16.0-F7A41D?style=for-the-badge&logo=zig&logoColor=white" alt="Zig Version"/>
-<img src="https://img.shields.io/badge/Telegram_Bot_API-9.6-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Bot API"/>
-<img src="https://img.shields.io/badge/Status-Usable_(95%25)-brightgreen?style=for-the-badge" alt="Status Usable 95%"/>
-<img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT"/>
+![Zig](https://img.shields.io/badge/Zig-0.16.0-F7A41D?style=flat-square&logo=zig&logoColor=white)
+![Telegram Bot API](https://img.shields.io/badge/Telegram_Bot_API-9.6-2CA5E0?style=flat-square&logo=telegram&logoColor=white)
+![Status](https://img.shields.io/badge/status-usable_%2895%25%29-22c55e?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-4ade80?style=flat-square)
+ 
+<br/>
 
-# ziogram
-
-[📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
-
+**A Telegram Bot API library written in Zig ⚡**
+ 
+[📦 Installation](#-installation) · [🚀 Quick Start](#-quick-start) · [📂 Examples](#-examples) · [🖥 Local Bot API](#-local-bot-api-server) · [⚠️ Error Handling](#%EF%B8%8F-error-handling)
+ 
 </div>
 
 ---
