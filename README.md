@@ -94,7 +94,7 @@ pub fn main(init: std.process.Init) !void {
     var client = try Client.init(init.gpa, init.io, .{});
     defer client.deinit();
 
-    var bot = try Bot.init(token, client, null);
+    var bot = try Bot.init(token, client, .{});
     defer bot.deinit();
 
     const allocator = init.arena.allocator();
