@@ -283,6 +283,4 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 Built with ❤️ and ⚡ by [atcoun](https://github.com/atcoun) · [ziogram](https://github.com/atcoun/ziogram)
 
-*A deaf developer from Ukraine 🇺🇦*
-
 </div>
