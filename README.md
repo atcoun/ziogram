@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/ziogram.png" width="1000" alt="ziogram logo"/>
+<img src="assets/ziogram.png" width="100%" alt="ziogram logo"/>
 
-<br>
+<br><br>
 
 <img src="https://img.shields.io/badge/Zig-0.16.0-F7A41D?style=for-the-badge&logo=zig&logoColor=white" alt="Zig Version"/>
 <img src="https://img.shields.io/badge/Telegram_Bot_API-9.6-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Bot API"/>
