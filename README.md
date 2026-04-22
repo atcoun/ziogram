@@ -5,7 +5,7 @@
 <img src="https://img.shields.io/badge/Status-Usable_(95%25)-brightgreen?style=for-the-badge" alt="Status Usable 95%"/>
 <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT"/>
 
-# ziogram
+<img src="assets/ziogram.png" width="600" alt="ziogram logo"/>
 
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
