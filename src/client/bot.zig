@@ -79,6 +79,7 @@ pub fn call(
     );
 }
 
+/// Source: https://core.telegram.org/bots/api#addstickertoset
 pub fn addStickerToSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -87,6 +88,7 @@ pub fn addStickerToSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#answercallbackquery
 pub fn answerCallbackQuery(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -95,6 +97,7 @@ pub fn answerCallbackQuery(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#answerinlinequery
 pub fn answerInlineQuery(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -103,6 +106,7 @@ pub fn answerInlineQuery(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#answerprecheckoutquery
 pub fn answerPreCheckoutQuery(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -111,6 +115,7 @@ pub fn answerPreCheckoutQuery(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#answershippingquery
 pub fn answerShippingQuery(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -119,6 +124,7 @@ pub fn answerShippingQuery(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#answerwebappquery
 pub fn answerWebAppQuery(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -127,6 +133,7 @@ pub fn answerWebAppQuery(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#approvechatjoinrequest
 pub fn approveChatJoinRequest(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -135,6 +142,7 @@ pub fn approveChatJoinRequest(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#approvesuggestedpost
 pub fn approveSuggestedPost(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -143,6 +151,7 @@ pub fn approveSuggestedPost(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#banchatmember
 pub fn banChatMember(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -151,6 +160,7 @@ pub fn banChatMember(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#banchatsenderchat
 pub fn banChatSenderChat(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -159,6 +169,7 @@ pub fn banChatSenderChat(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#closeforumtopic
 pub fn closeForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -167,6 +178,7 @@ pub fn closeForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#closegeneralforumtopic
 pub fn closeGeneralForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -175,6 +187,7 @@ pub fn closeGeneralForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#close
 pub fn close(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -183,6 +196,7 @@ pub fn close(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#convertgifttostars
 pub fn convertGiftToStars(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -191,6 +205,7 @@ pub fn convertGiftToStars(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#copymessage
 pub fn copyMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -199,6 +214,7 @@ pub fn copyMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#copymessages
 pub fn copyMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -207,6 +223,7 @@ pub fn copyMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#createchatinvitelink
 pub fn createChatInviteLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -215,6 +232,7 @@ pub fn createChatInviteLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#createchatsubscriptioninvitelink
 pub fn createChatSubscriptionInviteLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -223,6 +241,7 @@ pub fn createChatSubscriptionInviteLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#createforumtopic
 pub fn createForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -231,6 +250,7 @@ pub fn createForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#createinvoicelink
 pub fn createInvoiceLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -239,6 +259,7 @@ pub fn createInvoiceLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#createnewstickerset
 pub fn createNewStickerSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -247,6 +268,7 @@ pub fn createNewStickerSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#declinechatjoinrequest
 pub fn declineChatJoinRequest(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -255,6 +277,7 @@ pub fn declineChatJoinRequest(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#declinesuggestedpost
 pub fn declineSuggestedPost(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -263,6 +286,7 @@ pub fn declineSuggestedPost(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletebusinessmessages
 pub fn deleteBusinessMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -271,6 +295,7 @@ pub fn deleteBusinessMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletechatphoto
 pub fn deleteChatPhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -279,6 +304,7 @@ pub fn deleteChatPhoto(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletechatstickerset
 pub fn deleteChatStickerSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -287,6 +313,7 @@ pub fn deleteChatStickerSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deleteforumtopic
 pub fn deleteForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -295,6 +322,7 @@ pub fn deleteForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletemessage
 pub fn deleteMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -303,6 +331,7 @@ pub fn deleteMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletemessages
 pub fn deleteMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -311,6 +340,7 @@ pub fn deleteMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletemycommands
 pub fn deleteMyCommands(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -319,6 +349,7 @@ pub fn deleteMyCommands(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletestickerfromset
 pub fn deleteStickerFromSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -327,6 +358,7 @@ pub fn deleteStickerFromSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletestickerset
 pub fn deleteStickerSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -335,6 +367,7 @@ pub fn deleteStickerSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletestory
 pub fn deleteStory(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -343,6 +376,7 @@ pub fn deleteStory(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deletewebhook
 pub fn deleteWebhook(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -351,6 +385,7 @@ pub fn deleteWebhook(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editchatinvitelink
 pub fn editChatInviteLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -359,6 +394,7 @@ pub fn editChatInviteLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editchatsubscriptioninvitelink
 pub fn editChatSubscriptionInviteLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -367,6 +403,7 @@ pub fn editChatSubscriptionInviteLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editforumtopic
 pub fn editForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -375,6 +412,7 @@ pub fn editForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editgeneralforumtopic
 pub fn editGeneralForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -383,6 +421,7 @@ pub fn editGeneralForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editmessagecaption
 pub fn editMessageCaption(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -391,6 +430,7 @@ pub fn editMessageCaption(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editmessagechecklist
 pub fn editMessageChecklist(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -399,6 +439,7 @@ pub fn editMessageChecklist(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editmessagelivelocation
 pub fn editMessageLiveLocation(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -407,6 +448,7 @@ pub fn editMessageLiveLocation(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editmessagemedia
 pub fn editMessageMedia(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -415,6 +457,7 @@ pub fn editMessageMedia(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editmessagereplymarkup
 pub fn editMessageReplyMarkup(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -423,6 +466,7 @@ pub fn editMessageReplyMarkup(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editmessagetext
 pub fn editMessageText(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -431,6 +475,7 @@ pub fn editMessageText(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#editstory
 pub fn editStory(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -439,6 +484,7 @@ pub fn editStory(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#edituserstarsubscription
 pub fn editUserStarSubscription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -447,6 +493,7 @@ pub fn editUserStarSubscription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#exportchatinvitelink
 pub fn exportChatInviteLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -455,6 +502,7 @@ pub fn exportChatInviteLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#forwardmessage
 pub fn forwardMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -463,6 +511,7 @@ pub fn forwardMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#forwardmessages
 pub fn forwardMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -471,6 +520,7 @@ pub fn forwardMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getavailablegifts
 pub fn getAvailableGifts(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -479,6 +529,7 @@ pub fn getAvailableGifts(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getbusinessaccountgifts
 pub fn getBusinessAccountGifts(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -487,6 +538,7 @@ pub fn getBusinessAccountGifts(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getbusinessaccountstarbalance
 pub fn getBusinessAccountStarBalance(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -495,6 +547,7 @@ pub fn getBusinessAccountStarBalance(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getbusinessconnection
 pub fn getBusinessConnection(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -503,6 +556,7 @@ pub fn getBusinessConnection(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getchatadministrators
 pub fn getChatAdministrators(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -511,6 +565,7 @@ pub fn getChatAdministrators(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getchatgifts
 pub fn getChatGifts(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -519,6 +574,7 @@ pub fn getChatGifts(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getchatmembercount
 pub fn getChatMemberCount(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -527,6 +583,7 @@ pub fn getChatMemberCount(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getchatmember
 pub fn getChatMember(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -535,6 +592,7 @@ pub fn getChatMember(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getchatmenubutton
 pub fn getChatMenuButton(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -543,6 +601,7 @@ pub fn getChatMenuButton(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getchat
 pub fn getChat(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -551,6 +610,7 @@ pub fn getChat(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getcustomemojistickers
 pub fn getCustomEmojiStickers(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -559,6 +619,7 @@ pub fn getCustomEmojiStickers(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getfile
 pub fn getFile(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -567,6 +628,7 @@ pub fn getFile(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getforumtopiciconstickers
 pub fn getForumTopicIconStickers(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -575,6 +637,7 @@ pub fn getForumTopicIconStickers(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getgamehighscores
 pub fn getGameHighScores(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -583,6 +646,7 @@ pub fn getGameHighScores(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmanagedbottoken
 pub fn getManagedBotToken(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -591,6 +655,7 @@ pub fn getManagedBotToken(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getme
 pub fn getMe(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -599,6 +664,7 @@ pub fn getMe(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmycommands
 pub fn getMyCommands(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -607,6 +673,7 @@ pub fn getMyCommands(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmydefaultadministratorrights
 pub fn getMyDefaultAdministratorRights(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -615,6 +682,7 @@ pub fn getMyDefaultAdministratorRights(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmydescription
 pub fn getMyDescription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -623,6 +691,7 @@ pub fn getMyDescription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmyname
 pub fn getMyName(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -631,6 +700,7 @@ pub fn getMyName(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmyshortdescription
 pub fn getMyShortDescription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -639,6 +709,7 @@ pub fn getMyShortDescription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmystarbalance
 pub fn getMyStarBalance(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -647,6 +718,7 @@ pub fn getMyStarBalance(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getstartransactions
 pub fn getStarTransactions(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -655,6 +727,7 @@ pub fn getStarTransactions(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getstickerset
 pub fn getStickerSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -663,6 +736,7 @@ pub fn getStickerSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getupdates
 pub fn getUpdates(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -671,6 +745,7 @@ pub fn getUpdates(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getuserchatboosts
 pub fn getUserChatBoosts(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -679,6 +754,7 @@ pub fn getUserChatBoosts(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getusergifts
 pub fn getUserGifts(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -687,6 +763,7 @@ pub fn getUserGifts(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getuserprofileaudios
 pub fn getUserProfileAudios(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -695,6 +772,7 @@ pub fn getUserProfileAudios(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getuserprofilephotos
 pub fn getUserProfilePhotos(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -703,6 +781,7 @@ pub fn getUserProfilePhotos(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getwebhookinfo
 pub fn getWebhookInfo(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -711,6 +790,7 @@ pub fn getWebhookInfo(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#giftpremiumsubscription
 pub fn giftPremiumSubscription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -719,6 +799,7 @@ pub fn giftPremiumSubscription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#hidegeneralforumtopic
 pub fn hideGeneralForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -727,6 +808,7 @@ pub fn hideGeneralForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#leavechat
 pub fn leaveChat(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -735,6 +817,7 @@ pub fn leaveChat(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#logout
 pub fn logOut(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -743,6 +826,7 @@ pub fn logOut(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#pinchatmessage
 pub fn pinChatMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -751,6 +835,7 @@ pub fn pinChatMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#poststory
 pub fn postStory(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -759,6 +844,7 @@ pub fn postStory(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#promotechatmember
 pub fn promoteChatMember(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -767,6 +853,7 @@ pub fn promoteChatMember(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#readbusinessmessage
 pub fn readBusinessMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -775,6 +862,7 @@ pub fn readBusinessMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#refundstarpayment
 pub fn refundStarPayment(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -783,6 +871,7 @@ pub fn refundStarPayment(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#removebusinessaccountprofilephoto
 pub fn removeBusinessAccountProfilePhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -791,6 +880,7 @@ pub fn removeBusinessAccountProfilePhoto(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#removechatverification
 pub fn removeChatVerification(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -799,6 +889,7 @@ pub fn removeChatVerification(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#removemyprofilephoto
 pub fn removeMyProfilePhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -807,6 +898,7 @@ pub fn removeMyProfilePhoto(
     return try self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#removeuserverification
 pub fn removeUserVerification(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -815,6 +907,7 @@ pub fn removeUserVerification(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#reopenforumtopic
 pub fn reopenForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -823,6 +916,7 @@ pub fn reopenForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#reopengeneralforumtopic
 pub fn reopenGeneralForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -831,6 +925,7 @@ pub fn reopenGeneralForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#replacemanagedbottoken
 pub fn replaceManagedBotToken(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -839,6 +934,7 @@ pub fn replaceManagedBotToken(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#replacestickerinset
 pub fn replaceStickerInSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -847,6 +943,7 @@ pub fn replaceStickerInSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#repoststory
 pub fn repostStory(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -855,6 +952,7 @@ pub fn repostStory(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#restrictchatmember
 pub fn restrictChatMember(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -863,6 +961,7 @@ pub fn restrictChatMember(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#revokechatinvitelink
 pub fn revokeChatInviteLink(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -871,6 +970,7 @@ pub fn revokeChatInviteLink(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#savepreparedinlinemessage
 pub fn savePreparedInlineMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -879,6 +979,7 @@ pub fn savePreparedInlineMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#savepreparedkeyboardbutton
 pub fn savePreparedKeyboardButton(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -887,6 +988,7 @@ pub fn savePreparedKeyboardButton(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendanimation
 pub fn sendAnimation(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -895,6 +997,7 @@ pub fn sendAnimation(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendaudio
 pub fn sendAudio(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -903,6 +1006,7 @@ pub fn sendAudio(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendchataction
 pub fn sendChatAction(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -911,6 +1015,7 @@ pub fn sendChatAction(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendchecklist
 pub fn sendChecklist(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -919,6 +1024,7 @@ pub fn sendChecklist(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendcontact
 pub fn sendContact(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -927,6 +1033,7 @@ pub fn sendContact(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#senddice
 pub fn sendDice(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -935,6 +1042,7 @@ pub fn sendDice(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#senddocument
 pub fn sendDocument(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -943,6 +1051,7 @@ pub fn sendDocument(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendgame
 pub fn sendGame(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -951,6 +1060,7 @@ pub fn sendGame(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendgift
 pub fn sendGift(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -959,6 +1069,7 @@ pub fn sendGift(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendinvoice
 pub fn sendInvoice(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -967,6 +1078,7 @@ pub fn sendInvoice(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendlocation
 pub fn sendLocation(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -975,6 +1087,7 @@ pub fn sendLocation(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendmessagedraft
 pub fn sendMessageDraft(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -983,6 +1096,7 @@ pub fn sendMessageDraft(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendmessage
 pub fn sendMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -991,6 +1105,7 @@ pub fn sendMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendpaidmedia
 pub fn sendPaidMedia(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -999,6 +1114,7 @@ pub fn sendPaidMedia(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendphoto
 pub fn sendPhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1007,6 +1123,7 @@ pub fn sendPhoto(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendpoll
 pub fn sendPoll(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1015,6 +1132,7 @@ pub fn sendPoll(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendsticker
 pub fn sendSticker(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1023,6 +1141,7 @@ pub fn sendSticker(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendvenue
 pub fn sendVenue(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1031,6 +1150,7 @@ pub fn sendVenue(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendvideonote
 pub fn sendVideoNote(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1039,6 +1159,7 @@ pub fn sendVideoNote(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendvideo
 pub fn sendVideo(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1047,6 +1168,7 @@ pub fn sendVideo(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendvoice
 pub fn sendVoice(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1055,6 +1177,7 @@ pub fn sendVoice(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setbusinessaccountbio
 pub fn setBusinessAccountBio(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1063,6 +1186,7 @@ pub fn setBusinessAccountBio(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setbusinessaccountgiftsettings
 pub fn setBusinessAccountGiftSettings(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1071,6 +1195,7 @@ pub fn setBusinessAccountGiftSettings(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setbusinessaccountname
 pub fn setBusinessAccountName(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1079,6 +1204,7 @@ pub fn setBusinessAccountName(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setbusinessaccountprofilephoto
 pub fn setBusinessAccountProfilePhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1087,6 +1213,7 @@ pub fn setBusinessAccountProfilePhoto(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setbusinessaccountusername
 pub fn setBusinessAccountUsername(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1095,6 +1222,7 @@ pub fn setBusinessAccountUsername(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatadministratorcustomtitle
 pub fn setChatAdministratorCustomTitle(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1103,6 +1231,7 @@ pub fn setChatAdministratorCustomTitle(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatdescription
 pub fn setChatDescription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1111,6 +1240,7 @@ pub fn setChatDescription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatmembertag
 pub fn setChatMemberTag(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1119,6 +1249,7 @@ pub fn setChatMemberTag(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatmenubutton
 pub fn setChatMenuButton(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1127,6 +1258,7 @@ pub fn setChatMenuButton(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatpermissions
 pub fn setChatPermissions(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1135,6 +1267,7 @@ pub fn setChatPermissions(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatphoto
 pub fn setChatPhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1143,6 +1276,7 @@ pub fn setChatPhoto(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchatstickerset
 pub fn setChatStickerSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1151,6 +1285,7 @@ pub fn setChatStickerSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setchattitle
 pub fn setChatTitle(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1159,6 +1294,7 @@ pub fn setChatTitle(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setcustomemojistickersetthumbnail
 pub fn setCustomEmojiStickerSetThumbnail(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1167,6 +1303,7 @@ pub fn setCustomEmojiStickerSetThumbnail(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setgamescore
 pub fn setGameScore(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1175,6 +1312,7 @@ pub fn setGameScore(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmessagereaction
 pub fn setMessageReaction(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1183,6 +1321,7 @@ pub fn setMessageReaction(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmycommands
 pub fn setMyCommands(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1191,6 +1330,7 @@ pub fn setMyCommands(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmydefaultadministratorrights
 pub fn setMyDefaultAdministratorRights(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1199,6 +1339,7 @@ pub fn setMyDefaultAdministratorRights(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmydescription
 pub fn setMyDescription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1207,6 +1348,7 @@ pub fn setMyDescription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmyname
 pub fn setMyName(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1215,6 +1357,7 @@ pub fn setMyName(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmyprofilephoto
 pub fn setMyProfilePhoto(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1223,6 +1366,7 @@ pub fn setMyProfilePhoto(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setmyshortdescription
 pub fn setMyShortDescription(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1231,6 +1375,7 @@ pub fn setMyShortDescription(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setpassportdataerrors
 pub fn setPassportDataErrors(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1239,6 +1384,7 @@ pub fn setPassportDataErrors(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setstickeremojilist
 pub fn setStickerEmojiList(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1247,6 +1393,7 @@ pub fn setStickerEmojiList(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setstickerkeywords
 pub fn setStickerKeywords(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1255,6 +1402,7 @@ pub fn setStickerKeywords(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setstickermaskposition
 pub fn setStickerMaskPosition(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1263,6 +1411,7 @@ pub fn setStickerMaskPosition(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setstickerpositioninset
 pub fn setStickerPositionInSet(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1271,6 +1420,7 @@ pub fn setStickerPositionInSet(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setstickersetthumbnail
 pub fn setStickerSetThumbnail(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1279,6 +1429,7 @@ pub fn setStickerSetThumbnail(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setstickersettitle
 pub fn setStickerSetTitle(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1287,6 +1438,7 @@ pub fn setStickerSetTitle(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setuseremojistatus
 pub fn setUserEmojiStatus(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1295,6 +1447,7 @@ pub fn setUserEmojiStatus(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#setwebhook
 pub fn setWebhook(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1303,6 +1456,7 @@ pub fn setWebhook(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#stopmessagelivelocation
 pub fn stopMessageLiveLocation(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1311,6 +1465,7 @@ pub fn stopMessageLiveLocation(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#stoppoll
 pub fn stopPoll(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1319,6 +1474,7 @@ pub fn stopPoll(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#transferbusinessaccountstars
 pub fn transferBusinessAccountStars(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1327,6 +1483,7 @@ pub fn transferBusinessAccountStars(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#transfergift
 pub fn transferGift(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1335,6 +1492,7 @@ pub fn transferGift(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unbanchatmember
 pub fn unbanChatMember(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1343,6 +1501,7 @@ pub fn unbanChatMember(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unbanchatsenderchat
 pub fn unbanChatSenderChat(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1351,6 +1510,7 @@ pub fn unbanChatSenderChat(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unhidegeneralforumtopic
 pub fn unhideGeneralForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1359,6 +1519,7 @@ pub fn unhideGeneralForumTopic(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unpinallchatmessages
 pub fn unpinAllChatMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1367,6 +1528,7 @@ pub fn unpinAllChatMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unpinallforumtopicmessages
 pub fn unpinAllForumTopicMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1375,6 +1537,7 @@ pub fn unpinAllForumTopicMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unpinallgeneralforumtopicmessages
 pub fn unpinAllGeneralForumTopicMessages(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1383,6 +1546,7 @@ pub fn unpinAllGeneralForumTopicMessages(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#unpinchatmessage
 pub fn unpinChatMessage(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1391,6 +1555,7 @@ pub fn unpinChatMessage(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#upgradegift
 pub fn upgradeGift(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1399,6 +1564,7 @@ pub fn upgradeGift(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#uploadstickerfile
 pub fn uploadStickerFile(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1407,6 +1573,7 @@ pub fn uploadStickerFile(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#verifychat
 pub fn verifyChat(
     self: *const @This(),
     allocator: std.mem.Allocator,
@@ -1415,6 +1582,7 @@ pub fn verifyChat(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#verifychat
 pub fn verifyUser(
     self: *const @This(),
     allocator: std.mem.Allocator,
