@@ -1,11 +1,13 @@
-# ziogram
-
 <div align="center">
 
 <img src="https://img.shields.io/badge/Zig-0.16.0-F7A41D?style=for-the-badge&logo=zig&logoColor=white" alt="Zig Version"/>
 <img src="https://img.shields.io/badge/Telegram_Bot_API-9.6-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Bot API"/>
 <img src="https://img.shields.io/badge/Status-Usable_(95%25)-brightgreen?style=for-the-badge" alt="Status Usable 95%"/>
 <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT"/>
+
+# ziogram
+
+**The ziogram library interfaces with the [Telegram Bot API](https://core.telegram.org/bots/api) using the [Zig](https://ziglang.org) programming language.**
 
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
