@@ -110,9 +110,6 @@ pub fn main(init: std.process.Init) !void {
 }
 ```
 
-> [!TIP]
-> Use an `ArenaAllocator` per update/request — all returned slices and structs are allocated into it and freed in one shot. In a loop, prefer `arena.reset(.retain_capacity)` over `deinit` + `init` to reuse the allocated buffer across iterations.
-
 ---
 
 ### Sending a Message
