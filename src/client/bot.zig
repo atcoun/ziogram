@@ -6,7 +6,7 @@ const types = @import("types");
 const BotOptions = @import("bot_options.zig");
 const Client = @import("http.zig");
 
-const token_utils = @import("../utils/token.zig");
+const extractBotId = @import("../utils/token.zig").extractBotId;
 
 allocator: std.mem.Allocator,
 token: []const u8,
@@ -15,7 +15,7 @@ client: *Client,
 options: ?BotOptions = null,
 
 pub fn init(token: []const u8, client: *Client, options: BotOptions) !@This() {
-    const bot_id = try token_utils.extractBotId(token);
+    const bot_id = try extractBotId(token);
     const allocator = client.allocator;
 
     var bot_options = options;
