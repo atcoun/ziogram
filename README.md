@@ -1,6 +1,4 @@
 <div align="center">
-    
-<img src="assets/ziogram.png" width="80%" alt="ziogram"/>
 
 <br/>
 
@@ -10,6 +8,8 @@
 ![License](https://img.shields.io/badge/license-MIT-4ade80?style=flat-square)
  
 <br/>
+
+<img src="assets/ziogram.png" width="80%" alt="ziogram"/>
 
 **A Telegram Bot API library written in Zig ⚡**
  
