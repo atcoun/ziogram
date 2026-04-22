@@ -15,11 +15,6 @@
 
 ---
 
-> [!NOTE]
-> **Status: ~95% complete — usable, but not yet feature-complete**
->
-> The library is ready to use for most bot development tasks. All Telegram object types, enums, and API methods are fully implemented. File downloading is fully supported via `Bot.download` and `Bot.downloadFile` — see [Downloading a File](#downloading-a-file). Webhook support is also available — see [Examples](#-examples).
-
 > [!WARNING]
 > Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is" without warranty of any kind. Use at your own discretion.
 
