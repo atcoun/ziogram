@@ -65,7 +65,7 @@ const exe = b.addExecutable(.{
 });
 ```
 
-**4. Write your bot in `src/main.zig`** — see [Examples](#-examples) for ready-to-use code
+**4. Write your bot in `src/main.zig`** — see [🚀 Quick Start](#-quick-start) or [📂 Examples](#-examples) for ready-to-use code
 
 **5. Run**
 
