@@ -42,25 +42,22 @@ zig fetch --save git+https://github.com/atcoun/ziogram.git
 ```
 
 **3. Open your project's `build.zig` and add ziogram to your executable**
-
-```zig
-const ziogram = b.dependency("ziogram", .{
-    .target = target,
-    .optimize = optimize,
-}).module("ziogram");
-```
-
 Find the `b.addExecutable` call and add ziogram to the `.imports` list:
 
 ```zig
+const dep = b.dependency("ziogram", .{
+    .target = target,
+    .optimize = optimize,
+});
+const ziogram = dep.module("ziogram");
+
 const exe = b.addExecutable(.{
-    .name = "project",
+    .name = "my_project",
     .root_module = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
         .imports = &.{
-            .{ .name = "project", .module = mod },
             .{ .name = "ziogram", .module = ziogram },
         },
     }),
