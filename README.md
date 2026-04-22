@@ -281,6 +281,9 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
+### Star the project ⭐
+**If you find this library useful, please give it a star! It helps more developers discover ziogram.**
+
 Built with ❤️ and ⚡ by [atcoun](https://github.com/atcoun) · [ziogram](https://github.com/atcoun/ziogram)
 
 </div>
