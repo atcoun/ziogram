@@ -31,45 +31,6 @@
 
 ---
 
-## 🧠 Core Philosophy
-
-**ziogram** provides a zero-overhead abstraction layer designed for building scalable, memory-efficient Telegram bots. By leveraging modern systems programming, it ensures maximum performance without sacrificing developer experience.
-
-The name represents the synergy of its foundational technologies:
-
-| Letter | Stands for | Description |
-|--------|-----------|-------------|
-| **z** | **Zig** | A general-purpose language and toolchain for robust, optimal, reusable software |
-| **io** | **Standard I/O** | Zig's cross-platform `std.Io` interface abstracting filesystem, networking, async/concurrent tasks, timers, randomness, and more |
-| **gram** | **Telegram Bot API** | An HTTP-based interface for building Telegram bots |
-
----
-
-## 🏗 Technical Architecture
-
-### Comptime-First Design
-Every API method is a plain Zig struct with two comptime constants — `ReturnType` and `api_method` — that drive the generic `Bot.call` dispatcher with zero runtime overhead.
-
-```zig
-// get_me.zig
-pub const ReturnType = User;
-pub const api_method = "getMe";
-```
-
-### Native Networking
-Built on `std.http.Client` and `std.Io` for thread-safe, hardware-optimized I/O. `std.Io` provides a unified interface for networking, filesystem, async/concurrent tasks (`Group`, `Future`, `Select`), timers, and randomness. Requests are automatically dispatched as `GET` or `POST` based on payload presence.
-
-### Smart Serialization
-Uses `std.json` with `ArenaAllocator` strategies. Struct fields are reflected at comptime — optional fields are omitted from the JSON output automatically (`emit_null_optional_fields = false`).
-
-### Multipart File Uploads
-`InputFile` is a tagged union supporting filesystem paths, in-memory buffers, `file_id`, and URLs. Files are transparently streamed as `multipart/form-data` — the same `sendPhoto` call works for all input types.
-
-### Structured Error Handling
-All Telegram API errors map to typed `ZiogramError` variants. Rate limits, group migrations, decode failures, and HTTP errors each produce an entry in `errors.zig` with a human-readable message and a link to the relevant Telegram docs page.
-
----
-
 ## 📦 Installation
 
 ### Prerequisites
