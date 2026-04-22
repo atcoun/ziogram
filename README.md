@@ -105,6 +105,7 @@ pub fn main(init: std.process.Init) !void {
         .emit_null_optional_fields = false,
     });
     std.log.info("{s}", .{info});
+    std.log.info("\n🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
 }
 ```
 
