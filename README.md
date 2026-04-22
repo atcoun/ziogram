@@ -7,8 +7,6 @@
 
 # ziogram
 
-**ziogram is a [Zig](https://ziglang.org) library for interacting with the [Telegram Bot API](https://core.telegram.org/bots/api).**
-
 [📦 Installation](#-installation) • [🚀 Quick Start](#-quick-start) • [📂 Examples](#-examples) • [🖥 Local Bot API](#using-a-local-bot-api-server) • [⚠️ Error Handling](#error-handling)
 
 </div>
