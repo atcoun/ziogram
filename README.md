@@ -269,32 +269,6 @@ Full error set:
 
 ---
 
-## 🗺 Roadmap
-
-### Core
-- [x] `Bot.init` with `BotOptions`
-- [x] Generic `Bot.call` dispatcher (comptime method resolution)
-- [x] Long polling — `getUpdates`
-- [x] `getMe`, `sendMessage`, `sendPhoto`
-- [x] `answerCallbackQuery`, `deleteWebhook`
-- [x] Multipart file upload (`InputFile` — fs, buffer, file_id, url)
-- [x] Local Bot API server support with path mapping
-- [x] Structured error handling with `DetailedError`
-- [x] All Telegram object types (100% complete)
-- [x] Webhook support
-- [x] `getFile` — returns file metadata (`File` object with `file_path`)
-- [x] File download — `Bot.download` (by `file_id`) and `Bot.downloadFile` (by `file_path`), with local Bot API server support
-
-### API Methods (100% complete)
-- [x] `sendDocument`, `sendVideo`, `sendAudio`, `sendVoice`
-- [x] `editMessageText`, `deleteMessage`, `copyMessage`
-- [x] `setChatTitle`, `banChatMember`, admin methods
-- [x] Inline Mode (`InlineQueryResult*`)
-- [x] Payments API
-- [x] Stories, Business API, Gifts, Stars, Stickers, Games, Passport, and more
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
