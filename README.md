@@ -158,7 +158,7 @@ _ = try bot.sendPhoto(allocator, .{
 });
 
 // Upload a file from an in-memory buffer
-const photo_file = try InputFile.fromPathBuffered(session.io, allocator, "media/photo.png");
+const photo_file = try InputFile.fromPathBuffered(init.io, allocator, "media/photo.png");
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 },
     .photo = photo_file,
