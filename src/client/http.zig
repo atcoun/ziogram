@@ -64,7 +64,7 @@ pub fn deinit(self: *@This()) void {
 pub fn checkResponse(
     allocator: std.mem.Allocator,
     method: anytype,
-    status_code: u16,
+    status_code: std.http.Status,
     content: []const u8,
 ) !Response(@TypeOf(method).ReturnType) {
     const Method = @TypeOf(method);
@@ -85,7 +85,7 @@ pub fn checkResponse(
         return ZiogramError.ClientDecodeError;
     };
 
-    if (status_code >= 200 and status_code <= 226 and response.ok) {
+    if (status_code.class() == .success and response.ok) {
         return response;
     }
 
@@ -126,14 +126,17 @@ pub fn checkResponse(
     std.log.err("{s}: {s}\n  └─ Info: {s}", .{ api_err.label, api_err.message, api_err.url orelse "N/A" });
 
     return switch (status_code) {
-        400 => ZiogramError.TelegramBadRequest,
-        401 => ZiogramError.TelegramUnauthorizedError,
-        403 => ZiogramError.TelegramForbiddenError,
-        404 => ZiogramError.TelegramNotFound,
-        409 => ZiogramError.TelegramConflictError,
-        413 => ZiogramError.TelegramEntityTooLarge,
-        500...599 => ZiogramError.TelegramServerError,
-        else => ZiogramError.TelegramAPIError,
+        .bad_request => ZiogramError.TelegramBadRequest,
+        .unauthorized => ZiogramError.TelegramUnauthorizedError,
+        .forbidden => ZiogramError.TelegramForbiddenError,
+        .not_found => ZiogramError.TelegramNotFound,
+        .conflict => ZiogramError.TelegramConflictError,
+        .payload_too_large => ZiogramError.TelegramEntityTooLarge,
+        .too_many_requests => ZiogramError.TelegramRetryAfter,
+        else => if (status_code.class() == .server_error)
+            ZiogramError.TelegramServerError
+        else
+            ZiogramError.TelegramAPIError,
     };
 }
 
@@ -386,10 +389,9 @@ pub fn makeRequest(
         return ZiogramError.TelegramNetworkError;
     };
 
-    const status_code: u16 = @as(u16, @intFromEnum(result.status));
     const response_content = response_aw.written();
 
-    const response = try checkResponse(allocator, method, status_code, response_content);
+    const response = try checkResponse(allocator, method, result.status, response_content);
 
     return response.result orelse return error.TelegramBadRequest;
 }
@@ -411,21 +413,26 @@ pub fn streamContent(
     var redirect_buf: [8 * 1024]u8 = undefined;
     var response = try req.receiveHead(&redirect_buf);
 
-    const status_code: u16 = @as(u16, @intFromEnum(response.head.status));
-    if (status_code < 200 or status_code > 226) {
+    const status_code = response.head.status;
+
+    if (status_code.class() != .success) {
         return switch (status_code) {
-            401 => ZiogramError.TelegramUnauthorizedError,
-            403 => ZiogramError.TelegramForbiddenError,
-            404 => ZiogramError.TelegramNotFound,
-            500...599 => ZiogramError.TelegramServerError,
-            else => ZiogramError.TelegramAPIError,
+            .unauthorized => ZiogramError.TelegramUnauthorizedError,
+            .forbidden => ZiogramError.TelegramForbiddenError,
+            .not_found => ZiogramError.TelegramNotFound,
+            else => if (status_code.class() == .server_error)
+                ZiogramError.TelegramServerError
+            else
+                ZiogramError.TelegramAPIError,
         };
     }
 
     var transfer_buf: [65536]u8 = undefined;
     const reader = response.reader(&transfer_buf);
+
     _ = reader.streamRemaining(writer) catch |err| switch (err) {
         error.ReadFailed => return response.bodyErr().?,
         error.WriteFailed => return ZiogramError.TelegramNetworkError,
     };
 }
+
