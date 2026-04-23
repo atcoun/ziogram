@@ -180,11 +180,11 @@ Two methods are available depending on what you already have.
 **`Bot.download`** — high-level helper. Pass a `file_id`; the library calls `getFile` internally and streams the bytes to any `std.Io.Writer`.
 
 ```zig
-var file = try std.Io.Dir.cwd().createFile(client.io, "photo.jpg", .{});
-defer file.close(client.io);
+var file = try std.Io.Dir.cwd().createFile(init.io, "photo.jpg", .{});
+defer file.close(init.io);
 
 var buf: [65536]u8 = undefined;
-var writer = file.writer(client.io, &buf);
+var writer = file.writer(init.io, &buf);
 
 try bot.download(allocator, some_file_id, &writer.interface);
 ```
