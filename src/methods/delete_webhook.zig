@@ -1,4 +1,4 @@
-pub const ReturnType = bool;
-pub const api_method = "deleteWebhook";
+pub const Result = bool;
+pub const method_name = "deleteWebhook";
 
 drop_pending_updates: ?bool = null,

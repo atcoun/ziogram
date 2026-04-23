@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "approveSuggestedPost";
+pub const Result = bool;
+pub const method_name = "approveSuggestedPost";
 
 chat_id: i64,
 message_id: i32,

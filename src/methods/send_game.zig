@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "sendGame";
+pub const Result = types.Message;
+pub const method_name = "sendGame";
 
 chat_id: i64,
 game_short_name: []const u8,

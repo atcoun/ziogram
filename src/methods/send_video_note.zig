@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "sendVideoNote";
+pub const Result = types.Message;
+pub const method_name = "sendVideoNote";
 
 chat_id: types.ChatId,
 video_note: types.InputFile,

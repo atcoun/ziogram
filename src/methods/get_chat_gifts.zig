@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.OwnedGifts;
-pub const api_method = "getChatGifts";
+pub const Result = types.OwnedGifts;
+pub const method_name = "getChatGifts";
 
 chat_id: types.ChatId,
 exclude_unsaved: ?bool = null,

@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "answerInlineQuery";
+pub const Result = bool;
+pub const method_name = "answerInlineQuery";
 
 inline_query_id: []const u8,
 results: []const types.InlineQueryResult,

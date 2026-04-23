@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = []const u8;
-pub const api_method = "createInvoiceLink";
+pub const Result = []const u8;
+pub const method_name = "createInvoiceLink";
 
 title: []const u8,
 description: []const u8,

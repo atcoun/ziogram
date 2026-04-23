@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = types.BusinessConnection;
-pub const api_method = "getBusinessConnection";
+pub const Result = types.BusinessConnection;
+pub const method_name = "getBusinessConnection";
 
 business_connection_id: []const u8,

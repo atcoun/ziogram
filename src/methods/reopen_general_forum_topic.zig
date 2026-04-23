@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "reopenGeneralForumTopic";
+pub const Result = bool;
+pub const method_name = "reopenGeneralForumTopic";
 
 chat_id: types.ChatId,

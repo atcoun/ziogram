@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setBusinessAccountGiftSettings";
+pub const Result = bool;
+pub const method_name = "setBusinessAccountGiftSettings";
 
 business_connection_id: []const u8,
 show_gift_button: bool,

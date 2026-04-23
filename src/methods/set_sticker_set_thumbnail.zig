@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setStickerSetThumbnail";
+pub const Result = bool;
+pub const method_name = "setStickerSetThumbnail";
 
 name: []const u8,
 user_id: i64,

@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.UserProfilePhotos;
-pub const api_method = "getUserProfilePhotos";
+pub const Result = types.UserProfilePhotos;
+pub const method_name = "getUserProfilePhotos";
 
 user_id: i64,
 offset: ?i32 = null,

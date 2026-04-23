@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = types.MessageId;
-pub const api_method = "copyMessage";
+pub const Result = types.MessageId;
+pub const method_name = "copyMessage";
 
 chat_id: types.ChatId,
 from_chat_id: types.ChatId,

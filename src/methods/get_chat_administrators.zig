@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = []const types.ChatMember;
-pub const api_method = "getChatAdministrators";
+pub const Result = []const types.ChatMember;
+pub const method_name = "getChatAdministrators";
 
 chat_id: types.ChatId,

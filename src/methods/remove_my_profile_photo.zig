@@ -1,2 +1,2 @@
-pub const ReturnType = bool;
-pub const api_method = "removeMyProfilePhoto";
+pub const Result = bool;
+pub const method_name = "removeMyProfilePhoto";

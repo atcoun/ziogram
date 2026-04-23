@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.OwnedGifts;
-pub const api_method = "getBusinessAccountGifts";
+pub const Result = types.OwnedGifts;
+pub const method_name = "getBusinessAccountGifts";
 
 business_connection_id: []const u8,
 exclude_unsaved: ?bool = null,

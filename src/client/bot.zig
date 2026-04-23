@@ -72,7 +72,7 @@ pub fn call(
     self: *const @This(),
     allocator: std.mem.Allocator,
     method: anytype,
-) !@TypeOf(method).ReturnType {
+) !@TypeOf(method).Result {
     return self.client.makeRequest(
         allocator,
         self.token,

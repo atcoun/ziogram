@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "sendContact";
+pub const Result = types.Message;
+pub const method_name = "sendContact";
 
 chat_id: types.ChatId,
 phone_number: []const u8,

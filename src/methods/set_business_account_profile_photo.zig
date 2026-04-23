@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setBusinessAccountProfilePhoto";
+pub const Result = bool;
+pub const method_name = "setBusinessAccountProfilePhoto";
 
 business_connection_id: []const u8,
 photo: types.InputProfilePhoto,

@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = types.File;
-pub const api_method = "getFile";
+pub const Result = types.File;
+pub const method_name = "getFile";
 
 file_id: []const u8,

@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "addStickerToSet";
+pub const Result = bool;
+pub const method_name = "addStickerToSet";
 
 user_id: i64,
 name: []const u8,

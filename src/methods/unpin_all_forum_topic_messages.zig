@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "unpinAllForumTopicMessages";
+pub const Result = bool;
+pub const method_name = "unpinAllForumTopicMessages";
 
 chat_id: types.ChatId,
 message_thread_id: i32,

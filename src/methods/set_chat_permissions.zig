@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setChatPermissions";
+pub const Result = bool;
+pub const method_name = "setChatPermissions";
 
 chat_id: types.ChatId,
 permissions: types.ChatPermissions,

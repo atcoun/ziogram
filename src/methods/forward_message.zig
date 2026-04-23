@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "forwardMessage";
+pub const Result = types.Message;
+pub const method_name = "forwardMessage";
 
 chat_id: types.ChatId,
 from_chat_id: types.ChatId,

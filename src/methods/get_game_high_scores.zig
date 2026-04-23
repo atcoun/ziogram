@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = []const types.GameHighScore;
-pub const api_method = "getGameHighScores";
+pub const Result = []const types.GameHighScore;
+pub const method_name = "getGameHighScores";
 
 user_id: i64,
 chat_id: ?i64 = null,

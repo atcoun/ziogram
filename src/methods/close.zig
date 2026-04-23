@@ -1,2 +1,2 @@
-pub const ReturnType = bool;
-pub const api_method = "close";
+pub const Result = bool;
+pub const method_name = "close";

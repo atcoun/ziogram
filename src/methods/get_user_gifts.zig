@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.OwnedGifts;
-pub const api_method = "getUserGifts";
+pub const Result = types.OwnedGifts;
+pub const method_name = "getUserGifts";
 
 user_id: i64,
 exclude_unlimited: ?bool = null,

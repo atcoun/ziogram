@@ -1,4 +1,4 @@
 const types = @import("types");
 
-pub const ReturnType = types.Gifts;
-pub const api_method = "getAvailableGifts";
+pub const Result = types.Gifts;
+pub const method_name = "getAvailableGifts";

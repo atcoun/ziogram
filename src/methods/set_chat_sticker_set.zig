@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setChatStickerSet";
+pub const Result = bool;
+pub const method_name = "setChatStickerSet";
 
 chat_id: types.ChatId,
 sticker_set_name: []const u8,

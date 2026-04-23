@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "setStickerKeywords";
+pub const Result = bool;
+pub const method_name = "setStickerKeywords";
 
 sticker: []const u8,
 keywords: ?[]const []const u8 = null,

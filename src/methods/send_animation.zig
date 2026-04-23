@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "sendAnimation";
+pub const Result = types.Message;
+pub const method_name = "sendAnimation";
 
 chat_id: types.ChatId,
 animation: types.InputFile,

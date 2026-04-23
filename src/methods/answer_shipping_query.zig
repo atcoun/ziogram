@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "answerShippingQuery";
+pub const Result = bool;
+pub const method_name = "answerShippingQuery";
 
 shipping_query_id: []const u8,
 ok: bool,

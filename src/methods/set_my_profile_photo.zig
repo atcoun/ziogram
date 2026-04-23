@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setMyProfilePhoto";
+pub const Result = bool;
+pub const method_name = "setMyProfilePhoto";
 
 photo: types.InputProfilePhoto,

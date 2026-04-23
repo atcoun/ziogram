@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "setBusinessAccountBio";
+pub const Result = bool;
+pub const method_name = "setBusinessAccountBio";
 
 business_connection_id: []const u8,
 bio: ?[]const u8 = null,

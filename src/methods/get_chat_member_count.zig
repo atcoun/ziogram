@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = i32;
-pub const api_method = "getChatMemberCount";
+pub const Result = i32;
+pub const method_name = "getChatMemberCount";
 
 chat_id: types.ChatId,

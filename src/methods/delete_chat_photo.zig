@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "deleteChatPhoto";
+pub const Result = bool;
+pub const method_name = "deleteChatPhoto";
 
 chat_id: types.ChatId,

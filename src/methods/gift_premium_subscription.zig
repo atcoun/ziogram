@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "giftPremiumSubscription";
+pub const Result = bool;
+pub const method_name = "giftPremiumSubscription";
 
 user_id: i64,
 month_count: i32,

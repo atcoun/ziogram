@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.MessageOrBool;
-pub const api_method = "setGameScore";
+pub const Result = types.MessageOrBool;
+pub const method_name = "setGameScore";
 
 user_id: i64,
 score: i32,

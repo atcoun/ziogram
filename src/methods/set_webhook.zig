@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setWebhook";
+pub const Result = bool;
+pub const method_name = "setWebhook";
 
 url: []const u8,
 certificate: ?types.InputFile = null,

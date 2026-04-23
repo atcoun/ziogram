@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = []const u8;
-pub const api_method = "exportChatInviteLink";
+pub const Result = []const u8;
+pub const method_name = "exportChatInviteLink";
 
 chat_id: types.ChatId,

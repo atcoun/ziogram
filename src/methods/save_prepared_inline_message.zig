@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.PreparedInlineMessage;
-pub const api_method = "savePreparedInlineMessage";
+pub const Result = types.PreparedInlineMessage;
+pub const method_name = "savePreparedInlineMessage";
 
 user_id: i64,
 result: types.InlineQueryResult,

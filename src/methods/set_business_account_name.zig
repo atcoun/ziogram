@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "setBusinessAccountName";
+pub const Result = bool;
+pub const method_name = "setBusinessAccountName";
 
 business_connection_id: []const u8,
 first_name: []const u8,

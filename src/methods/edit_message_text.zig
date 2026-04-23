@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = types.MessageOrBool;
-pub const api_method = "editMessageText";
+pub const Result = types.MessageOrBool;
+pub const method_name = "editMessageText";
 
 text: []const u8,
 business_connection_id: ?[]const u8 = null,

@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.SentWebAppMessage;
-pub const api_method = "answerWebAppQuery";
+pub const Result = types.SentWebAppMessage;
+pub const method_name = "answerWebAppQuery";
 
 web_app_query_id: []const u8,
 result: types.InlineQueryResult,

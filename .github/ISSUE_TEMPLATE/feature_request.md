@@ -22,8 +22,8 @@ Link to the relevant method in the [Telegram Bot API docs](https://core.telegram
 
 ```zig
 // src/methods/send_foo.zig
-pub const ReturnType = bool; // or a concrete type
-pub const api_method = "sendFoo";
+pub const Result = bool; // or a concrete type
+pub const method_name = "sendFoo";
 
 chat_id: types.ChatId,
 foo: ?[]const u8 = null,

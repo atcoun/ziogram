@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "sendVenue";
+pub const Result = types.Message;
+pub const method_name = "sendVenue";
 
 chat_id: types.ChatId,
 latitude: f64,

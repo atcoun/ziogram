@@ -1,4 +1,4 @@
 const types = @import("types");
 
-pub const ReturnType = types.WebhookInfo;
-pub const api_method = "getWebhookInfo";
+pub const Result = types.WebhookInfo;
+pub const method_name = "getWebhookInfo";

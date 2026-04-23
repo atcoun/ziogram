@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.PreparedKeyboardButton;
-pub const api_method = "savePreparedKeyboardButton";
+pub const Result = types.PreparedKeyboardButton;
+pub const method_name = "savePreparedKeyboardButton";
 
 user_id: i64,
 button: types.KeyboardButton,

@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = types.File;
-pub const api_method = "uploadStickerFile";
+pub const Result = types.File;
+pub const method_name = "uploadStickerFile";
 
 user_id: i64,
 sticker: types.InputFile,

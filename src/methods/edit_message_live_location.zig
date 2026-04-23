@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.MessageOrBool;
-pub const api_method = "editMessageLiveLocation";
+pub const Result = types.MessageOrBool;
+pub const method_name = "editMessageLiveLocation";
 
 latitude: f64,
 longitude: f64,

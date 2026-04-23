@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.ForumTopic;
-pub const api_method = "createForumTopic";
+pub const Result = types.ForumTopic;
+pub const method_name = "createForumTopic";
 
 chat_id: types.ChatId,
 name: []const u8,

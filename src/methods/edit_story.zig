@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = types.Story;
-pub const api_method = "editStory";
+pub const Result = types.Story;
+pub const method_name = "editStory";
 
 business_connection_id: []const u8,
 story_id: i32,

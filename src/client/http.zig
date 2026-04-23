@@ -66,9 +66,9 @@ pub fn checkResponse(
     method: anytype,
     status_code: std.http.Status,
     content: []const u8,
-) !Response(@TypeOf(method).ReturnType) {
+) !Response(@TypeOf(method).Result) {
     const Method = @TypeOf(method);
-    const T = Method.ReturnType;
+    const T = Method.Result;
 
     const response = std.json.parseFromSliceLeaky(
         Response(T),
@@ -98,7 +98,7 @@ pub fn checkResponse(
         if (params.retry_after) |ra| {
             var err_detail = try errors.makeRetryAfter(
                 allocator,
-                Method.api_method,
+                Method.method_name,
                 method_chat_id,
                 @intCast(ra),
                 description,
@@ -121,7 +121,7 @@ pub fn checkResponse(
         }
     }
 
-    var api_err = try errors.makeTelegramError(allocator, Method.api_method, error_code, description);
+    var api_err = try errors.makeTelegramError(allocator, Method.method_name, error_code, description);
     defer api_err.deinit();
     std.log.err("{s}: {s}\n  └─ Info: {s}", .{ api_err.label, api_err.message, api_err.url orelse "N/A" });
 
@@ -226,7 +226,7 @@ pub fn prepareValue(
 }
 
 fn isMetaField(comptime name: []const u8) bool {
-    return std.mem.eql(u8, name, "ReturnType") or std.mem.eql(u8, name, "api_method");
+    return std.mem.eql(u8, name, "Result") or std.mem.eql(u8, name, "method_name");
 }
 
 fn writePart(
@@ -334,9 +334,9 @@ pub fn makeRequest(
     token: []const u8,
     method: anytype,
     bot_options: ?BotOptions,
-) !@TypeOf(method).ReturnType {
+) !@TypeOf(method).Result {
     const Method = @TypeOf(method);
-    const url_str = try self.options.api.apiUrl(allocator, token, Method.api_method);
+    const url_str = try self.options.api.apiUrl(allocator, token, Method.method_name);
 
     var has_files = false;
     inline for (std.meta.fields(Method)) |field| {
@@ -385,7 +385,7 @@ pub fn makeRequest(
             std.log.err("DNS resolution failed. Check your internet connection.", .{});
             return ZiogramError.NameServerFailure;
         }
-        std.log.err("Network error while calling '{s}': {s}", .{ Method.api_method, @errorName(err) });
+        std.log.err("Network error while calling '{s}': {s}", .{ Method.method_name, @errorName(err) });
         return ZiogramError.TelegramNetworkError;
     };
 

@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "answerPreCheckoutQuery";
+pub const Result = bool;
+pub const method_name = "answerPreCheckoutQuery";
 
 pre_checkout_query_id: []const u8,
 ok: bool,

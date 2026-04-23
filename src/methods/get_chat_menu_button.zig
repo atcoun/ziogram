@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = types.MenuButton;
-pub const api_method = "getChatMenuButton";
+pub const Result = types.MenuButton;
+pub const method_name = "getChatMenuButton";
 
 chat_id: ?i64 = null,

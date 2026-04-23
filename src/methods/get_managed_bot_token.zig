@@ -1,4 +1,4 @@
 user_id: i64,
 
-pub const ReturnType = []const u8;
-pub const api_method = "getManagedBotToken";
+pub const Result = []const u8;
+pub const method_name = "getManagedBotToken";

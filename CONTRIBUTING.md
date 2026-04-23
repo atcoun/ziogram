@@ -73,15 +73,15 @@ enums
 > **All methods from the current [Telegram Bot API](https://core.telegram.org/bots/api) are already implemented.**
 > This section is for when Telegram releases a new API update and ziogram hasn't added it yet — you can implement it yourself and open a PR without waiting for a maintainer.
 
-Every Telegram API method is a single `.zig` file in `src/methods/`. The generic `Bot.call` dispatcher resolves `ReturnType` and `api_method` at comptime — no registration table needed.
+Every Telegram API method is a single `.zig` file in `src/methods/`. The generic `Bot.call` dispatcher resolves `Result` and `method_name` at comptime — no registration table needed.
 
 ### 1. Create `src/methods/send_foo.zig`
 
 ```zig
 const types = @import("types");
 
-pub const ReturnType = bool; // or a concrete type, e.g. types.Message
-pub const api_method = "sendFoo"; // exact Telegram Bot API method name
+pub const Result = bool; // or a concrete type, e.g. types.Message
+pub const method_name = "sendFoo"; // exact Telegram Bot API method name
 
 // Required fields — no default value
 chat_id: types.ChatId,
@@ -107,7 +107,7 @@ pub fn sendFoo(
     self: *const @This(),
     allocator: std.mem.Allocator,
     options: methods.SendFoo,
-) !methods.SendFoo.ReturnType {
+) !methods.SendFoo.Result {
     return self.call(allocator, options);
 }
 ```

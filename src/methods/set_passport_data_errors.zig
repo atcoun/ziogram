@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setPassportDataErrors";
+pub const Result = bool;
+pub const method_name = "setPassportDataErrors";
 
 user_id: i64,
 errors: []const types.PassportElementError,

@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = types.ChatAdministratorRights;
-pub const api_method = "getMyDefaultAdministratorRights";
+pub const Result = types.ChatAdministratorRights;
+pub const method_name = "getMyDefaultAdministratorRights";
 
 for_channels: ?bool = null,

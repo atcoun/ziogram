@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = types.StickerSet;
-pub const api_method = "getStickerSet";
+pub const Result = types.StickerSet;
+pub const method_name = "getStickerSet";
 
 name: []const u8,

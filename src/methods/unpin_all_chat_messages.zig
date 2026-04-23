@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "unpinAllChatMessages";
+pub const Result = bool;
+pub const method_name = "unpinAllChatMessages";
 
 chat_id: types.ChatId,

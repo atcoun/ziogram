@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Poll;
-pub const api_method = "stopPoll";
+pub const Result = types.Poll;
+pub const method_name = "stopPoll";
 
 chat_id: types.ChatId,
 message_id: i32,

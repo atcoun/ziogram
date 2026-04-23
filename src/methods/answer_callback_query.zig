@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "answerCallbackQuery";
+pub const Result = bool;
+pub const method_name = "answerCallbackQuery";
 
 callback_query_id: []const u8,
 text: ?[]const u8 = null,

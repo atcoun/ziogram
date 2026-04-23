@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "setStickerEmojiList";
+pub const Result = bool;
+pub const method_name = "setStickerEmojiList";
 
 sticker: []const u8,
 emoji_list: []const []const u8,

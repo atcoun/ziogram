@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "transferGift";
+pub const Result = bool;
+pub const method_name = "transferGift";
 
 business_connection_id: []const u8,
 owned_gift_id: []const u8,

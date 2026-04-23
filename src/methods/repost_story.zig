@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.Story;
-pub const api_method = "repostStory";
+pub const Result = types.Story;
+pub const method_name = "repostStory";
 
 business_connection_id: []const u8,
 from_chat_id: i64,

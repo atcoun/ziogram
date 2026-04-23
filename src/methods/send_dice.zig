@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = types.Message;
-pub const api_method = "sendDice";
+pub const Result = types.Message;
+pub const method_name = "sendDice";
 
 chat_id: types.ChatId,
 business_connection_id: ?[]const u8 = null,

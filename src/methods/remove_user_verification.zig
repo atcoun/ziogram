@@ -1,4 +1,4 @@
-pub const ReturnType = bool;
-pub const api_method = "removeUserVerification";
+pub const Result = bool;
+pub const method_name = "removeUserVerification";
 
 user_id: i64,

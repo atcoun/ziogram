@@ -1,4 +1,4 @@
-pub const ReturnType = bool;
-pub const api_method = "deleteStickerFromSet";
+pub const Result = bool;
+pub const method_name = "deleteStickerFromSet";
 
 sticker: []const u8,

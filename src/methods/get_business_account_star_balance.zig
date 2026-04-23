@@ -1,6 +1,6 @@
 const types = @import("types");
 
-pub const ReturnType = types.StarAmount;
-pub const api_method = "getBusinessAccountStarBalance";
+pub const Result = types.StarAmount;
+pub const method_name = "getBusinessAccountStarBalance";
 
 business_connection_id: []const u8,

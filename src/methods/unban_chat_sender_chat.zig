@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "unbanChatSenderChat";
+pub const Result = bool;
+pub const method_name = "unbanChatSenderChat";
 
 chat_id: types.ChatId,
 sender_chat_id: i64,

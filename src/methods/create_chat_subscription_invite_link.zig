@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.ChatInviteLink;
-pub const api_method = "createChatSubscriptionInviteLink";
+pub const Result = types.ChatInviteLink;
+pub const method_name = "createChatSubscriptionInviteLink";
 
 chat_id: types.ChatId,
 subscription_period: i32,

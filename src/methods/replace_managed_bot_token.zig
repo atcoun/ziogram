@@ -1,4 +1,4 @@
-pub const ReturnType = []const u8;
-pub const api_method = "replaceManagedBotToken";
+pub const Result = []const u8;
+pub const method_name = "replaceManagedBotToken";
 
 user_id: i64,

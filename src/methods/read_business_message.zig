@@ -1,5 +1,5 @@
-pub const ReturnType = bool;
-pub const api_method = "readBusinessMessage";
+pub const Result = bool;
+pub const method_name = "readBusinessMessage";
 
 business_connection_id: []const u8,
 chat_id: i64,

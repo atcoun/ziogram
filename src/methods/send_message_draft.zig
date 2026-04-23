@@ -1,8 +1,8 @@
 const enums = @import("enums");
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "sendMessageDraft";
+pub const Result = bool;
+pub const method_name = "sendMessageDraft";
 
 chat_id: i64,
 draft_id: i32,

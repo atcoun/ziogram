@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = types.MessageOrBool;
-pub const api_method = "editMessageReplyMarkup";
+pub const Result = types.MessageOrBool;
+pub const method_name = "editMessageReplyMarkup";
 
 business_connection_id: ?[]const u8 = null,
 chat_id: ?types.ChatId = null,

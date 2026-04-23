@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = []const types.MessageId;
-pub const api_method = "copyMessages";
+pub const Result = []const types.MessageId;
+pub const method_name = "copyMessages";
 
 chat_id: types.ChatId,
 from_chat_id: types.ChatId,

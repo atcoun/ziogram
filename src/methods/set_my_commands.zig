@@ -1,7 +1,7 @@
 const types = @import("types");
 
-pub const ReturnType = bool;
-pub const api_method = "setMyCommands";
+pub const Result = bool;
+pub const method_name = "setMyCommands";
 
 commands: []const types.BotCommand,
 scope: ?types.BotCommandScope = null,
