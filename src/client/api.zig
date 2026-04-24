@@ -14,6 +14,15 @@ pub const FilesPathWrapper = union(enum) {
             return try std.fs.path.resolve(allocator, &.{ s.local_path, relative });
         return try allocator.dupe(u8, path);
     }
+
+    pub fn toServer(self: @This(), allocator: std.mem.Allocator, path: []const u8) ![]const u8 {
+        if (self == .bare) return try allocator.dupe(u8, path);
+        const s = self.simple;
+
+        if (std.mem.cutPrefix(u8, path, s.local_path)) |relative|
+            return try std.fs.path.resolve(allocator, &.{ s.server_path, relative });
+        return try allocator.dupe(u8, path);
+    }
 };
 
 base: []const u8,
@@ -21,22 +30,43 @@ file: []const u8,
 is_local: bool = false,
 wrap_local_file: FilesPathWrapper = .bare,
 
-pub fn apiUrl(self: @This(), allocator: std.mem.Allocator, token: []const u8, method: []const u8) ![]const u8 {
-    return self.format(allocator, self.base, "{token}", token, "{method}", method);
+pub fn apiUrl(
+    self: @This(),
+    allocator: std.mem.Allocator,
+    token: []const u8,
+    method: []const u8,
+) ![]const u8 {
+    return format(
+        allocator,
+        self.base,
+        "{token}",
+        token,
+        "{method}",
+        method,
+    );
 }
 
-pub fn fileUrl(self: @This(), allocator: std.mem.Allocator, token: []const u8, path: []const u8) ![]const u8 {
-    return self.format(allocator, self.file, "{token}", token, "{path}", path);
+pub fn fileUrl(
+    self: @This(),
+    allocator: std.mem.Allocator,
+    token: []const u8,
+    path: []const u8,
+) ![]const u8 {
+    return format(
+        allocator,
+        self.file,
+        "{token}",
+        token,
+        "{path}",
+        path,
+    );
 }
 
-fn format(self: @This(), allocator: std.mem.Allocator, template: []const u8, k1: []const u8, v1: []const u8, k2: []const u8, v2: []const u8) ![]const u8 {
-    _ = self;
-    const c1 = std.mem.cut(u8, template, k1) orelse return error.InvalidTemplate;
-    const c2 = std.mem.cut(u8, c1.@"1", k2) orelse return error.InvalidTemplate;
-    return try std.fmt.allocPrint(allocator, "{s}{s}{s}{s}{s}", .{ c1.@"0", v1, c2.@"0", v2, c2.@"1" });
-}
-
-pub fn fromBase(allocator: std.mem.Allocator, base_url: []const u8, local_paths: ?LocalPaths) !@This() {
+pub fn fromBase(
+    allocator: std.mem.Allocator,
+    base_url: []const u8,
+    local_paths: ?LocalPaths,
+) !@This() {
     const root = std.mem.trimEnd(u8, base_url, "/");
     const is_local = std.mem.startsWith(u8, root, "http://");
     return .{
@@ -45,6 +75,27 @@ pub fn fromBase(allocator: std.mem.Allocator, base_url: []const u8, local_paths:
         .is_local = is_local,
         .wrap_local_file = if (local_paths) |p| .{ .simple = p } else .bare,
     };
+}
+
+fn format(
+    allocator: std.mem.Allocator,
+    template: []const u8,
+    k1: []const u8,
+    v1: []const u8,
+    k2: []const u8,
+    v2: []const u8,
+) ![]const u8 {
+    const c1, const after1 = std.mem.cut(u8, template, k1) orelse
+        return error.InvalidTemplate;
+
+    const c2, const after2 = std.mem.cut(u8, after1, k2) orelse
+        return error.InvalidTemplate;
+
+    return std.fmt.allocPrint(
+        allocator,
+        "{s}{s}{s}{s}{s}",
+        .{ c1, v1, c2, v2, after2 },
+    );
 }
 
 pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
@@ -142,6 +193,37 @@ test "toLocal simple unknown path returns as-is" {
         .local_path = "/mnt/storage/",
     } };
     const result = try wrapper.toLocal(allocator, "/other/path/file.jpg");
+    defer allocator.free(result);
+    try std.testing.expectEqualStrings("/other/path/file.jpg", result);
+}
+
+test "toServer bare returns same path" {
+    const allocator = std.testing.allocator;
+    const wrapper = FilesPathWrapper{ .bare = {} };
+    const result = try wrapper.toServer(allocator, "/some/path/file.jpg");
+    defer allocator.free(result);
+    try std.testing.expectEqualStrings("/some/path/file.jpg", result);
+}
+
+test "toServer simple remaps local path" {
+    const allocator = std.testing.allocator;
+    const wrapper = FilesPathWrapper{ .simple = .{
+        .server_path = "/var/lib/telegram-bot-api/",
+        .local_path = "/mnt/storage/",
+    } };
+    const result = try wrapper.toServer(allocator, "/mnt/storage/photos/file.jpg");
+    defer allocator.free(result);
+    try std.testing.expect(std.mem.endsWith(u8, result, "photos/file.jpg"));
+    try std.testing.expect(std.mem.startsWith(u8, result, "/var/lib/telegram-bot-api"));
+}
+
+test "toServer simple unknown path returns as-is" {
+    const allocator = std.testing.allocator;
+    const wrapper = FilesPathWrapper{ .simple = .{
+        .server_path = "/var/lib/telegram-bot-api/",
+        .local_path = "/mnt/storage/",
+    } };
+    const result = try wrapper.toServer(allocator, "/other/path/file.jpg");
     defer allocator.free(result);
     try std.testing.expectEqualStrings("/other/path/file.jpg", result);
 }
