@@ -66,7 +66,7 @@ pub fn fromBase(
     allocator: std.mem.Allocator,
     url: []const u8,
     is_local: bool,
-    local_paths: ?LocalPaths,
+    local_paths: LocalPaths,
 ) !@This() {
     return .{
         .base = try std.fmt.allocPrint(
@@ -80,7 +80,7 @@ pub fn fromBase(
             .{std.mem.trimEnd(u8, url, "/")},
         ),
         .is_local = is_local,
-        .wrap_local_file = if (local_paths) |p| .{ .simple = p } else .bare,
+        .wrap_local_file = .{ .simple = local_paths },
     };
 }
 
