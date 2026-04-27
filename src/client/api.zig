@@ -164,6 +164,17 @@ test "fromBase https is_local=false" {
     try std.testing.expect(api.is_local == false);
 }
 
+test "fromBase with local paths" {
+    const allocator = std.testing.allocator;
+    var api = try fromBase(allocator, "http://localhost:8081", true, .{
+        .server_path = "/var/lib/telegram-bot-api/",
+        .local_path = "/mnt/storage/",
+    });
+    defer api.deinit(allocator);
+    try std.testing.expect(api.is_local == true);
+    try std.testing.expect(api.wrap_local_file == .simple);
+}
+
 test "fromBase trailing slash stripped" {
     const allocator = std.testing.allocator;
     var api = try fromBase(allocator, "http://localhost:8081/", true, .{});
