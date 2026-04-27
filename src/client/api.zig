@@ -64,14 +64,21 @@ pub fn fileUrl(
 
 pub fn fromBase(
     allocator: std.mem.Allocator,
-    base_url: []const u8,
+    url: []const u8,
+    is_local: bool,
     local_paths: ?LocalPaths,
 ) !@This() {
-    const root = std.mem.trimEnd(u8, base_url, "/");
-    const is_local = std.mem.startsWith(u8, root, "http://");
     return .{
-        .base = try std.fmt.allocPrint(allocator, "{s}/bot{{token}}/{{method}}", .{root}),
-        .file = try std.fmt.allocPrint(allocator, "{s}/file/bot{{token}}/{{path}}", .{root}),
+        .base = try std.fmt.allocPrint(
+            allocator,
+            "{s}/bot{{token}}/{{method}}",
+            .{std.mem.trimEnd(u8, url, "/")},
+        ),
+        .file = try std.fmt.allocPrint(
+            allocator,
+            "{s}/file/bot{{token}}/{{path}}",
+            .{std.mem.trimEnd(u8, url, "/")},
+        ),
         .is_local = is_local,
         .wrap_local_file = if (local_paths) |p| .{ .simple = p } else .bare,
     };
@@ -145,21 +152,21 @@ test "TEST apiUrl" {
 
 test "fromBase http is_local=true" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "http://localhost:8081", null);
+    var api = try fromBase(allocator, "http://localhost:8081", true, .{});
     defer api.deinit(allocator);
     try std.testing.expect(api.is_local == true);
 }
 
 test "fromBase https is_local=false" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "https://api.telegram.org", null);
+    var api = try fromBase(allocator, "https://api.telegram.org", false, .{});
     defer api.deinit(allocator);
     try std.testing.expect(api.is_local == false);
 }
 
 test "fromBase trailing slash stripped" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "http://localhost:8081/", null);
+    var api = try fromBase(allocator, "http://localhost:8081/", true, .{});
     defer api.deinit(allocator);
     const url = try api.apiUrl(allocator, "TOKEN", "getMe");
     defer allocator.free(url);
