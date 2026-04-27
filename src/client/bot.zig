@@ -40,8 +40,8 @@ pub fn downloadFile(
     file_path: []const u8,
     writer: *std.Io.Writer,
 ) !void {
-    if (self.client.api.is_local) {
-        const local_path = try self.client.api.wrap_local_file.toLocal(allocator, file_path);
+    if (self.client.options.api.is_local) {
+        const local_path = try self.client.options.api.wrap_local_file.toLocal(allocator, file_path);
         defer allocator.free(local_path);
 
         const file = try std.Io.Dir.openFile(.cwd(), self.client.io, local_path, .{});
@@ -53,7 +53,7 @@ pub fn downloadFile(
         return;
     }
 
-    const url_str = try self.client.api.fileUrl(allocator, self.token, file_path);
+    const url_str = try self.client.options.api.fileUrl(allocator, self.token, file_path);
     return self.client.streamContent(allocator, url_str, writer);
 }
 
