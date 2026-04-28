@@ -47,9 +47,10 @@ pub fn downloadFile(
         const file = try std.Io.Dir.openFile(.cwd(), self.client.io, local_path, .{});
         defer file.close(self.client.io);
 
-        var buf: [65536]u8 = undefined;
-        var file_reader = file.reader(self.client.io, &buf);
-        _ = try writer.sendFileReadingAll(&file_reader.interface, .unlimited);
+        var read_buf: [64 * 1024]u8 = undefined;
+        var file_reader = file.reader(self.client.io, &read_buf);
+
+        _ = try writer.sendFileReadingAll(&file_reader, .unlimited);
         return;
     }
 
