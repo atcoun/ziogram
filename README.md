@@ -218,17 +218,17 @@ var bot = try Bot.init(token, client, .{
 ### Using a Local Bot API Server
 
 ```zig
-var api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", .{});
-defer api.deinit(gpa);
+var api = try TelegramAPI.init(allocator, "http://localhost:8081", true, .{});
+defer api.deinit(allocator);
 
-var client = try Client.init(init.gpa, init.io, .{ .api = api });
+var client = try Client.init(allocator, io, .{ .api = api });
 defer client.deinit();
 ```
 
 For path mapping between the local server and your filesystem:
 
 ```zig
-var api = try TelegramAPI.fromBase(init.gpa, "http://localhost:8081", .{
+var api = try TelegramAPI.init(allocator, "http://localhost:8081", true, .{
     .server_path = "/var/lib/telegram-bot-api/",
     .local_path  = "/mnt/bot-storage/",
 });
