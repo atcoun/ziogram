@@ -31,7 +31,7 @@
 ### Steps
 
 **1.** Create a new project and add ziogram as a dependency:
-```zig
+```sh
 mkdir my_project
 cd my_project
 zig init
@@ -84,7 +84,7 @@ pub fn main(init: std.process.Init) !void {
 ```
 
 **4.** Run:
-```zig
+```sh
 zig build run
 ```
 
