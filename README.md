@@ -30,22 +30,15 @@
 
 ### Steps
 
-**1. Create a new Zig project**
-
-```sh
+**1.** Create a new project and add ziogram as a dependency:
+```zig
+mkdir my_project
+cd my_project
 zig init
-```
-
-**2. Fetch and save the dependency**
-
-```sh
 zig fetch --save git+https://github.com/atcoun/ziogram.git
 ```
 
-**3. Open your project's `build.zig` and add ziogram to your executable**
-
-Find the `b.addExecutable` call and add ziogram to the `.imports` list:
-
+**2.** Open `build.zig` in your `my_project`, find the executable definition and add the module:
 ```zig
 const dep = b.dependency("ziogram", .{
     .target = target,
@@ -66,11 +59,32 @@ const exe = b.addExecutable(.{
 });
 ```
 
-**4. Write your bot in `src/main.zig`** — see [🚀 Quick Start](#-quick-start) or [📂 Examples](#-examples) for ready-to-use code
+**3.** Write your first bot in `src/main.zig`:
+```zig
+const std = @import("std");
+const ziogram = @import("ziogram");
 
-**5. Run**
+pub fn main(init: std.process.Init) !void {
+    var client = try ziogram.Client.init(init.gpa, init.io, .{});
+    defer client.deinit();
 
-```sh
+    var bot = try ziogram.Bot.init("YOUR_BOT_TOKEN", client, .{});
+    defer bot.deinit();
+
+    const allocator = init.arena.allocator();
+
+    const me = try bot.getMe(allocator, .{});
+
+    const info = try std.json.Stringify.valueAlloc(allocator, me, .{
+        .whitespace = .indent_4,
+        .emit_null_optional_fields = false,
+    });
+    std.log.info("{s}", .{info});
+}
+```
+
+**4.** Run:
+```zig
 zig build run
 ```
 
@@ -78,37 +92,11 @@ zig build run
 
 ## 🚀 Quick Start
 
-### Initialization
+### Long Polling
+See [examples/echo_bot.zig](examples/echo_bot.zig)
 
-`Bot` is created from a token and a `Client`. The session owns the HTTP client and the allocator.
-
-```zig
-const std = @import("std");
-const ziogram = @import("ziogram");
-
-const Bot = ziogram.Bot;
-const Client = ziogram.Client;
-
-pub fn main(init: std.process.Init) !void {
-    const token = "YOUR_BOT_TOKEN";
-
-    var client = try Client.init(init.gpa, init.io, .{});
-    defer client.deinit();
-
-    var bot = try Bot.init(token, client, .{});
-    defer bot.deinit();
-
-    const allocator = init.arena.allocator();
-
-    const me = try bot.getMe(allocator, .{});
-    const info = try std.json.Stringify.valueAlloc(allocator, me, .{
-        .whitespace = .indent_4,
-        .emit_null_optional_fields = false,
-    });
-    std.log.info("{s}", .{info});
-    std.log.info("🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
-}
-```
+### Webhook
+See [examples/echo_bot_webhook.zig](examples/echo_bot_webhook.zig)
 
 ---
 
@@ -126,17 +114,6 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 
 > [!NOTE]
 > `.{ .username = "@username" }` works for public groups and channels. For private chats, Telegram requires a numeric `user_id` — the bot must have received at least one message from the user first.
-
----
-
-## 📂 Examples
-
-Ready-to-use examples are available in the [`examples/`](examples/) directory:
-
-| File | Description |
-|------|-------------|
-| [`echo_bot.zig`](examples/echo_bot.zig) | Long polling — receives updates via `getUpdates` |
-| [`echo_bot_webhook.zig`](examples/echo_bot_webhook.zig) | Webhook — listens for incoming HTTPS requests from Telegram |
 
 ---
 
