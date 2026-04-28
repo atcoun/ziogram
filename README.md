@@ -265,6 +265,7 @@ Full error set:
 | `TelegramRetryAfter` | Flood control — `retry_after` in response parameters |
 | `TelegramMigrateToChat` | Group migrated to supergroup |
 | `ClientDecodeError` | JSON decode failure |
+| `NameServerFailure` | DNS resolution failed |
 
 ---
 
