@@ -54,7 +54,7 @@ pub fn downloadFile(
     }
 
     const url_str = try self.client.options.api.fileUrl(allocator, self.token, file_path);
-    return self.client.streamContent(allocator, url_str, writer);
+    return self.client.streamContent(url_str, writer);
 }
 
 pub fn download(
