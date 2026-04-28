@@ -75,16 +75,24 @@ enums
 
 Every Telegram API method is a single `.zig` file in `src/methods/`. The generic `Bot.call` dispatcher resolves `Result` and `method_name` at comptime — no registration table needed.
 
+> **Tip:** Keep the [Telegram Bot API reference](https://core.telegram.org/bots/api) open while working.
+> Per the official docs:
+> - Optional fields may not be returned when irrelevant — which is why all optional fields in ziogram default to `null`
+> - Integer fields are `i32` by default unless otherwise noted
+> - Fields named `user_id` or `chat_id` are always `i64`
+
 ### 1. Create `src/methods/send_foo.zig`
 
 ```zig
 const types = @import("types");
 
-pub const Result = bool; // or a concrete type, e.g. types.Message
+// Result is the exact return type of the method.
+// Common values: bool, types.Message, types.MessageId, types.MessageOrBool, []const u8, i32
+pub const Result = bool;
 pub const method_name = "sendFoo"; // exact Telegram Bot API method name
 
 // Required fields — no default value
-chat_id: types.ChatId,
+chat_id: types.ChatId, // union(enum) { id: i64, username: []const u8 }
 
 // Optional fields — must default to null
 foo: ?[]const u8 = null,
@@ -93,6 +101,16 @@ bar: ?i32 = null,
 
 > If the method accepts a file, use `types.InputFile` for that field.
 > `Client.makeRequest` switches to `multipart/form-data` automatically when an `InputFile` field is present.
+
+**Result type reference:**
+
+| Telegram returns | Zig type |
+|---|---|
+| `true` on success | `bool` |
+| Message object | `types.Message` |
+| Message or `true` | `types.MessageOrBool` |
+| Message ID only | `types.MessageId` |
+| String | `[]const u8` |
 
 ### 2. Export in `src/methods.zig`
 
@@ -103,11 +121,21 @@ pub const SendFoo = @import("methods/send_foo.zig");
 ### 3. Add a wrapper to `src/client/bot.zig`
 
 ```zig
+// bool — method returns true on success
 pub fn sendFoo(
     self: *const @This(),
     allocator: std.mem.Allocator,
     options: methods.SendFoo,
-) !methods.SendFoo.Result {
+) !bool {
+    return self.call(allocator, options);
+}
+
+// types.MessageOrBool — method returns Message or true depending on context
+pub fn editFoo(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.EditFoo,
+) !types.MessageOrBool {
     return self.call(allocator, options);
 }
 ```
