@@ -30,39 +30,7 @@ file: []const u8,
 is_local: bool = false,
 wrap_local_file: FilesPathWrapper = .bare,
 
-pub fn apiUrl(
-    self: @This(),
-    allocator: std.mem.Allocator,
-    token: []const u8,
-    method: []const u8,
-) ![]const u8 {
-    return format(
-        allocator,
-        self.base,
-        "{token}",
-        token,
-        "{method}",
-        method,
-    );
-}
-
-pub fn fileUrl(
-    self: @This(),
-    allocator: std.mem.Allocator,
-    token: []const u8,
-    path: []const u8,
-) ![]const u8 {
-    return format(
-        allocator,
-        self.file,
-        "{token}",
-        token,
-        "{path}",
-        path,
-    );
-}
-
-pub fn fromBase(
+pub fn init(
     allocator: std.mem.Allocator,
     url: []const u8,
     is_local: bool,
@@ -84,30 +52,57 @@ pub fn fromBase(
     };
 }
 
-fn format(
-    allocator: std.mem.Allocator,
-    template: []const u8,
-    k1: []const u8,
-    v1: []const u8,
-    k2: []const u8,
-    v2: []const u8,
-) ![]const u8 {
-    const c1, const after1 = std.mem.cut(u8, template, k1) orelse
-        return error.InvalidTemplate;
-
-    const c2, const after2 = std.mem.cut(u8, after1, k2) orelse
-        return error.InvalidTemplate;
-
-    return std.fmt.allocPrint(
-        allocator,
-        "{s}{s}{s}{s}{s}",
-        .{ c1, v1, c2, v2, after2 },
-    );
-}
-
-pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
+pub fn deinit(self: @This(), allocator: std.mem.Allocator) void {
     allocator.free(self.base);
     allocator.free(self.file);
+}
+
+pub fn apiUrl(
+    self: @This(),
+    allocator: std.mem.Allocator,
+    token: []const u8,
+    method: []const u8,
+) ![]u8 {
+    const step1 = try std.mem.replaceOwned(
+        u8,
+        allocator,
+        self.base,
+        "{token}",
+        token,
+    );
+    defer allocator.free(step1);
+    const url = try std.mem.replaceOwned(
+        u8,
+        allocator,
+        step1,
+        "{method}",
+        method,
+    );
+    return url;
+}
+
+pub fn fileUrl(
+    self: @This(),
+    allocator: std.mem.Allocator,
+    token: []const u8,
+    path: []const u8,
+) ![]u8 {
+    const step1 = try std.mem.replaceOwned(
+        u8,
+        allocator,
+        self.file,
+        "{token}",
+        token,
+    );
+    defer allocator.free(step1);
+    const url = try std.mem.replaceOwned(
+        u8,
+        allocator,
+        step1,
+        "{path}",
+        path,
+    );
+    return url;
 }
 
 pub const PRODUCTION = @This(){
@@ -152,21 +147,21 @@ test "TEST apiUrl" {
 
 test "fromBase http is_local=true" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "http://localhost:8081", true, .{});
+    var api = try init(allocator, "http://localhost:8081", true, .{});
     defer api.deinit(allocator);
     try std.testing.expect(api.is_local == true);
 }
 
 test "fromBase https is_local=false" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "https://api.telegram.org", false, .{});
+    var api = try init(allocator, "https://api.telegram.org", false, .{});
     defer api.deinit(allocator);
     try std.testing.expect(api.is_local == false);
 }
 
 test "fromBase with local paths" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "http://localhost:8081", true, .{
+    var api = try init(allocator, "http://localhost:8081", true, .{
         .server_path = "/var/lib/telegram-bot-api/",
         .local_path = "/mnt/storage/",
     });
@@ -177,7 +172,7 @@ test "fromBase with local paths" {
 
 test "fromBase trailing slash stripped" {
     const allocator = std.testing.allocator;
-    var api = try fromBase(allocator, "http://localhost:8081/", true, .{});
+    var api = try init(allocator, "http://localhost:8081/", true, .{});
     defer api.deinit(allocator);
     const url = try api.apiUrl(allocator, "TOKEN", "getMe");
     defer allocator.free(url);
