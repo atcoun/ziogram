@@ -283,7 +283,9 @@ Full error set:
 
 ## 🤝 Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
+Missing something in ziogram? Don't worry — ideas, changes, bug fixes, and questions are all welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
 
 ---
 
