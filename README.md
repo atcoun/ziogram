@@ -119,33 +119,42 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 
 ### Sending a Photo
 
-`InputFile` accepts a filesystem path, an in-memory buffer, a `file_id`, or a URL — the transport (multipart vs JSON) is selected automatically.
+`InputFile` is a versatile union that automatically selects the correct transport (multipart vs. JSON) based on the input type. It supports the local filesystem, in-memory buffers, existing `file_id`s, or remote URLs with byte-streaming support.
 
 ```zig
-// Upload a file from the local filesystem
+// 1. Upload a file from the local filesystem
+// The filename is automatically extracted from the path.
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 }, // or .{ .username = "@username" }
-    .photo = .fromPath("media/photo.png"),
-    .caption = "Sent via ziogram",
+    .photo = .{ .fs = .{ .path = "assets/ziogram.png" } },
+    .caption = "Hello from Zig!",
 });
 
-// Send a photo using a remote URL or an existing file_id
+// 2. Send using an existing file_id (fastest method)
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 },
-    .photo = .{ .url = "https://example.com" }, // or .file_id = "..."
+    .photo = .{ .file_id = "AgACAgIAAxkBAAI..." },
 });
 
-// Upload a file from an in-memory buffer
-const photo_file = try InputFile.fromPathBuffered(io, allocator, "media/photo.png");
+// 3. Streaming from a remote URL (aiogram-style)
+// The bot downloads the file and proxies its bytes to Telegram.
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 },
-    .photo = photo_file,
+    .photo = .{ .url = .{ 
+        .url = "https://ziglang.org",
+        .filename = "logo.svg", // Optional: override filename
+        .headers = .{ .user_agent = .{ .override = "Ziogram/1.0" } }, // Optional: custom headers
+    }},
 });
 
-// Or wrap an existing in-memory buffer directly:
+// 4. Upload from an in-memory buffer
+// Filename is required for buffers so Telegram knows the file extension.
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 },
-    .photo = InputFile.fromBuffer(my_buffer, "photo.png"),
+    .photo = .{ .buffer = .{ 
+        .data = my_buffer_slice, 
+        .filename = "chart.jpg" 
+    }},
 });
 ```
 
