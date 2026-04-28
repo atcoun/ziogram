@@ -158,7 +158,8 @@ pub fn prepareValue(
         .@"union" => {
             if (comptime T == InputFile) {
                 switch (value) {
-                    .file_id, .url => |str| try jw.write(str),
+                    .file_id => |id| try jw.write(id),
+                    .url => |u| try jw.write(u.url),
                     inline .fs, .buffer => {
                         var random_bytes: [8]u8 = undefined;
                         std.Io.random(io, &random_bytes);
@@ -247,11 +248,15 @@ fn writePart(
                 var filename_buf: [512]u8 = undefined;
                 try writer.print("; filename=\"{s}\"\r\n", .{value.getFilename(&filename_buf)});
                 try writer.writeAll("Content-Type: application/octet-stream\r\n\r\n");
-                try value.writeTo(self.client.io, writer);
+                try value.writeTo(self.client.io, writer, &self.client);
             },
-            .url, .file_id => |str| {
+            .url => |u| {
                 try writer.writeAll("\r\n\r\n");
-                try writer.writeAll(str);
+                try writer.writeAll(u.url);
+            },
+            .file_id => |id| {
+                try writer.writeAll("\r\n\r\n");
+                try writer.writeAll(id);
             },
         }
     } else {
@@ -435,4 +440,3 @@ pub fn streamContent(
         error.WriteFailed => return ZiogramError.TelegramNetworkError,
     };
 }
-
