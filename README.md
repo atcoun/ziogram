@@ -200,16 +200,29 @@ try bot.downloadFile(allocator, path, &writer.interface);
 
 ---
 
-### Bot Options
+### ⚙️ Bot Options
 
 Set once on `Bot.init` — applied to every method call that supports the field, unless overridden per-call.
 
 ```zig
 var bot = try Bot.init(token, client, .{
-    .parse_mode               = .MarkdownV2,
-    .disable_notification     = true,
-    .protect_content          = true,
+    .parse_mode = .HTML,
+    .disable_notification = true,
+    .protect_content = true,
     .link_preview_is_disabled = true,
+});
+
+// parse_mode = .HTML is applied automatically from bot options:
+_ = try bot.sendMessage(allocator, .{
+    .chat_id = .{ .id = 123456789 },
+    .text = "Message with <b>bold</b> and <u>underline</u>",
+});
+
+// Override per-call with .None to send plain text:
+_ = try bot.sendMessage(allocator, .{
+    .chat_id = .{ .id = 123456789 },
+    .text = "Message without <b>bold</b> and <u>underline</u>",
+    .parse_mode = .None,
 });
 ```
 
