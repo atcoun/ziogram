@@ -205,29 +205,26 @@ _ = try bot.sendMessage(allocator, .{
 ```
 
 ---
+### 🖥 Local Bot API Server Support
 
-### Using a Local Bot API Server
+Running your own [Telegram Bot API server](https://github.com/tdlib/telegram-bot-api)? Ziogram supports it out of the box, including local file path remapping between the server and your machine:
 
 ```zig
-var api = try TelegramAPI.init(allocator, "http://localhost:8081", true, .{});
+var api= try TelegramAPI.init(allocator, "http://localhost:8081", true, .{
+    .server_path = "/var/lib/telegram-bot-api/",
+    .local_path   = "/mnt/storage/",
+});
 defer api.deinit(allocator);
 
 var client = try Client.init(allocator, io, .{ .api = api });
 defer client.deinit();
 ```
 
-For path mapping between the local server and your filesystem:
-
-```zig
-var api = try TelegramAPI.init(allocator, "http://localhost:8081", true, .{
-    .server_path = "/var/lib/telegram-bot-api/",
-    .local_path  = "/mnt/bot-storage/",
-});
-```
+When `is_local` is true, `downloadFile` reads directly from disk instead of making an HTTP request.
 
 ---
 
-### Error Handling
+### ⚠️ Error Handling
 
 All errors are typed. Telegram-specific errors carry a `DetailedError` with a human-readable message and a docs URL, logged automatically before the error is returned.
 
