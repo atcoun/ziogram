@@ -126,7 +126,7 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 // The filename is automatically extracted from the path.
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 }, // or .{ .username = "@username" }
-    .photo = .{ .fs = .{ .path = "assets/ziogram.png" } },
+    .photo = .{ .fs = .{ .path = "src/assets/ziogram.png" } },
     .caption = "Hello from Zig!",
 });
 
