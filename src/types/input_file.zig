@@ -1,73 +1,94 @@
 const std = @import("std");
 const Io = std.Io;
 
+pub const default_chunk_size: usize = 64 * 1024;
+
 pub const InputFile = union(enum) {
     fs: struct {
         path: []const u8,
-        filename: []const u8,
+        filename: ?[]const u8 = null,
+        chunk_size: usize = default_chunk_size,
     },
     buffer: struct {
         data: []const u8,
-        filename: []const u8,
+        filename: ?[]const u8 = null,
+        chunk_size: usize = default_chunk_size,
     },
-    url: []const u8,
+    url: struct {
+        url: []const u8,
+        headers: std.http.Client.Request.Headers = .{},
+        filename: ?[]const u8 = null,
+        chunk_size: usize = default_chunk_size,
+    },
     file_id: []const u8,
-
-    pub fn fromPath(path: []const u8) InputFile {
-        return .{
-            .fs = .{
-                .path = path,
-                .filename = std.fs.path.basename(path),
-            },
-        };
-    }
-
-    pub fn fromPathBuffered(io: Io, allocator: std.mem.Allocator, path: []const u8) !InputFile {
-        const limit: Io.Limit = .limited(50 * 1024 * 1024);
-        const data = try std.Io.Dir.cwd().readFileAlloc(io, path, allocator, limit);
-        return .{
-            .buffer = .{
-                .data = data,
-                .filename = std.fs.path.basename(path),
-            },
-        };
-    }
-
-    pub fn fromBuffer(data: []const u8, filename: []const u8) InputFile {
-        return .{ .buffer = .{ .data = data, .filename = filename } };
-    }
 
     pub fn getFilename(self: InputFile, buf: []u8) []const u8 {
         switch (self) {
-            .fs => |f| return f.filename,
-            .buffer => |b| return b.filename,
+            .fs => |f| {
+                if (f.filename) |name| return name;
+                const name = std.fs.path.basename(f.path);
+                return if (name.len == 0) "file" else name;
+            },
+            .buffer => |b| return b.filename orelse "file",
             .file_id => return "file",
             .url => |u| {
-                const uri = std.Uri.parse(u) catch return "file";
-                const raw_path = switch (uri.path) {
-                    .raw, .percent_encoded => |s| s,
+                const uri = std.Uri.parse(u.url) catch return "file";
+                const encoded_name = switch (uri.path) {
+                    .raw, .percent_encoded => |s| std.fs.path.basenamePosix(s),
                 };
-                const encoded_name = std.fs.path.basenamePosix(raw_path);
                 if (encoded_name.len == 0) return "file";
+
                 const component: std.Uri.Component = .{ .percent_encoded = encoded_name };
+
                 return component.toRaw(buf) catch encoded_name;
             },
         }
     }
 
-    pub fn writeTo(self: InputFile, io: Io, w: *Io.Writer) !void {
+    pub fn writeTo(self: InputFile, io: Io, w: *Io.Writer, client: *std.http.Client) !void {
         switch (self) {
-            .buffer => |b| try w.writeAll(b.data),
             .fs => |f| {
-                const file = try std.Io.Dir.cwd().openFile(io, f.path, .{});
+                const file = try std.Io.Dir.cwd().openFile(
+                    io,
+                    f.path,
+                    .{ .mode = .read_only, .allow_directory = false },
+                );
                 defer file.close(io);
 
-                var buf: [64 * 1024]u8 = undefined;
-                var reader = file.reader(io, &buf);
+                var file_buf: [default_chunk_size]u8 = undefined;
+                var file_reader = file.reader(io, &file_buf);
 
-                _ = try w.sendFileAll(&reader, .unlimited);
+                _ = try w.sendFileAll(&file_reader, .unlimited);
             },
-            .url, .file_id => unreachable,
+            .buffer => |b| try w.writeAll(b.data),
+            .url => |u| {
+                const uri = try std.Uri.parse(u.url);
+
+                var req = try client.request(.GET, uri, .{
+                    .headers = u.headers,
+                });
+                defer req.deinit();
+
+                try req.sendBodiless();
+
+                var redirect_buf: [8000]u8 = undefined;
+                var res = try req.receiveHead(&redirect_buf);
+
+                if (res.head.status.class() != .success) return error.HttpDownloadFailed;
+
+                const buf = try client.allocator.alloc(u8, u.chunk_size);
+                defer client.allocator.free(buf);
+
+                var response_reader = res.reader(buf);
+
+                while (true) {
+                    const n = try response_reader.readSliceShort(buf);
+                    if (n == 0) break;
+
+                    try w.writeAll(buf[0..n]);
+                }
+            },
+            .file_id => unreachable,
         }
     }
 };
