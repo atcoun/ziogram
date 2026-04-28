@@ -136,7 +136,7 @@ _ = try bot.sendPhoto(allocator, .{
 });
 
 // Upload a file from an in-memory buffer
-const photo_file = try InputFile.fromPathBuffered(init.io, allocator, "media/photo.png");
+const photo_file = try InputFile.fromPathBuffered(io, allocator, "media/photo.png");
 _ = try bot.sendPhoto(allocator, .{
     .chat_id = .{ .id = 1234567890 },
     .photo = photo_file,
@@ -158,11 +158,11 @@ Two methods are available depending on what you already have.
 **`Bot.download`** — high-level helper. Pass a `file_id`; the library calls `getFile` internally and streams the bytes to any `std.Io.Writer`.
 
 ```zig
-var file = try std.Io.Dir.cwd().createFile(init.io, "photo.jpg", .{});
-defer file.close(init.io);
+var file = try std.Io.Dir.cwd().createFile(io, "photo.jpg", .{});
+defer file.close(io);
 
 var buf: [65536]u8 = undefined;
-var writer = file.writer(init.io, &buf);
+var writer = file.writer(io, &buf);
 
 try bot.download(allocator, some_file_id, &writer.interface);
 ```
