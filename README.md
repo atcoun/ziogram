@@ -224,6 +224,18 @@ When `is_local` is true, `downloadFile` reads directly from disk instead of maki
 
 ---
 
+### 🔀 JSON + Multipart in One Interface
+
+Ziogram automatically picks the right content type. If a method has any `InputFile` field, it uses `multipart/form-data`. Otherwise, it sends `application/json`. You never think about this.
+
+---
+
+### ✅ Token Validation
+
+Tokens are validated on `bot.init()` — format, separator, numeric ID — before any network request is made.
+
+---
+
 ### ⚠️ Error Handling
 
 All errors are typed. Telegram-specific errors carry a `DetailedError` with a human-readable message and a docs URL, logged automatically before the error is returned.
