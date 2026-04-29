@@ -145,21 +145,21 @@ test "TEST apiUrl" {
     );
 }
 
-test "fromBase http is_local=true" {
+test "init http is_local=true" {
     const allocator = std.testing.allocator;
     var api = try init(allocator, "http://localhost:8081", true, .{});
     defer api.deinit(allocator);
     try std.testing.expect(api.is_local == true);
 }
 
-test "fromBase https is_local=false" {
+test "init https is_local=false" {
     const allocator = std.testing.allocator;
     var api = try init(allocator, "https://api.telegram.org", false, .{});
     defer api.deinit(allocator);
     try std.testing.expect(api.is_local == false);
 }
 
-test "fromBase with local paths" {
+test "init with local paths" {
     const allocator = std.testing.allocator;
     var api = try init(allocator, "http://localhost:8081", true, .{
         .server_path = "/var/lib/telegram-bot-api/",
@@ -170,7 +170,7 @@ test "fromBase with local paths" {
     try std.testing.expect(api.wrap_local_file == .simple);
 }
 
-test "fromBase trailing slash stripped" {
+test "init trailing slash stripped" {
     const allocator = std.testing.allocator;
     var api = try init(allocator, "http://localhost:8081/", true, .{});
     defer api.deinit(allocator);
