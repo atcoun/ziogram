@@ -34,8 +34,8 @@ pub fn main(init: std.process.Init) !void {
         std.log.info("🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
     }
 
-    var group = Io.Group.init;
-    defer group.await(io) catch {};
+    var group: Io.Group = .init;
+    defer group.cancel(io);
 
     var offset: i32 = 0;
 
@@ -56,12 +56,16 @@ pub fn main(init: std.process.Init) !void {
         };
 
         for (updates) |update| {
-            try group.concurrent(io, handleUpdate, .{ gpa, bot, update });
+            group.concurrent(io, handleUpdate, .{ gpa, bot, update }) catch |err| switch (err) {
+                error.ConcurrencyUnavailable => {
+                    handleUpdate(gpa, bot, update) catch |e|
+                        std.log.err("handleUpdate: {any}", .{e});
+                },
+            };
             offset = update.update_id + 1;
         }
 
-        try group.await(io);
-
+        group.await(io) catch {};
         _ = arena.reset(.retain_capacity);
     }
 }
