@@ -1,10 +1,9 @@
 const std = @import("std");
 const ziogram = @import("ziogram");
 
-const Io = std.Io;
-
 const Client = ziogram.Client;
 const Bot = ziogram.Bot;
+// const TelegramAPI = ziogram.TelegramAPI;
 
 const enums = ziogram.enums;
 const ChatType = enums.ChatType;
@@ -17,7 +16,7 @@ const web_server_host = "127.0.0.1";
 const web_server_port = 8080;
 const webhook_path = "/webhook";
 const webhook_secret = "YOUR_SECRET_TOKEN";
-const webhook_url = "https://example.com";
+const webhook_url = "https://example.com"; // Local Bot API: optionally use your local HTTP URL, e.g. "http://127.0.0.1:8080"
 
 pub fn main(init: std.process.Init) !void {
     const arena = init.arena;
@@ -26,10 +25,13 @@ pub fn main(init: std.process.Init) !void {
 
     const token = "YOUR_BOT_TOKEN";
 
-    const client = try Client.init(gpa, init.io, .{});
+    // var api = try TelegramAPI.init(gpa, "http://127.0.0.1:8081", true, .{});
+    // defer api.deinit(gpa);
+
+    var client = try Client.init(gpa, init.io, .{}); // .{ .api = api }
     defer client.deinit();
 
-    const bot = try Bot.init(token, client, .{});
+    var bot = try Bot.init(token, client, .{});
     defer bot.deinit();
 
     const allocator = arena.allocator();
@@ -50,8 +52,8 @@ pub fn main(init: std.process.Init) !void {
     try startWebhook(io, gpa, bot, web_server_port);
 }
 
-pub fn startWebhook(io: Io, gpa: std.mem.Allocator, bot: Bot, port: u16) !void {
-    const addr = try Io.net.IpAddress.parseIp4(web_server_host, port);
+pub fn startWebhook(io: std.Io, gpa: std.mem.Allocator, bot: Bot, port: u16) !void {
+    const addr = try std.Io.net.IpAddress.parseIp4(web_server_host, port);
     var server = try addr.listen(io, .{});
     defer server.deinit(io);
 
@@ -59,16 +61,22 @@ pub fn startWebhook(io: Io, gpa: std.mem.Allocator, bot: Bot, port: u16) !void {
     if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
     std.log.info("🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
 
-    var group = Io.Group.init;
-    defer group.await(io) catch {};
+    var group: std.Io.Group = .init;
+    defer group.cancel(io);
 
     while (true) {
         const stream = try server.accept(io);
-        try group.concurrent(io, handleConn, .{ gpa, io, bot, &group, stream });
+
+        group.concurrent(io, handleConn, .{ gpa, io, bot, &group, stream }) catch |err| switch (err) {
+            error.ConcurrencyUnavailable => {
+                handleConn(gpa, io, bot, &group, stream) catch |e|
+                    std.log.err("handleConn: {any}", .{e});
+            },
+        };
     }
 }
 
-fn handleConn(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, stream: Io.net.Stream) !void {
+fn handleConn(gpa: std.mem.Allocator, io: std.Io, bot: Bot, group: *std.Io.Group, stream: std.Io.net.Stream) !void {
     defer stream.close(io);
 
     var read_buf: [8192]u8 = undefined;
@@ -86,7 +94,7 @@ fn handleConn(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, stream
     }
 }
 
-fn handleRequest(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, req: *std.http.Server.Request) !void {
+fn handleRequest(gpa: std.mem.Allocator, io: std.Io, bot: Bot, group: *std.Io.Group, req: *std.http.Server.Request) !void {
     if (req.head.method != .POST or !std.mem.eql(u8, req.head.target, webhook_path)) {
         try req.respond("Not Found", .{ .status = .not_found });
         return;
@@ -127,7 +135,12 @@ fn handleRequest(gpa: std.mem.Allocator, io: Io, bot: Bot, group: *Io.Group, req
         return;
     };
 
-    group.async(io, handleUpdate, .{ gpa, bot, parsed.value, parsed });
+    group.concurrent(io, handleUpdate, .{ gpa, bot, parsed.value, parsed }) catch |err| switch (err) {
+        error.ConcurrencyUnavailable => {
+            handleUpdate(gpa, bot, parsed.value, parsed) catch |e|
+                std.log.err("handleUpdate: {any}", .{e});
+        },
+    };
 }
 
 pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update, parsed: std.json.Parsed(Update)) !void {
