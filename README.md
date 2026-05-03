@@ -10,7 +10,7 @@
 
 **A Telegram Bot API library written in Zig ⚡**
  
-[📦 Installation](#-installation) · [🚀 Quick Start](#-quick-start) · [📂 Examples](#-examples) · [🖥 Local Bot API](#-local-bot-api-server-support) · [⚠️ Error Handling](#%EF%B8%8F-error-handling)
+[🚀 Quick Start](#-quick-start) · [📂 Examples](#-examples) · [🖥 Local Bot API](#-local-bot-api-server-support) · [⚠️ Error Handling](#%EF%B8%8F-error-handling)
  
 </div>
 
