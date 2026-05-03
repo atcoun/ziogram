@@ -280,7 +280,7 @@ Full error set:
 
 ## 🤖 Bots using Ziogram
  
-Bots built with this library. Want to add yours? Open a PR with your bot's username and a short description.
+Bots built with this library. Want to add yours? Open an [issue](https://github.com/atcoun/ziogram/issues) or PR with your bot's username and a short description.
  
 > No bots yet — be the first!
  
