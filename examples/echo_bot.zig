@@ -3,6 +3,7 @@ const ziogram = @import("ziogram");
 
 const Client = ziogram.Client;
 const Bot = ziogram.Bot;
+// const TelegramAPI = ziogram.TelegramAPI;
 
 const enums = ziogram.enums;
 const ChatType = enums.ChatType;
@@ -18,7 +19,10 @@ pub fn main(init: std.process.Init) !void {
 
     const token = "YOUR_BOT_TOKEN";
 
-    var client = try Client.init(gpa, init.io, .{});
+    // var api = try TelegramAPI.init(gpa, "http://127.0.0.1:8081", true, .{});
+    // defer api.deinit(gpa);
+
+    var client = try Client.init(gpa, io, .{}); // .{ .api = api }
     defer client.deinit();
 
     var bot = try Bot.init(token, client, .{});
