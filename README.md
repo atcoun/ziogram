@@ -100,7 +100,7 @@ See [examples/echo_bot_webhook.zig](examples/echo_bot_webhook.zig)
 
 ---
 
-### Sending a Message
+### ✉️ Sending a Message
 
 ```zig
 const msg = try bot.sendMessage(allocator, .{
@@ -117,7 +117,7 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 
 ---
 
-### Sending a Photo
+### 🖼️ Sending a Photo
 
 `InputFile` is a versatile union that automatically selects the correct transport (multipart vs. JSON) based on the input type. It supports the local filesystem, in-memory buffers, existing `file_id`s, or remote URLs with byte-streaming support.
 
@@ -160,7 +160,7 @@ _ = try bot.sendPhoto(allocator, .{
 
 ---
 
-### Downloading a File
+### 📁 Downloading a File
 
 Two methods are available depending on what you already have.
 
