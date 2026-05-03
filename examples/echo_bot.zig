@@ -1,8 +1,6 @@
 const std = @import("std");
 const ziogram = @import("ziogram");
 
-const Io = std.Io;
-
 const Client = ziogram.Client;
 const Bot = ziogram.Bot;
 
@@ -20,10 +18,10 @@ pub fn main(init: std.process.Init) !void {
 
     const token = "YOUR_BOT_TOKEN";
 
-    const client = try Client.init(gpa, init.io, .{});
+    var client = try Client.init(gpa, init.io, .{});
     defer client.deinit();
 
-    const bot = try Bot.init(token, client, .{});
+    var bot = try Bot.init(token, client, .{});
     defer bot.deinit();
 
     {
@@ -34,7 +32,7 @@ pub fn main(init: std.process.Init) !void {
         std.log.info("🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
     }
 
-    var group: Io.Group = .init;
+    var group: std.Io.Group = .init;
     defer group.cancel(io);
 
     var offset: i32 = 0;
@@ -62,10 +60,14 @@ pub fn main(init: std.process.Init) !void {
                         std.log.err("handleUpdate: {any}", .{e});
                 },
             };
-            offset = update.update_id + 1;
         }
 
         group.await(io) catch {};
+
+        if (updates.len > 0) {
+            offset = updates[updates.len - 1].update_id + 1;
+        }
+
         _ = arena.reset(.retain_capacity);
     }
 }
