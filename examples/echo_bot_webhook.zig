@@ -28,7 +28,7 @@ pub fn main(init: std.process.Init) !void {
     // var api = try TelegramAPI.init(gpa, "http://127.0.0.1:8081", true, .{});
     // defer api.deinit(gpa);
 
-    var client = try Client.init(gpa, init.io, .{}); // .{ .api = api }
+    var client = try Client.init(gpa, io, .{}); // .{ .api = api }
     defer client.deinit();
 
     var bot = try Bot.init(token, client, .{});
