@@ -280,16 +280,11 @@ Full error set:
 
 ## 🤖 Bots using Ziogram
  
-Open-source bots and projects built with this library.
+Bots built with this library. Want to add yours? Open a PR with your bot's username and a short description.
  
-> **Be the first bot!**  
-> Built something with ziogram? Open a PR and add your project here — see [CONTRIBUTING.md](CONTRIBUTING.md).
- 
-<!--
-| Bot | Description | Source |
-|-----|-------------|--------|
-| [@YourBot](https://t.me/YourBot) | Short description of what the bot does | [github.com/you/repo](https://github.com/you/repo) |
--->
+| Bot | Description |
+|-----|-------------|
+| [@Bot](https://t.me/Bot) | Be the first bot! |
  
 ---
 
