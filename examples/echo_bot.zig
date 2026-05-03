@@ -48,7 +48,7 @@ pub fn main(init: std.process.Init) !void {
             },
         }) catch |err| {
             std.log.warn("Network error in getUpdates: {any}. Retrying in 10 seconds...", .{err});
-            const delay = Io.Duration.fromSeconds(10);
+            const delay = std.Io.Duration.fromSeconds(10);
             try io.sleep(delay, .awake);
             continue;
         };
