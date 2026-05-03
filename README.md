@@ -282,9 +282,7 @@ Full error set:
  
 Bots built with this library. Want to add yours? Open a PR with your bot's username and a short description.
  
-| Bot | Description |
-|-----|-------------|
-| [@Bot](https://t.me/Bot) | Be the first bot! |
+> No bots yet — be the first!
  
 ---
 
