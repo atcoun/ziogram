@@ -39,7 +39,6 @@ src/
 ├── client/
 │   ├── api.zig           # TelegramAPI — URL formatting, local server support
 │   ├── bot.zig           # Bot — public API, call dispatcher, download helpers
-│   ├── bot_options.zig   # BotOptions — global defaults applied per-call
 │   ├── http.zig          # Client — HTTP, multipart/form-data, JSON serialization
 │   ├── http_options.zig  # ClientOptions — proxy, custom API endpoint
 │   └── local_paths.zig   # LocalPaths — server↔local filesystem path mapping
@@ -53,7 +52,7 @@ src/
 ├── methods.zig
 └── types.zig
 build.zig                 # Build script — module graph + test steps
-build.zig.zon             # Package manifest — version 0.3.0, min Zig 0.16.0
+build.zig.zon             # Package manifest — version 0.4.0, min Zig 0.16.0
 ```
 
 ### Module dependency graph
@@ -160,7 +159,6 @@ The test suite covers:
 |------|----------------|
 | `src/client/api.zig` | URL generation for PRODUCTION/TEST, `fromBase`, `toLocal` path mapping |
 | `src/errors.zig` | All `DetailedError` constructors — message content, labels, extra fields |
-| `src/client/bot_options.zig` | `resolve()` logic — `LinkPreviewOptions` merging |
 
 When adding a new feature, please add tests for any pure logic (string formatting, struct field logic, etc.) that does not require a network connection.
 
