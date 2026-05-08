@@ -69,7 +69,7 @@ pub fn main(init: std.process.Init) !void {
     var client = try ziogram.Client.init(init.gpa, init.io, .{});
     defer client.deinit();
 
-    var bot = try ziogram.Bot.init("YOUR_BOT_TOKEN", client, .{});
+    var bot = try ziogram.Bot.init("YOUR_BOT_TOKEN", client);
     defer bot.deinit();
 
     const allocator = init.arena.allocator();
