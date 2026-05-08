@@ -188,33 +188,6 @@ try bot.downloadFile(allocator, path, &writer.interface);
 
 ---
 
-### ⚙️ Bot Options
-
-Set once on `Bot.init` — applied to every method call that supports the field, unless overridden per-call.
-
-```zig
-var bot = try Bot.init(token, client, .{
-    .parse_mode = .HTML,
-    .disable_notification = true,
-    .protect_content = true,
-    .link_preview_is_disabled = true,
-});
-
-// parse_mode = .HTML is applied automatically from bot options:
-_ = try bot.sendMessage(allocator, .{
-    .chat_id = .{ .id = 123456789 },
-    .text = "Message with <b>bold</b> and <u>underline</u>",
-});
-
-// Override per-call with .None to send plain text:
-_ = try bot.sendMessage(allocator, .{
-    .chat_id = .{ .id = 123456789 },
-    .text = "Message without <b>bold</b> and <u>underline</u>",
-    .parse_mode = .None,
-});
-```
-
----
 ### 🖥 Local Bot API Server Support
 
 Running your own [Telegram Bot API server](https://github.com/tdlib/telegram-bot-api)? Ziogram supports it out of the box, including local file path remapping between the server and your machine:

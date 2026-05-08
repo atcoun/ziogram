@@ -6,7 +6,6 @@ const types = @import("types");
 
 const ZiogramError = errors.ZiogramError;
 
-const BotOptions = @import("../client/bot_options.zig");
 const ClientOptions = @import("../client/http_options.zig");
 const TelegramAPI = @import("../client/api.zig");
 
@@ -146,13 +145,12 @@ pub fn prepareValue(
     jw: anytype,
     value: anytype,
     files: *FilesMap,
-    bot_options: ?BotOptions,
 ) !void {
     const T = @TypeOf(value);
 
     switch (@typeInfo(T)) {
         .optional => {
-            if (value) |v| try prepareValue(allocator, io, jw, v, files, bot_options) else try jw.write(null);
+            if (value) |v| try prepareValue(allocator, io, jw, v, files) else try jw.write(null);
         },
 
         .@"union" => {
@@ -186,18 +184,10 @@ pub fn prepareValue(
             inline for (std.meta.fields(T)) |field| {
                 if (comptime isMetaField(field.name)) continue;
 
-                var field_val = @field(value, field.name);
+                const field_val = @field(value, field.name);
                 const is_optional = comptime @typeInfo(field.type) == .optional;
 
                 if (comptime is_optional) {
-                    if (bot_options) |o| {
-                        if (field_val == null) {
-                            if (comptime @hasField(BotOptions, field.name)) {
-                                field_val = @field(o, field.name);
-                            }
-                        }
-                    }
-
                     if (field_val) |v| {
                         try jw.objectField(field.name);
                         try prepareValue(allocator, io, jw, v, files, null);
@@ -306,23 +296,16 @@ fn writeMultipart(
     writer: *std.Io.Writer,
     method: anytype,
     boundary: []const u8,
-    bot_options: ?BotOptions,
 ) !void {
     const MethodType = @TypeOf(method);
 
     inline for (std.meta.fields(MethodType)) |field| {
         if (comptime isMetaField(field.name)) continue;
 
-        var value = @field(method, field.name);
+        const value = @field(method, field.name);
         const is_optional = comptime @typeInfo(field.type) == .optional;
 
         if (comptime is_optional) {
-            if (value == null and bot_options != null) {
-                if (comptime @hasField(BotOptions, field.name)) {
-                    value = @field(bot_options.?, field.name);
-                }
-            }
-
             if (value) |final_value| {
                 try self.writePart(writer, field.name, final_value, boundary);
             }
@@ -338,7 +321,6 @@ pub fn makeRequest(
     allocator: std.mem.Allocator,
     token: []const u8,
     method: anytype,
-    bot_options: ?BotOptions,
 ) !@TypeOf(method).Result {
     const Method = @TypeOf(method);
     const url_str = try self.options.api.apiUrl(allocator, token, Method.method_name);
@@ -361,14 +343,14 @@ pub fn makeRequest(
     defer payload_aw.deinit();
 
     if (has_files) {
-        try self.writeMultipart(&payload_aw.writer, method, boundary, bot_options);
+        try self.writeMultipart(&payload_aw.writer, method, boundary);
     } else {
         var jws = std.json.Stringify{
             .writer = &payload_aw.writer,
             .options = .{ .emit_null_optional_fields = false },
         };
         var files_map = FilesMap.empty;
-        try prepareValue(allocator, self.client.io, &jws, method, &files_map, bot_options);
+        try prepareValue(allocator, self.client.io, &jws, method, &files_map);
     }
 
     const payload_data = payload_aw.written();
@@ -378,7 +360,6 @@ pub fn makeRequest(
 
     const result = self.client.fetch(.{
         .location = .{ .url = url_str },
-        .method = if (payload_data.len > 0) .POST else .GET,
         .payload = if (payload_data.len > 0) payload_data else null,
         .response_writer = &response_aw.writer,
         .headers = .{

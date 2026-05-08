@@ -3,7 +3,6 @@ const std = @import("std");
 const methods = @import("methods");
 const types = @import("types");
 
-const BotOptions = @import("bot_options.zig");
 const Client = @import("http.zig");
 
 const extractBotId = @import("../utils/token.zig").extractBotId;
@@ -12,21 +11,15 @@ allocator: std.mem.Allocator,
 token: []const u8,
 id: i64,
 client: *Client,
-options: ?BotOptions = null,
 
-pub fn init(token: []const u8, client: *Client, options: BotOptions) !@This() {
+pub fn init(token: []const u8, client: *Client) !@This() {
     const bot_id = try extractBotId(token);
     const allocator = client.allocator;
-
-    var bot_options = options;
-    bot_options.resolve();
-
     return @This(){
         .allocator = allocator,
         .token = try allocator.dupe(u8, token),
         .id = bot_id,
         .client = client,
-        .options = bot_options,
     };
 }
 
@@ -78,7 +71,6 @@ pub fn call(
         allocator,
         self.token,
         method,
-        self.options,
     );
 }
 
