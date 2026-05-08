@@ -27,7 +27,7 @@ Thank you for your interest in contributing to **ziogram** — a high-performanc
 ```sh
 git clone https://github.com/atcoun/ziogram.git
 cd ziogram
-zig build
+zig build test
 ```
 
 ---
