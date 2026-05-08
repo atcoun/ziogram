@@ -92,15 +92,15 @@ pub fn checkResponse(
     const description = response.description orelse "no description";
     const error_code = response.error_code orelse 0;
 
-    if (response.parameters) |params| {
+    if (response.parameters) |parameters| {
         const method_chat_id = if (@hasField(Method, "chat_id")) method.chat_id else null;
 
-        if (params.retry_after) |ra| {
+        if (parameters.retry_after) |retry_after| {
             var err_detail = try errors.makeRetryAfter(
                 allocator,
                 Method.method_name,
                 method_chat_id,
-                @intCast(ra),
+                @intCast(retry_after),
                 description,
             );
             std.log.err("{s}: {s}", .{ err_detail.label, err_detail.message });
@@ -108,11 +108,11 @@ pub fn checkResponse(
             return ZiogramError.TelegramRetryAfter;
         }
 
-        if (params.migrate_to_chat_id) |mid| {
+        if (parameters.migrate_to_chat_id) |migrate_to_chat_id| {
             var err_detail = try errors.makeMigrateToChat(
                 allocator,
                 method_chat_id,
-                mid,
+                migrate_to_chat_id,
                 description,
             );
             defer err_detail.deinit();
