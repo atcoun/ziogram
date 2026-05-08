@@ -1,6 +1,6 @@
 <div align="center">
 
-![Zig](https://img.shields.io/badge/Zig-0.16.0-F7A41D?style=flat-square&logo=zig&logoColor=white)
+![Zig](https://img.shields.io/badge/Zig-0.16.0+-F7A41D?style=flat-square&logo=zig&logoColor=white)
 ![Ziogram](https://img.shields.io/badge/Ziogram-0.4.0-F7A41D?style=flat-square&logo=zig&logoColor=white)
 ![Telegram Bot API](https://img.shields.io/badge/Telegram_Bot_API-10.0-2CA5E0?style=flat-square&logo=telegram&logoColor=white)
 ![Status](https://img.shields.io/badge/status-stable-22c55e?style=flat-square)
