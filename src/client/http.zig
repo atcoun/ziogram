@@ -190,11 +190,11 @@ pub fn prepareValue(
                 if (comptime is_optional) {
                     if (field_val) |v| {
                         try jw.objectField(field.name);
-                        try prepareValue(allocator, io, jw, v, files, null);
+                        try prepareValue(allocator, io, jw, v, files);
                     }
                 } else {
                     try jw.objectField(field.name);
-                    try prepareValue(allocator, io, jw, field_val, files, null);
+                    try prepareValue(allocator, io, jw, field_val, files);
                 }
             }
             try jw.endObject();
@@ -205,10 +205,10 @@ pub fn prepareValue(
                 try jw.write(value);
             } else if (comptime ptr.size == .slice) {
                 try jw.beginArray();
-                for (value) |item| try prepareValue(allocator, io, jw, item, files, null);
+                for (value) |item| try prepareValue(allocator, io, jw, item, files);
                 try jw.endArray();
             } else {
-                try prepareValue(allocator, io, jw, value.*, files, null);
+                try prepareValue(allocator, io, jw, value.*, files);
             }
         },
 
