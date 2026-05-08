@@ -31,7 +31,7 @@ pub fn main(init: std.process.Init) !void {
     var client = try Client.init(gpa, io, .{}); // .{ .api = api }
     defer client.deinit();
 
-    var bot = try Bot.init(token, client, .{});
+    var bot = try Bot.init(token, client);
     defer bot.deinit();
 
     const allocator = arena.allocator();
