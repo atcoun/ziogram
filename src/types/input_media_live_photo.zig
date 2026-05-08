@@ -1,0 +1,11 @@
+const enums = @import("enums");
+const types = @import("types");
+
+type: enums.InputMediaType = .live_photo,
+media: []const u8,
+photo: []const u8,
+caption: ?[]const u8 = null,
+parse_mode: ?enums.ParseMode = null,
+caption_entities: ?[]const types.MessageEntity = null,
+show_caption_above_media: ?bool = null,
+has_spoiler: ?bool = null,

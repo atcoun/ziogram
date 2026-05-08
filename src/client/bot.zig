@@ -100,6 +100,15 @@ pub fn answerCallbackQuery(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#answer_guest_query
+pub fn answerGuestQuery(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.AnswerGuestQuery,
+) !bool {
+    return self.call(allocator, options);
+}
+
 /// Source: https://core.telegram.org/bots/api#answerinlinequery
 pub fn answerInlineQuery(
     self: *const @This(),
@@ -289,6 +298,15 @@ pub fn declineSuggestedPost(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#deleteallmessagereactions
+pub fn deleteAllMessageReactions(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.DeleteAllMessageReactions,
+) !bool {
+    return self.call(allocator, options);
+}
+
 /// Source: https://core.telegram.org/bots/api#deletebusinessmessages
 pub fn deleteBusinessMessages(
     self: *const @This(),
@@ -321,6 +339,15 @@ pub fn deleteForumTopic(
     self: *const @This(),
     allocator: std.mem.Allocator,
     options: methods.DeleteForumTopic,
+) !bool {
+    return self.call(allocator, options);
+}
+
+/// Source: https://core.telegram.org/bots/api#deletemessagereaction
+pub fn deleteMessageReaction(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.DeleteMessageReaction,
 ) !bool {
     return self.call(allocator, options);
 }
@@ -649,6 +676,15 @@ pub fn getGameHighScores(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#getmanagedbotaccesssettings
+pub fn getManagedBotAccessSettings(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.GetManagedBotAccessSettings,
+) ![]const types.GameHighScore {
+    return self.call(allocator, options);
+}
+
 /// Source: https://core.telegram.org/bots/api#getmanagedbottoken
 pub fn getManagedBotToken(
     self: *const @This(),
@@ -762,6 +798,15 @@ pub fn getUserGifts(
     self: *const @This(),
     allocator: std.mem.Allocator,
     options: methods.GetUserGifts,
+) !types.OwnedGifts {
+    return self.call(allocator, options);
+}
+
+/// Source: https://core.telegram.org/bots/api#getuserpersonalchatmessages
+pub fn getUserPersonalChatMessages(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.GetUserPersonalChatMessages,
 ) !types.OwnedGifts {
     return self.call(allocator, options);
 }
@@ -1081,11 +1126,29 @@ pub fn sendInvoice(
     return self.call(allocator, options);
 }
 
+/// Source: https://core.telegram.org/bots/api#sendlivephoto
+pub fn sendLivePhoto(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.SendLivePhoto,
+) !types.Message {
+    return self.call(allocator, options);
+}
+
 /// Source: https://core.telegram.org/bots/api#sendlocation
 pub fn sendLocation(
     self: *const @This(),
     allocator: std.mem.Allocator,
     options: methods.SendLocation,
+) !types.Message {
+    return self.call(allocator, options);
+}
+
+/// Source: https://core.telegram.org/bots/api#sendmediagroup
+pub fn sendMediaGroup(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.SendMediaGroup,
 ) !types.Message {
     return self.call(allocator, options);
 }
@@ -1311,6 +1374,15 @@ pub fn setGameScore(
     self: *const @This(),
     allocator: std.mem.Allocator,
     options: methods.SetGameScore,
+) !types.MessageOrBool {
+    return self.call(allocator, options);
+}
+
+/// Source: https://core.telegram.org/bots/api#setmanagedbotaccesssettings
+pub fn setManagedBotAccessSettings(
+    self: *const @This(),
+    allocator: std.mem.Allocator,
+    options: methods.SetManagedBotAccessSettings,
 ) !types.MessageOrBool {
     return self.call(allocator, options);
 }
