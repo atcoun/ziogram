@@ -13,7 +13,6 @@
 
 <p>
   <a href="#-quick-start">🚀 Quick Start</a> ·
-  <a href="#-examples">📂 Examples</a> ·
   <a href="#-local-bot-api-server-support">🖥 Local Bot API</a> ·
   <a href="#%EF%B8%8F-error-handling">⚠️ Error Handling</a>
 </p>
