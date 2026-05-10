@@ -17,11 +17,6 @@
 
 ---
 
-> [!WARNING]
-> Not recommended for production-critical environments. Since Zig has not yet reached v1.0.0, API stability and backward compatibility are subject to change. This library is provided "as is", without warranty of any kind, express or implied. Use at your own risk.
-
----
-
 ## 📦 Installation
 
 ### Prerequisites

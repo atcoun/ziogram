@@ -1,16 +1,11 @@
 const std = @import("std");
-const ziogram = @import("ziogram");
 
+const ziogram = @import("ziogram");
 const Client = ziogram.Client;
 const Bot = ziogram.Bot;
 // const TelegramAPI = ziogram.TelegramAPI;
-
 const enums = ziogram.enums;
-const ChatType = enums.ChatType;
-
 const types = ziogram.types;
-const Message = types.Message;
-const Update = types.Update;
 
 pub fn main(init: std.process.Init) !void {
     const arena = init.arena;
@@ -76,7 +71,7 @@ pub fn main(init: std.process.Init) !void {
     }
 }
 
-pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
+pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: types.Update) !void {
     var arena = std.heap.ArenaAllocator.init(gpa);
     defer arena.deinit();
 
@@ -91,7 +86,7 @@ pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update) !void {
     }
 }
 
-pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
+pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: types.Message) !void {
     if (message.text) |text| {
         if (std.mem.eql(u8, text, "/start")) {
             _ = try bot.sendMessage(allocator, .{

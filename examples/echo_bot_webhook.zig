@@ -1,16 +1,11 @@
 const std = @import("std");
-const ziogram = @import("ziogram");
 
+const ziogram = @import("ziogram");
 const Client = ziogram.Client;
 const Bot = ziogram.Bot;
 // const TelegramAPI = ziogram.TelegramAPI;
-
 const enums = ziogram.enums;
-const ChatType = enums.ChatType;
-
 const types = ziogram.types;
-const Message = types.Message;
-const Update = types.Update;
 
 const web_server_host = "127.0.0.1";
 const web_server_port = 8080;
@@ -126,7 +121,7 @@ fn handleRequest(gpa: std.mem.Allocator, io: std.Io, bot: Bot, group: *std.Io.Gr
     try req.respond("", .{ .status = .ok });
 
     const parsed = std.json.parseFromSlice(
-        Update,
+        types.Update,
         gpa,
         body,
         .{ .ignore_unknown_fields = true },
@@ -143,7 +138,7 @@ fn handleRequest(gpa: std.mem.Allocator, io: std.Io, bot: Bot, group: *std.Io.Gr
     };
 }
 
-pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update, parsed: std.json.Parsed(Update)) !void {
+pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: types.Update, parsed: std.json.Parsed(types.Update)) !void {
     defer parsed.deinit();
 
     var arena = std.heap.ArenaAllocator.init(gpa);
@@ -160,7 +155,7 @@ pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: Update, parsed: st
     }
 }
 
-pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: Message) !void {
+pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: types.Message) !void {
     if (message.text) |text| {
         if (std.mem.eql(u8, text, "/start")) {
             _ = try bot.sendMessage(allocator, .{

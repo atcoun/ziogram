@@ -43,16 +43,16 @@ src/
 │   ├── http_options.zig  # ClientOptions — proxy, custom API endpoint
 │   └── local_paths.zig   # LocalPaths — server↔local filesystem path mapping
 ├── enums/                # All Telegram enums (ParseMode, ChatType, etc.)
+│   └── root.zig
 ├── methods/              # One .zig file per Telegram API method
+│   └── root.zig
 ├── types/                # All Telegram object types
+│   └── root.zig
 ├── utils/                # Internal helpers (token parsing, etc.)
 ├── errors.zig            # ZiogramError set + DetailedError constructors
-├── root.zig              # Public exports: Bot, Client, TelegramAPI, types, enums, errors, methods
-├── enums.zig
-├── methods.zig
-└── types.zig
+└── root.zig              # Public exports: Bot, Client, TelegramAPI, types, enums, errors, methods
 build.zig                 # Build script — module graph + test steps
-build.zig.zon             # Package manifest — version 0.4.0, min Zig 0.16.0
+build.zig.zon             # Package manifest — version 2026.5.10, min Zig 0.16.0
 ```
 
 ### Module dependency graph
@@ -195,7 +195,7 @@ When adding a new feature, please add tests for any pure logic (string formattin
 feat: add sendPoll method
 fix: handle migrate_to_chat_id in checkResponse
 test: add tests for makeRetryAfter with username chat_id
-chore: bump version to 0.4.0 in build.zig.zon
+chore: bump version to 2026.5.10 in build.zig.zon
 ```
 
 ---

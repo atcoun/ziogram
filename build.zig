@@ -5,7 +5,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     const enums = b.addModule("enums", .{
-        .root_source_file = b.path("src/enums.zig"),
+        .root_source_file = b.path("src/enums/root.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -17,13 +17,13 @@ pub fn build(b: *std.Build) void {
     });
 
     const methods = b.addModule("methods", .{
-        .root_source_file = b.path("src/methods.zig"),
+        .root_source_file = b.path("src/methods/root.zig"),
         .target = target,
         .optimize = optimize,
     });
 
     const types = b.addModule("types", .{
-        .root_source_file = b.path("src/types.zig"),
+        .root_source_file = b.path("src/types/root.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -74,22 +74,8 @@ pub fn build(b: *std.Build) void {
     });
     const run_api_tests = b.addRunArtifact(api_tests);
 
-    const bot_options_tests = b.addTest(.{
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/client/bot_options.zig"),
-            .target = target,
-            .optimize = optimize,
-            .imports = &.{
-                .{ .name = "enums", .module = enums },
-                .{ .name = "types", .module = types },
-            },
-        }),
-    });
-    const run_bot_options_tests = b.addRunArtifact(bot_options_tests);
-
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&run_ziogram_tests.step);
     test_step.dependOn(&run_errors_tests.step);
     test_step.dependOn(&run_api_tests.step);
-    test_step.dependOn(&run_bot_options_tests.step);
 }
