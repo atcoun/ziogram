@@ -16,7 +16,7 @@
   <a href="#-downloading-a-file">📁 Downloading a File</a> ·
   <a href="#-local-bot-api-server-support">🖥 Local Bot API</a> ·
   <a href="#%EF%B8%8F-error-handling">⚠️ Error Handling</a> ·
-  <a href="#-bots-using-ziogram">🤖 Bots using Ziogram</a> ·
+  <a href="#-bots-using-ziogram">🤖 Bots using Ziogram</a>
 </p>
 
 </div>
