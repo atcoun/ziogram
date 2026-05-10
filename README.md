@@ -3,7 +3,7 @@
 [![Zig](https://img.shields.io/badge/Zig-0.16.0+-F7A41D?style=flat-square&logo=zig&logoColor=white)](https://ziglang.org/download/)
 [![Telegram Bot API](https://img.shields.io/badge/Telegram_Bot_API-10.0-2CA5E0?style=flat-square&logo=telegram&logoColor=white)](https://core.telegram.org/bots/api)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-22c55e?style=flat-square)](COVERAGE.md)
-[![License](https://img.shields.io/badge/license-MIT-4ade80?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-4ade80?style=flat-square)](https://opensource.org/licenses/MIT)
 
 <img src="assets/ziogram.png" width="100%" alt="ziogram"/>
 
