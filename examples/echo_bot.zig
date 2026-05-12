@@ -1,35 +1,34 @@
 const std = @import("std");
 
 const ziogram = @import("ziogram");
-const Client = ziogram.Client;
+const ClientSession = ziogram.ClientSession;
 const Bot = ziogram.Bot;
 // const TelegramAPI = ziogram.TelegramAPI;
+
 const enums = ziogram.enums;
+const ChatType = enums.ChatType;
+
 const types = ziogram.types;
+const Update = types.Update;
+const Message = types.Message;
 
 pub fn main(init: std.process.Init) !void {
     const arena = init.arena;
-    const gpa = init.gpa;
+    const allocator = init.gpa;
     const io = init.io;
 
-    const token = "YOUR_BOT_TOKEN";
+    // var api = try TelegramAPI.init(allocator, "http://127.0.0.1:8081", true, .{});
+    // defer api.deinit(allocator);
 
-    // var api = try TelegramAPI.init(gpa, "http://127.0.0.1:8081", true, .{});
-    // defer api.deinit(gpa);
+    var session = try ClientSession.init(allocator, io, .{}); // .{ .api = api }
+    defer session.deinit();
 
-    var client = try Client.init(gpa, io, .{}); // .{ .api = api }
-    defer client.deinit();
-
-    var bot = try Bot.init(token, client);
+    var bot = try Bot.init("YOUR_BOT_TOKEN", &session);
     defer bot.deinit();
 
-    {
-        const allocator = arena.allocator();
-        _ = try bot.deleteWebhook(allocator, .{ .drop_pending_updates = true });
-        const me = try bot.getMe(allocator, .{});
-        if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
-        std.log.info("🌟 Enjoying ziogram? Support the project with a star: https://github.com/atcoun/ziogram", .{});
-    }
+    _ = try bot.deleteWebhook(arena, .{ .drop_pending_updates = true });
+    const me = try bot.getMe(arena, .{});
+    if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
 
     var group: std.Io.Group = .init;
     defer group.cancel(io);
@@ -37,25 +36,25 @@ pub fn main(init: std.process.Init) !void {
     var offset: i32 = 0;
 
     while (true) {
-        const allocator = arena.allocator();
-
-        const updates = bot.getUpdates(allocator, .{
+        const updates = bot.getUpdates(arena, .{
             .offset = offset,
-            .timeout = 60,
+            .timeout = 50,
             .allowed_updates = &.{
                 .message,
             },
         }) catch |err| {
-            std.log.warn("Network error in getUpdates: {any}. Retrying in 10 seconds...", .{err});
-            const delay = std.Io.Duration.fromSeconds(10);
+            std.log.warn("Network error in getUpdates: {any}. Retrying in 1 seconds...", .{err});
+            const delay = std.Io.Duration.fromSeconds(1);
             try io.sleep(delay, .awake);
             continue;
         };
 
+        if (updates.len == 0) continue;
+
         for (updates) |update| {
-            group.concurrent(io, handleUpdate, .{ gpa, bot, update }) catch |err| switch (err) {
+            group.concurrent(io, handleUpdate, .{ arena, bot, update }) catch |err| switch (err) {
                 error.ConcurrencyUnavailable => {
-                    handleUpdate(gpa, bot, update) catch |e|
+                    handleUpdate(arena, bot, update) catch |e|
                         std.log.err("handleUpdate: {any}", .{e});
                 },
             };
@@ -71,31 +70,31 @@ pub fn main(init: std.process.Init) !void {
     }
 }
 
-pub fn handleUpdate(gpa: std.mem.Allocator, bot: Bot, update: types.Update) !void {
-    var arena = std.heap.ArenaAllocator.init(gpa);
-    defer arena.deinit();
-
-    const allocator = arena.allocator();
-
+pub fn handleUpdate(arena: *std.heap.ArenaAllocator, bot: Bot, update: Update) !void {
     if (update.message) |message| {
         if (message.chat.type == enums.ChatType.private) {
-            handleMessage(allocator, bot, message) catch |err| {
+            handleMessage(arena, bot, message) catch |err| {
                 std.log.err("Error [handleMessage]: {any}", .{err});
             };
         }
     }
 }
 
-pub fn handleMessage(allocator: std.mem.Allocator, bot: Bot, message: types.Message) !void {
+pub fn handleMessage(arena: *std.heap.ArenaAllocator, bot: Bot, message: Message) !void {
     if (message.text) |text| {
         if (std.mem.eql(u8, text, "/start")) {
-            _ = try bot.sendMessage(allocator, .{
+            _ = try bot.sendMessage(arena, .{
                 .chat_id = .{ .id = message.chat.id },
                 .text = try std.fmt.allocPrint(
-                    allocator,
+                    arena.allocator(),
                     "Hello, {s}!",
                     .{message.from.?.first_name},
                 ),
+            });
+        } else {
+            _ = try bot.sendMessage(arena, .{
+                .chat_id = .{ .id = message.chat.id },
+                .text = text,
             });
         }
     }

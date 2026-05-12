@@ -64,20 +64,24 @@ const exe = b.addExecutable(.{
 **3.** Write your first bot in `src/main.zig`:
 ```zig
 const std = @import("std");
+
 const ziogram = @import("ziogram");
+const ClientSession = ziogram.ClientSession;
+const Bot = ziogram.Bot;
 
 pub fn main(init: std.process.Init) !void {
-    var client = try ziogram.Client.init(init.gpa, init.io, .{});
-    defer client.deinit();
+    const arena = init.arena;
+    const allocator = init.gpa;
+    const io = init.io;
 
-    var bot = try ziogram.Bot.init("YOUR_BOT_TOKEN", client);
+    var session = try ClientSession.init(allocator, io, .{});
+    defer session.deinit();
+
+    var bot = try Bot.init("YOUR_BOT_TOKEN", &session);
     defer bot.deinit();
 
-    const allocator = init.arena.allocator();
-
-    const me = try bot.getMe(allocator, .{});
-
-    const info = try std.json.Stringify.valueAlloc(allocator, me, .{
+    const me = try bot.getMe(arena, .{});
+    const info = try std.json.Stringify.valueAlloc(arena.allocator(), me, .{
         .whitespace = .indent_4,
         .emit_null_optional_fields = false,
     });
@@ -105,13 +109,13 @@ See [examples/echo_bot_webhook.zig](examples/echo_bot_webhook.zig)
 ### ✉️ Sending a Message
 
 ```zig
-const msg = try bot.sendMessage(allocator, .{
+const message = try bot.sendMessage(arena, .{
     .chat_id = .{ .id = 123456789 }, // or .{ .username = "@username" }
     .text = "Hello from <b>ziogram</b>! ⚡",
     .parse_mode = .HTML,
 });
 
-std.log.info("Sent message id: {d}", .{msg.message_id});
+std.log.info("Sent message id: {d}", .{message.message_id});
 ```
 
 > [!NOTE]
@@ -126,21 +130,21 @@ std.log.info("Sent message id: {d}", .{msg.message_id});
 ```zig
 // 1. Upload a file from the local filesystem
 // The filename is automatically extracted from the path.
-_ = try bot.sendPhoto(allocator, .{
+_ = try bot.sendPhoto(arena, .{
     .chat_id = .{ .id = 1234567890 }, // or .{ .username = "@username" }
     .photo = .{ .fs = .{ .path = "assets/ziogram.png" } },
     .caption = "Hello from Zig!",
 });
 
 // 2. Send using an existing file_id (fastest method)
-_ = try bot.sendPhoto(allocator, .{
+_ = try bot.sendPhoto(arena, .{
     .chat_id = .{ .id = 1234567890 },
     .photo = .{ .file_id = "AgACAgIAAxkBAAI..." },
 });
 
 // 3. Streaming from a remote URL (aiogram-style)
 // The bot downloads the file and proxies its bytes to Telegram.
-_ = try bot.sendPhoto(allocator, .{
+_ = try bot.sendPhoto(arena, .{
     .chat_id = .{ .id = 1234567890 },
     .photo = .{ .url = .{ 
         .url = "https://ziglang.org",
@@ -151,7 +155,7 @@ _ = try bot.sendPhoto(allocator, .{
 
 // 4. Upload from an in-memory buffer
 // Filename is required for buffers so Telegram knows the file extension.
-_ = try bot.sendPhoto(allocator, .{
+_ = try bot.sendPhoto(arena, .{
     .chat_id = .{ .id = 1234567890 },
     .photo = .{ .buffer = .{ 
         .data = my_buffer_slice, 
@@ -169,22 +173,35 @@ Two methods are available depending on what you already have.
 **`Bot.download`** — high-level helper. Pass a `file_id`; the library calls `getFile` internally and streams the bytes to any `std.Io.Writer`.
 
 ```zig
-var file = try std.Io.Dir.cwd().createFile(io, "photo.jpg", .{});
-defer file.close(io);
+fn downloadToFile(
+    arena: *std.heap.ArenaAllocator,
+    bot: Bot,
+    file_id: []const u8,
+    filename: []const u8,
+) !void {
+    const io = bot.session.io;
 
-var buf: [65536]u8 = undefined;
-var writer = file.writer(io, &buf);
+    const out_file = try std.Io.Dir.cwd().createFile(io, filename, .{
+        .truncate = true,
+    });
+    defer out_file.close(io);
 
-try bot.download(allocator, some_file_id, &writer.interface);
+    var write_buf: [64 * 1024]u8 = undefined;
+    var file_writer = out_file.writer(io, &write_buf);
+
+    try bot.download(arena, file_id, &file_writer.interface);
+
+    std.log.info("File saved: {s}", .{filename});
+}
 ```
 
 **`Bot.downloadFile`** — low-level variant. Use it when you already have a `file_path` from a `File` object returned by `getFile`.
 
 ```zig
-const file_meta = try bot.getFile(allocator, .{ .file_id = some_file_id });
+const file_meta = try bot.getFile(arena, .{ .file_id = some_file_id });
 const path = file_meta.file_path orelse return error.TelegramFileTooLarge;
 
-try bot.downloadFile(allocator, path, &writer.interface);
+try bot.downloadFile(arena, path, &writer.interface);
 ```
 
 ---
@@ -200,8 +217,8 @@ var api= try TelegramAPI.init(allocator, "http://localhost:8081", true, .{
 });
 defer api.deinit(allocator);
 
-var client = try Client.init(allocator, io, .{ .api = api });
-defer client.deinit();
+var session = try ClientSession.init(allocator, io, .{ .api = api });
+defer session.deinit();
 ```
 
 When `is_local` is true, `downloadFile` reads directly from disk instead of making an HTTP request.
@@ -225,7 +242,7 @@ Tokens are validated on `bot.init()` — format, separator, numeric ID — befor
 All errors are typed. Telegram-specific errors carry a `DetailedError` with a human-readable message and a docs URL, logged automatically before the error is returned.
 
 ```zig
-bot.sendMessage(allocator, .{ .chat_id = .{ .id = id }, .text = "hi" }) catch |err| {
+bot.sendMessage(arena, .{ .chat_id = .{ .id = id }, .text = "hi" }) catch |err| {
     switch (err) {
         error.TelegramForbiddenError => std.log.err("Bot was blocked", .{}),
         error.TelegramRetryAfter     => std.log.err("Rate limited — check logs for retry_after", .{}),

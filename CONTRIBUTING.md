@@ -19,7 +19,7 @@ Thank you for your interest in contributing to **ziogram** — a high-performanc
 
 ### Requirements
 
-- [Zig](https://ziglang.org/download/) `0.16.0` (minimum, see `build.zig.zon`)
+- [Zig](https://ziglang.org/download/) `0.16.0+` (minimum, see `build.zig.zon`)
 - A Telegram Bot Token (from [@BotFather](https://t.me/BotFather)) — only needed to run a real bot, not for tests
 
 ### Setup
@@ -37,11 +37,11 @@ zig build test
 ```
 src/
 ├── client/
-│   ├── api.zig           # TelegramAPI — URL formatting, local server support
-│   ├── bot.zig           # Bot — public API, call dispatcher, download helpers
-│   ├── http.zig          # Client — HTTP, multipart/form-data, JSON serialization
-│   ├── http_options.zig  # ClientOptions — proxy, custom API endpoint
-│   └── local_paths.zig   # LocalPaths — server↔local filesystem path mapping
+│   ├── session/
+│   │   ├── base.zig      # BaseSession — HTTP client, JSON serialization, response validation
+│   │   └── client.zig    # ClientSession — request dispatching, timeout (via Io.Select), multipart/form-data, connection pool, proxy, file streaming
+│   ├── telegram.zig      # TelegramAPI — URL formatting, local server support
+│   └── bot.zig           # Bot — public API, call dispatcher, download helpers
 ├── enums/                # All Telegram enums (ParseMode, ChatType, etc.)
 │   └── root.zig
 ├── methods/              # One .zig file per Telegram API method
@@ -49,10 +49,11 @@ src/
 ├── types/                # All Telegram object types
 │   └── root.zig
 ├── utils/                # Internal helpers (token parsing, etc.)
+│   └── token.zig
 ├── errors.zig            # ZiogramError set + DetailedError constructors
-└── root.zig              # Public exports: Bot, Client, TelegramAPI, types, enums, errors, methods
+└── root.zig              # Public exports: Bot, ClientSession, TelegramAPI, types, enums, errors, methods
 build.zig                 # Build script — module graph + test steps
-build.zig.zon             # Package manifest — version 2026.5.10, min Zig 0.16.0
+build.zig.zon             # Package manifest — version 0.5.0, min Zig 0.16.0+
 ```
 
 ### Module dependency graph
@@ -99,7 +100,7 @@ bar: ?i32 = null,
 ```
 
 > If the method accepts a file, use `types.InputFile` for that field.
-> `Client.makeRequest` switches to `multipart/form-data` automatically when an `InputFile` field is present.
+> `ClientSession.makeRequest` switches to `multipart/form-data` automatically when an `InputFile` field is present.
 
 **Result type reference:**
 
@@ -111,10 +112,10 @@ bar: ?i32 = null,
 | Message ID only | `types.MessageId` |
 | String | `[]const u8` |
 
-### 2. Export in `src/methods.zig`
+### 2. Export in `src/methods/root.zig`
 
 ```zig
-pub const SendFoo = @import("methods/send_foo.zig");
+pub const SendFoo = @import("send_foo.zig");
 ```
 
 ### 3. Add a wrapper to `src/client/bot.zig`
@@ -122,22 +123,29 @@ pub const SendFoo = @import("methods/send_foo.zig");
 ```zig
 // bool — method returns true on success
 pub fn sendFoo(
-    self: *const @This(),
-    allocator: std.mem.Allocator,
-    options: methods.SendFoo,
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        foo: ?[]const u8 = null,
+        bar: ?i32 = null,
+        request_timeout: ?i32 = null,
+    },
 ) !bool {
-    return self.call(allocator, options);
-}
-
-// types.MessageOrBool — method returns Message or true depending on context
-pub fn editFoo(
-    self: *const @This(),
-    allocator: std.mem.Allocator,
-    options: methods.EditFoo,
-) !types.MessageOrBool {
-    return self.call(allocator, options);
+    return self.call(
+        arena.allocator(),
+        methods.SendFoo{
+            .chat_id = options.chat_id,
+            .foo = options.foo,
+            .bar = options.bar,
+        },
+        options.request_timeout,
+    );
 }
 ```
+
+> Note: the wrapper takes an anonymous struct with all method fields plus `request_timeout`.
+> Required fields have no default, optional fields default to `null`, `request_timeout` always defaults to `null`.
 
 ### 4. Update the README roadmap
 
@@ -157,8 +165,8 @@ The test suite covers:
 
 | File | What is tested |
 |------|----------------|
-| `src/client/api.zig` | URL generation for PRODUCTION/TEST, `fromBase`, `toLocal` path mapping |
-| `src/errors.zig` | All `DetailedError` constructors — message content, labels, extra fields |
+| `src/client/telegram.zig` | URL generation for server/test_server, `toLocal`/`toServer` path mapping, `init` with local paths |
+| `src/errors.zig` | `makeTelegramError`, `makeRetryAfter`, `makeMigrateToChat`, `makeDecodeError` — message content, labels, url generation, extra fields |
 
 When adding a new feature, please add tests for any pure logic (string formatting, struct field logic, etc.) that does not require a network connection.
 
@@ -195,7 +203,7 @@ When adding a new feature, please add tests for any pure logic (string formattin
 feat: add sendPoll method
 fix: handle migrate_to_chat_id in checkResponse
 test: add tests for makeRetryAfter with username chat_id
-chore: bump version to 2026.5.10 in build.zig.zon
+chore: bump version to 0.5.0 in build.zig.zon
 ```
 
 ---
@@ -208,7 +216,7 @@ chore: bump version to 2026.5.10 in build.zig.zon
 - Ensure `zig build test` passes before submitting
 - Keep the method pattern consistent:
   - struct in `src/methods/`
-  - export in `src/methods.zig`
+  - export in `src/methods/root.zig`
   - wrapper in `src/client/bot.zig`
 
 ---

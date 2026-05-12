@@ -1,6 +1,11 @@
+const TelegramAPI = @This();
+
 const std = @import("std");
 
-const LocalPaths = @import("local_paths.zig");
+const LocalPaths = struct {
+    server_path: []const u8 = "",
+    local_path: []const u8 = "",
+};
 
 pub const FilesPathWrapper = union(enum) {
     bare: void,
@@ -35,7 +40,7 @@ pub fn init(
     url: []const u8,
     is_local: bool,
     local_paths: LocalPaths,
-) !@This() {
+) !TelegramAPI {
     return .{
         .base = try std.fmt.allocPrint(
             allocator,
@@ -52,13 +57,16 @@ pub fn init(
     };
 }
 
-pub fn deinit(self: @This(), allocator: std.mem.Allocator) void {
+pub fn deinit(
+    self: TelegramAPI,
+    allocator: std.mem.Allocator,
+) void {
     allocator.free(self.base);
     allocator.free(self.file);
 }
 
 pub fn apiUrl(
-    self: @This(),
+    self: TelegramAPI,
     allocator: std.mem.Allocator,
     token: []const u8,
     method: []const u8,
@@ -82,7 +90,7 @@ pub fn apiUrl(
 }
 
 pub fn fileUrl(
-    self: @This(),
+    self: TelegramAPI,
     allocator: std.mem.Allocator,
     token: []const u8,
     path: []const u8,
@@ -105,19 +113,19 @@ pub fn fileUrl(
     return url;
 }
 
-pub const PRODUCTION = @This(){
+pub const server = TelegramAPI{
     .base = "https://api.telegram.org/bot{token}/{method}",
     .file = "https://api.telegram.org/file/bot{token}/{path}",
 };
 
-pub const TEST = @This(){
+pub const test_server = TelegramAPI{
     .base = "https://api.telegram.org/bot{token}/test/{method}",
     .file = "https://api.telegram.org/file/bot{token}/test/{path}",
 };
 
-test "PRODUCTION apiUrl" {
+test "server apiUrl" {
     const allocator = std.testing.allocator;
-    const url = try PRODUCTION.apiUrl(allocator, "TOKEN", "getMe");
+    const url = try server.apiUrl(allocator, "TOKEN", "getMe");
     defer allocator.free(url);
     try std.testing.expectEqualStrings(
         "https://api.telegram.org/botTOKEN/getMe",
@@ -125,9 +133,9 @@ test "PRODUCTION apiUrl" {
     );
 }
 
-test "PRODUCTION fileUrl" {
+test "server fileUrl" {
     const allocator = std.testing.allocator;
-    const url = try PRODUCTION.fileUrl(allocator, "TOKEN", "photos/file_0.jpg");
+    const url = try server.fileUrl(allocator, "TOKEN", "photos/file_0.jpg");
     defer allocator.free(url);
     try std.testing.expectEqualStrings(
         "https://api.telegram.org/file/botTOKEN/photos/file_0.jpg",
@@ -135,9 +143,9 @@ test "PRODUCTION fileUrl" {
     );
 }
 
-test "TEST apiUrl" {
+test "test_server apiUrl" {
     const allocator = std.testing.allocator;
-    const url = try TEST.apiUrl(allocator, "TOKEN", "sendMessage");
+    const url = try test_server.apiUrl(allocator, "TOKEN", "sendMessage");
     defer allocator.free(url);
     try std.testing.expectEqualStrings(
         "https://api.telegram.org/botTOKEN/test/sendMessage",
