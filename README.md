@@ -40,7 +40,7 @@ zig init
 zig fetch --save git+https://github.com/atcoun/ziogram.git
 ```
 
-**2.** Open `build.zig` in your `my_project`, find the executable definition and add the module:
+**2.** Open `build.zig` in your `my_project`, add the module before the executable definition:
 ```zig
 const dep = b.dependency("ziogram", .{
     .target = target,
@@ -48,7 +48,7 @@ const dep = b.dependency("ziogram", .{
 });
 const ziogram = dep.module("ziogram");
 ```
-Then add it to your executable imports:
+Then add it to your `my_project` executable imports:
 ```zig
 .{ .name = "ziogram", .module = ziogram },
 ```
@@ -82,6 +82,7 @@ pub fn main(init: std.process.Init) !void {
 ```
 
 **4.** Run:
+
 Run in debug mode (default):
 ```sh
 zig build run
