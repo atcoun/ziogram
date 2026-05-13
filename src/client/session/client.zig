@@ -16,9 +16,8 @@ const ChatId = types.ChatId;
 const InputFile = types.InputFile;
 
 const Options = struct {
-    pool: usize = 100,
+    pool: usize = 10,
     api: TelegramAPI = TelegramAPI.server,
-    proxy: ?std.http.Client.Proxy = null,
 };
 const default_timeout: i32 = 60;
 
@@ -39,9 +38,6 @@ pub fn init(
         .options = options,
     };
     try session.base.client.connection_pool.resize(io, options.pool);
-    if (session.options.proxy != null) {
-        session.base.client.https_proxy = &session.options.proxy.?;
-    }
     return session;
 }
 

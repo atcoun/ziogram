@@ -47,35 +47,52 @@ pub fn build(b: *std.Build) void {
     ziogram.addImport("methods", methods);
     ziogram.addImport("types", types);
 
+    const exe = b.addExecutable(.{
+        .name = "ziogram",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main.zig"),
+            .target = target,
+            .optimize = optimize,
+            .imports = &.{
+                .{ .name = "ziogram", .module = ziogram },
+            },
+        }),
+    });
+
+    b.installArtifact(exe);
+
+    const run_step = b.step("run", "Run the app");
+
+    const run_cmd = b.addRunArtifact(exe);
+    run_step.dependOn(&run_cmd.step);
+
+    run_cmd.step.dependOn(b.getInstallStep());
+
+    if (b.args) |args| {
+        run_cmd.addArgs(args);
+    }
+
     const ziogram_tests = b.addTest(.{
         .root_module = ziogram,
     });
     const run_ziogram_tests = b.addRunArtifact(ziogram_tests);
 
     const errors_tests = b.addTest(.{
-        .root_module = b.createModule(.{
-            .root_source_file = b.path("src/errors.zig"),
-            .target = target,
-            .optimize = optimize,
-            .imports = &.{
-                .{ .name = "types", .module = types },
-            },
-        }),
+        .root_module = errors,
     });
     const run_errors_tests = b.addRunArtifact(errors_tests);
 
-    const api_tests = b.addTest(.{
+    const telegram_tests = b.addTest(.{
         .root_module = b.createModule(.{
-            .root_source_file = b.path("src/client/api.zig"),
+            .root_source_file = b.path("src/client/telegram.zig"),
             .target = target,
             .optimize = optimize,
-            .imports = &.{},
         }),
     });
-    const run_api_tests = b.addRunArtifact(api_tests);
+    const run_telegram_tests = b.addRunArtifact(telegram_tests);
 
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&run_ziogram_tests.step);
     test_step.dependOn(&run_errors_tests.step);
-    test_step.dependOn(&run_api_tests.step);
+    test_step.dependOn(&run_telegram_tests.step);
 }
