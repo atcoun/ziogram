@@ -43,8 +43,8 @@ pub fn main(init: std.process.Init) !void {
                 .message,
             },
         }) catch |err| {
-            arena.deinit();
             std.log.warn("Network error in getUpdates: {any}. Retrying in 1 seconds...", .{err});
+            arena.deinit();
             try io.sleep(std.Io.Duration.fromSeconds(1), .awake);
             continue;
         };
