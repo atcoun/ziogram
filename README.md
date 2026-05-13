@@ -47,18 +47,10 @@ const dep = b.dependency("ziogram", .{
     .optimize = optimize,
 });
 const ziogram = dep.module("ziogram");
-
-const exe = b.addExecutable(.{
-    .name = "my_project",
-    .root_module = b.createModule(.{
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
-        .imports = &.{
-            .{ .name = "ziogram", .module = ziogram },
-        },
-    }),
-});
+```
+Then add it to your executable imports:
+```zig
+.{ .name = "ziogram", .module = ziogram },
 ```
 
 **3.** Write your first bot in `src/main.zig`:
@@ -90,8 +82,13 @@ pub fn main(init: std.process.Init) !void {
 ```
 
 **4.** Run:
+Run in debug mode (default):
 ```sh
 zig build run
+```
+Run in release mode (production):
+```sh
+zig build run -Doptimize=ReleaseSafe
 ```
 
 ---
