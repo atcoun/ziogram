@@ -148,31 +148,24 @@ pub fn handleUpdate(arena: *std.heap.ArenaAllocator, bot: Bot, update: Update) !
         arena.deinit();
         arena.child_allocator.destroy(arena);
     }
-    if (update.message) |message| {
-        if (message.chat.type == ChatType.private) {
-            handleMessage(arena, bot, message) catch |err| {
-                std.log.err("Error [handleMessage]: {any}", .{err});
-            };
-        }
-    }
+    const message = update.message orelse return;
+    if (message.chat.type != enums.ChatType.private) return;
+
+    handleMessage(arena, bot, message) catch |err| {
+        std.log.err("Error [handleMessage]: {any}", .{err});
+    };
 }
 
 pub fn handleMessage(arena: *std.heap.ArenaAllocator, bot: Bot, message: Message) !void {
-    if (message.text) |text| {
-        if (std.mem.eql(u8, text, "/start")) {
-            _ = try bot.sendMessage(arena, .{
-                .chat_id = .{ .id = message.chat.id },
-                .text = try std.fmt.allocPrint(
-                    arena.allocator(),
-                    "Hello, {s}!",
-                    .{message.from.?.first_name},
-                ),
-            });
-        } else {
-            _ = try bot.sendMessage(arena, .{
-                .chat_id = .{ .id = message.chat.id },
-                .text = text,
-            });
-        }
-    }
+    const message_text = message.text orelse return;
+
+    const text = if (std.mem.eql(u8, message_text, "/start"))
+        try std.fmt.allocPrint(arena.allocator(), "Hello, {s}!", .{message.from.?.first_name})
+    else
+        message_text;
+
+    _ = try bot.sendMessage(arena, .{
+        .chat_id = .{ .id = message.chat.id },
+        .text = text,
+    });
 }
