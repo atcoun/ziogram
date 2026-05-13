@@ -25,12 +25,9 @@ pub fn main(init: std.process.Init) !void {
     var bot = try Bot.init("YOUR_BOT_TOKEN", &session);
     defer bot.deinit();
 
-    {
-        const arena = init.arena;
-        _ = try bot.deleteWebhook(arena, .{ .drop_pending_updates = true });
-        const me = try bot.getMe(arena, .{});
-        if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
-    }
+    _ = try bot.deleteWebhook(init.arena, .{ .drop_pending_updates = true });
+    const me = try bot.getMe(init.arena, .{});
+    if (me.username) |username| std.log.info("Authorized as @{s}", .{username});
 
     var group: std.Io.Group = .init;
     defer group.cancel(io);
