@@ -132,6 +132,8 @@ fn handleRequest(allocator: std.mem.Allocator, io: std.Io, bot: Bot, group: *std
         },
     ) catch |err| {
         std.log.err("json parse: {any}", .{err});
+        arena.deinit();
+        allocator.destroy(arena);
         return;
     };
 
