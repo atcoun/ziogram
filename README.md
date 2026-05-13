@@ -81,7 +81,7 @@ pub fn main(init: std.process.Init) !void {
 }
 ```
 
-**4.** in debug mode (default):
+**4.** Run in debug mode (default):
 ```sh
 zig build run
 ```
