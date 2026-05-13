@@ -64,12 +64,12 @@ pub fn download(
 
 pub fn call(
     self: *const Bot,
-    allocator: std.mem.Allocator,
+    arena: *std.heap.ArenaAllocator,
     method: anytype,
     request_timeout: ?i32,
 ) !@TypeOf(method).Result {
     return self.session.makeRequest(
-        allocator,
+        arena.allocator(),
         self.*,
         method,
         request_timeout,
@@ -88,7 +88,7 @@ pub fn addStickerToSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AddStickerToSet{
             .user_id = options.user_id,
             .name = options.name,
@@ -112,7 +112,7 @@ pub fn answerCallbackQuery(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AnswerCallbackQuery{
             .callback_query_id = options.callback_query_id,
             .text = options.text,
@@ -135,7 +135,7 @@ pub fn answerGuestQuery(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AnswerGuestQuery{
             .guest_query_id = options.guest_query_id,
             .result = options.result,
@@ -159,7 +159,7 @@ pub fn answerInlineQuery(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AnswerInlineQuery{
             .inline_query_id = options.inline_query_id,
             .results = options.results,
@@ -184,7 +184,7 @@ pub fn answerPreCheckoutQuery(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AnswerPreCheckoutQuery{
             .pre_checkout_query_id = options.pre_checkout_query_id,
             .ok = options.ok,
@@ -207,7 +207,7 @@ pub fn answerShippingQuery(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AnswerShippingQuery{
             .shipping_query_id = options.shipping_query_id,
             .ok = options.ok,
@@ -229,7 +229,7 @@ pub fn answerWebAppQuery(
     },
 ) !types.SentWebAppMessage {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.AnswerWebAppQuery{
             .web_app_query_id = options.web_app_query_id,
             .result = options.result,
@@ -249,7 +249,7 @@ pub fn approveChatJoinRequest(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ApproveChatJoinRequest{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -270,7 +270,7 @@ pub fn approveSuggestedPost(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ApproveSuggestedPost{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -293,7 +293,7 @@ pub fn banChatMember(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.BanChatMember{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -315,7 +315,7 @@ pub fn banChatSenderChat(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.BanChatSenderChat{
             .chat_id = options.chat_id,
             .sender_chat_id = options.sender_chat_id,
@@ -335,7 +335,7 @@ pub fn closeForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CloseForumTopic{
             .chat_id = options.chat_id,
             .message_thread_id = options.message_thread_id,
@@ -354,7 +354,7 @@ pub fn closeGeneralForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CloseGeneralForumTopic{
             .chat_id = options.chat_id,
         },
@@ -371,7 +371,7 @@ pub fn close(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.Close{},
         options.request_timeout,
     );
@@ -388,7 +388,7 @@ pub fn convertGiftToStars(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ConvertGiftToStars{
             .business_connection_id = options.business_connection_id,
             .owned_gift_id = options.owned_gift_id,
@@ -423,7 +423,7 @@ pub fn copyMessage(
     },
 ) !types.MessageId {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CopyMessage{
             .chat_id = options.chat_id,
             .from_chat_id = options.from_chat_id,
@@ -464,7 +464,7 @@ pub fn copyMessages(
     },
 ) ![]const types.MessageId {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CopyMessages{
             .chat_id = options.chat_id,
             .from_chat_id = options.from_chat_id,
@@ -493,7 +493,7 @@ pub fn createChatInviteLink(
     },
 ) !types.ChatInviteLink {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CreateChatInviteLink{
             .chat_id = options.chat_id,
             .name = options.name,
@@ -518,7 +518,7 @@ pub fn createChatSubscriptionInviteLink(
     },
 ) !types.ChatInviteLink {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CreateChatSubscriptionInviteLink{
             .chat_id = options.chat_id,
             .subscription_period = options.subscription_period,
@@ -542,7 +542,7 @@ pub fn createForumTopic(
     },
 ) !types.ForumTopic {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CreateForumTopic{
             .chat_id = options.chat_id,
             .name = options.name,
@@ -584,7 +584,7 @@ pub fn createInvoiceLink(
     },
 ) ![]const u8 {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CreateInvoiceLink{
             .title = options.title,
             .description = options.description,
@@ -628,7 +628,7 @@ pub fn createNewStickerSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.CreateNewStickerSet{
             .user_id = options.user_id,
             .name = options.name,
@@ -652,7 +652,7 @@ pub fn declineChatJoinRequest(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeclineChatJoinRequest{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -673,7 +673,7 @@ pub fn declineSuggestedPost(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeclineSuggestedPost{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -695,7 +695,7 @@ pub fn deleteAllMessageReactions(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteAllMessageReactions{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -716,7 +716,7 @@ pub fn deleteBusinessMessages(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteBusinessMessages{
             .business_connection_id = options.business_connection_id,
             .message_ids = options.message_ids,
@@ -735,7 +735,7 @@ pub fn deleteChatPhoto(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteChatPhoto{
             .chat_id = options.chat_id,
         },
@@ -753,7 +753,7 @@ pub fn deleteChatStickerSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteChatStickerSet{
             .chat_id = options.chat_id,
         },
@@ -772,7 +772,7 @@ pub fn deleteForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteForumTopic{
             .chat_id = options.chat_id,
             .message_thread_id = options.message_thread_id,
@@ -794,7 +794,7 @@ pub fn deleteMessageReaction(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteMessageReaction{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -816,7 +816,7 @@ pub fn deleteMessage(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteMessage{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -836,7 +836,7 @@ pub fn deleteMessages(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteMessages{
             .chat_id = options.chat_id,
             .message_ids = options.message_ids,
@@ -856,7 +856,7 @@ pub fn deleteMyCommands(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteMyCommands{
             .scope = options.scope,
             .language_code = options.language_code,
@@ -875,7 +875,7 @@ pub fn deleteStickerFromSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteStickerFromSet{
             .sticker = options.sticker,
         },
@@ -893,7 +893,7 @@ pub fn deleteStickerSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteStickerSet{
             .name = options.name,
         },
@@ -912,7 +912,7 @@ pub fn deleteStory(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteStory{
             .business_connection_id = options.business_connection_id,
             .story_id = options.story_id,
@@ -931,7 +931,7 @@ pub fn deleteWebhook(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.DeleteWebhook{
             .drop_pending_updates = options.drop_pending_updates,
         },
@@ -954,7 +954,7 @@ pub fn editChatInviteLink(
     },
 ) !types.ChatInviteLink {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditChatInviteLink{
             .chat_id = options.chat_id,
             .invite_link = options.invite_link,
@@ -979,7 +979,7 @@ pub fn editChatSubscriptionInviteLink(
     },
 ) !types.ChatInviteLink {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditChatSubscriptionInviteLink{
             .chat_id = options.chat_id,
             .invite_link = options.invite_link,
@@ -1002,7 +1002,7 @@ pub fn editForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditForumTopic{
             .chat_id = options.chat_id,
             .message_thread_id = options.message_thread_id,
@@ -1024,7 +1024,7 @@ pub fn editGeneralForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditGeneralForumTopic{
             .chat_id = options.chat_id,
             .name = options.name,
@@ -1051,7 +1051,7 @@ pub fn editMessageCaption(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditMessageCaption{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -1081,7 +1081,7 @@ pub fn editMessageChecklist(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditMessageChecklist{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -1113,7 +1113,7 @@ pub fn editMessageLiveLocation(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditMessageLiveLocation{
             .latitude = options.latitude,
             .longitude = options.longitude,
@@ -1146,7 +1146,7 @@ pub fn editMessageMedia(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditMessageMedia{
             .media = options.media,
             .business_connection_id = options.business_connection_id,
@@ -1173,7 +1173,7 @@ pub fn editMessageReplyMarkup(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditMessageReplyMarkup{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -1203,7 +1203,7 @@ pub fn editMessageText(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditMessageText{
             .text = options.text,
             .business_connection_id = options.business_connection_id,
@@ -1235,7 +1235,7 @@ pub fn editStory(
     },
 ) !types.Story {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditStory{
             .business_connection_id = options.business_connection_id,
             .story_id = options.story_id,
@@ -1261,7 +1261,7 @@ pub fn editUserStarSubscription(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.EditUserStarSubscription{
             .user_id = options.user_id,
             .telegram_payment_charge_id = options.telegram_payment_charge_id,
@@ -1281,7 +1281,7 @@ pub fn exportChatInviteLink(
     },
 ) ![]const u8 {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ExportChatInviteLink{
             .chat_id = options.chat_id,
         },
@@ -1308,7 +1308,7 @@ pub fn forwardMessage(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ForwardMessage{
             .chat_id = options.chat_id,
             .from_chat_id = options.from_chat_id,
@@ -1341,7 +1341,7 @@ pub fn forwardMessages(
     },
 ) ![]const types.MessageId {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ForwardMessages{
             .chat_id = options.chat_id,
             .from_chat_id = options.from_chat_id,
@@ -1364,7 +1364,7 @@ pub fn getAvailableGifts(
     },
 ) !types.Gifts {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetAvailableGifts{},
         options.request_timeout,
     );
@@ -1390,7 +1390,7 @@ pub fn getBusinessAccountGifts(
     },
 ) !types.OwnedGifts {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetBusinessAccountGifts{
             .business_connection_id = options.business_connection_id,
             .exclude_unsaved = options.exclude_unsaved,
@@ -1418,7 +1418,7 @@ pub fn getBusinessAccountStarBalance(
     },
 ) !types.StarAmount {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetBusinessAccountStarBalance{
             .business_connection_id = options.business_connection_id,
         },
@@ -1436,7 +1436,7 @@ pub fn getBusinessConnection(
     },
 ) !types.BusinessConnection {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetBusinessConnection{
             .business_connection_id = options.business_connection_id,
         },
@@ -1455,7 +1455,7 @@ pub fn getChatAdministrators(
     },
 ) ![]const types.ChatMember {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetChatAdministrators{
             .chat_id = options.chat_id,
             .return_bots = options.return_bots,
@@ -1484,7 +1484,7 @@ pub fn getChatGifts(
     },
 ) !types.OwnedGifts {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetChatGifts{
             .chat_id = options.chat_id,
             .exclude_unsaved = options.exclude_unsaved,
@@ -1512,7 +1512,7 @@ pub fn getChatMemberCount(
     },
 ) !i32 {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetChatMemberCount{
             .chat_id = options.chat_id,
         },
@@ -1531,7 +1531,7 @@ pub fn getChatMember(
     },
 ) !types.ChatMember {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetChatMember{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -1550,7 +1550,7 @@ pub fn getChatMenuButton(
     },
 ) !types.MenuButton {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetChatMenuButton{
             .chat_id = options.chat_id,
         },
@@ -1568,7 +1568,7 @@ pub fn getChat(
     },
 ) !types.ChatFullInfo {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetChat{
             .chat_id = options.chat_id,
         },
@@ -1586,7 +1586,7 @@ pub fn getCustomEmojiStickers(
     },
 ) ![]const types.Sticker {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetCustomEmojiStickers{
             .custom_emoji_ids = options.custom_emoji_ids,
         },
@@ -1604,7 +1604,7 @@ pub fn getFile(
     },
 ) !types.File {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetFile{
             .file_id = options.file_id,
         },
@@ -1621,7 +1621,7 @@ pub fn getForumTopicIconStickers(
     },
 ) ![]const types.Sticker {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetForumTopicIconStickers{},
         options.request_timeout,
     );
@@ -1640,7 +1640,7 @@ pub fn getGameHighScores(
     },
 ) ![]const types.GameHighScore {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetGameHighScores{
             .user_id = options.user_id,
             .chat_id = options.chat_id,
@@ -1661,7 +1661,7 @@ pub fn getManagedBotAccessSettings(
     },
 ) ![]const types.GameHighScore {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetManagedBotAccessSettings{
             .user_id = options.user_id,
         },
@@ -1679,7 +1679,7 @@ pub fn getManagedBotToken(
     },
 ) ![]const u8 {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetManagedBotToken{
             .user_id = options.user_id,
         },
@@ -1696,7 +1696,7 @@ pub fn getMe(
     },
 ) !types.User {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMe{},
         options.request_timeout,
     );
@@ -1713,7 +1713,7 @@ pub fn getMyCommands(
     },
 ) ![]const types.BotCommand {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMyCommands{
             .scope = options.scope,
             .language_code = options.language_code,
@@ -1732,7 +1732,7 @@ pub fn getMyDefaultAdministratorRights(
     },
 ) !types.ChatAdministratorRights {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMyDefaultAdministratorRights{
             .for_channels = options.for_channels,
         },
@@ -1750,7 +1750,7 @@ pub fn getMyDescription(
     },
 ) !types.BotDescription {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMyDescription{
             .language_code = options.language_code,
         },
@@ -1768,7 +1768,7 @@ pub fn getMyName(
     },
 ) !types.BotName {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMyName{
             .language_code = options.language_code,
         },
@@ -1786,7 +1786,7 @@ pub fn getMyShortDescription(
     },
 ) !types.BotShortDescription {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMyShortDescription{
             .language_code = options.language_code,
         },
@@ -1803,7 +1803,7 @@ pub fn getMyStarBalance(
     },
 ) !types.StarAmount {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetMyStarBalance{},
         options.request_timeout,
     );
@@ -1820,7 +1820,7 @@ pub fn getStarTransactions(
     },
 ) !types.StarTransactions {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetStarTransactions{
             .offset = options.offset,
             .limit = options.limit,
@@ -1839,7 +1839,7 @@ pub fn getStickerSet(
     },
 ) !types.StickerSet {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetStickerSet{
             .name = options.name,
         },
@@ -1860,7 +1860,7 @@ pub fn getUpdates(
     },
 ) ![]const types.Update {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetUpdates{
             .offset = options.offset,
             .limit = options.limit,
@@ -1882,7 +1882,7 @@ pub fn getUserChatBoosts(
     },
 ) !types.UserChatBoosts {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetUserChatBoosts{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -1909,7 +1909,7 @@ pub fn getUserGifts(
     },
 ) !types.OwnedGifts {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetUserGifts{
             .user_id = options.user_id,
             .exclude_unlimited = options.exclude_unlimited,
@@ -1936,7 +1936,7 @@ pub fn getUserPersonalChatMessages(
     },
 ) !types.OwnedGifts {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetUserPersonalChatMessages{
             .user_id = options.user_id,
             .limit = options.limit,
@@ -1957,7 +1957,7 @@ pub fn getUserProfileAudios(
     },
 ) !types.UserProfileAudios {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetUserProfileAudios{
             .user_id = options.user_id,
             .offset = options.offset,
@@ -1979,7 +1979,7 @@ pub fn getUserProfilePhotos(
     },
 ) !types.UserProfilePhotos {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetUserProfilePhotos{
             .user_id = options.user_id,
             .offset = options.offset,
@@ -1998,7 +1998,7 @@ pub fn getWebhookInfo(
     },
 ) !types.WebhookInfo {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GetWebhookInfo{},
         options.request_timeout,
     );
@@ -2019,7 +2019,7 @@ pub fn giftPremiumSubscription(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.GiftPremiumSubscription{
             .user_id = options.user_id,
             .month_count = options.month_count,
@@ -2042,7 +2042,7 @@ pub fn hideGeneralForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.HideGeneralForumTopic{
             .chat_id = options.chat_id,
         },
@@ -2060,7 +2060,7 @@ pub fn leaveChat(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.LeaveChat{
             .chat_id = options.chat_id,
         },
@@ -2077,7 +2077,7 @@ pub fn logOut(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.LogOut{},
         options.request_timeout,
     );
@@ -2096,7 +2096,7 @@ pub fn pinChatMessage(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.PinChatMessage{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -2125,7 +2125,7 @@ pub fn postStory(
     },
 ) !types.Story {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.PostStory{
             .business_connection_id = options.business_connection_id,
             .content = options.content,
@@ -2169,7 +2169,7 @@ pub fn promoteChatMember(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.PromoteChatMember{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -2207,7 +2207,7 @@ pub fn readBusinessMessage(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ReadBusinessMessage{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -2228,7 +2228,7 @@ pub fn refundStarPayment(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RefundStarPayment{
             .user_id = options.user_id,
             .telegram_payment_charge_id = options.telegram_payment_charge_id,
@@ -2248,7 +2248,7 @@ pub fn removeBusinessAccountProfilePhoto(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RemoveBusinessAccountProfilePhoto{
             .business_connection_id = options.business_connection_id,
             .is_public = options.is_public,
@@ -2267,7 +2267,7 @@ pub fn removeChatVerification(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RemoveChatVerification{
             .chat_id = options.chat_id,
         },
@@ -2284,7 +2284,7 @@ pub fn removeMyProfilePhoto(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RemoveMyProfilePhoto{},
         options.request_timeout,
     );
@@ -2300,7 +2300,7 @@ pub fn removeUserVerification(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RemoveUserVerification{
             .user_id = options.user_id,
         },
@@ -2319,7 +2319,7 @@ pub fn reopenForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ReopenForumTopic{
             .chat_id = options.chat_id,
             .message_thread_id = options.message_thread_id,
@@ -2338,7 +2338,7 @@ pub fn reopenGeneralForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ReopenGeneralForumTopic{
             .chat_id = options.chat_id,
         },
@@ -2356,7 +2356,7 @@ pub fn replaceManagedBotToken(
     },
 ) ![]const u8 {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ReplaceManagedBotToken{
             .user_id = options.user_id,
         },
@@ -2377,7 +2377,7 @@ pub fn replaceStickerInSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.ReplaceStickerInSet{
             .user_id = options.user_id,
             .name = options.name,
@@ -2403,7 +2403,7 @@ pub fn repostStory(
     },
 ) !types.Story {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RepostStory{
             .business_connection_id = options.business_connection_id,
             .from_chat_id = options.from_chat_id,
@@ -2430,7 +2430,7 @@ pub fn restrictChatMember(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RestrictChatMember{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -2453,7 +2453,7 @@ pub fn revokeChatInviteLink(
     },
 ) !types.ChatInviteLink {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.RevokeChatInviteLink{
             .chat_id = options.chat_id,
             .invite_link = options.invite_link,
@@ -2477,7 +2477,7 @@ pub fn savePreparedInlineMessage(
     },
 ) !types.PreparedInlineMessage {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SavePreparedInlineMessage{
             .user_id = options.user_id,
             .result = options.result,
@@ -2501,7 +2501,7 @@ pub fn savePreparedKeyboardButton(
     },
 ) !types.PreparedKeyboardButton {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SavePreparedKeyboardButton{
             .user_id = options.user_id,
             .button = options.button,
@@ -2540,7 +2540,7 @@ pub fn sendAnimation(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendAnimation{
             .chat_id = options.chat_id,
             .animation = options.animation,
@@ -2596,7 +2596,7 @@ pub fn sendAudio(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendAudio{
             .chat_id = options.chat_id,
             .audio = options.audio,
@@ -2635,7 +2635,7 @@ pub fn sendChatAction(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendChatAction{
             .chat_id = options.chat_id,
             .action = options.action,
@@ -2663,7 +2663,7 @@ pub fn sendChecklist(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendChecklist{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -2702,7 +2702,7 @@ pub fn sendContact(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendContact{
             .chat_id = options.chat_id,
             .phone_number = options.phone_number,
@@ -2745,7 +2745,7 @@ pub fn sendDice(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendDice{
             .chat_id = options.chat_id,
             .business_connection_id = options.business_connection_id,
@@ -2790,7 +2790,7 @@ pub fn sendDocument(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendDocument{
             .chat_id = options.chat_id,
             .document = options.document,
@@ -2833,7 +2833,7 @@ pub fn sendGame(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendGame{
             .chat_id = options.chat_id,
             .game_short_name = options.game_short_name,
@@ -2866,7 +2866,7 @@ pub fn sendGift(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendGift{
             .gift_id = options.gift_id,
             .user_id = options.user_id,
@@ -2920,7 +2920,7 @@ pub fn sendInvoice(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendInvoice{
             .chat_id = options.chat_id,
             .title = options.title,
@@ -2985,7 +2985,7 @@ pub fn sendLivePhoto(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendLivePhoto{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -3036,7 +3036,7 @@ pub fn sendLocation(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendLocation{
             .chat_id = options.chat_id,
             .latitude = options.latitude,
@@ -3079,7 +3079,7 @@ pub fn sendMediaGroup(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendMediaGroup{
             .chat_id = options.chat_id,
             .media = options.media,
@@ -3111,7 +3111,7 @@ pub fn sendMessageDraft(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendMessageDraft{
             .chat_id = options.chat_id,
             .draft_id = options.draft_id,
@@ -3147,7 +3147,7 @@ pub fn sendMessage(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendMessage{
             .chat_id = options.chat_id,
             .text = options.text,
@@ -3194,7 +3194,7 @@ pub fn sendPaidMedia(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendPaidMedia{
             .chat_id = options.chat_id,
             .star_count = options.star_count,
@@ -3243,7 +3243,7 @@ pub fn sendPhoto(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendPhoto{
             .chat_id = options.chat_id,
             .photo = options.photo,
@@ -3308,7 +3308,7 @@ pub fn sendPoll(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendPoll{
             .chat_id = options.chat_id,
             .question = options.question,
@@ -3370,7 +3370,7 @@ pub fn sendSticker(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendSticker{
             .chat_id = options.chat_id,
             .sticker = options.sticker,
@@ -3418,7 +3418,7 @@ pub fn sendVenue(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendVenue{
             .chat_id = options.chat_id,
             .latitude = options.latitude,
@@ -3468,7 +3468,7 @@ pub fn sendVideoNote(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendVideoNote{
             .chat_id = options.chat_id,
             .video_note = options.video_note,
@@ -3523,7 +3523,7 @@ pub fn sendVideo(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendVideo{
             .chat_id = options.chat_id,
             .video = options.video,
@@ -3579,7 +3579,7 @@ pub fn sendVoice(
     },
 ) !types.Message {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SendVoice{
             .chat_id = options.chat_id,
             .voice = options.voice,
@@ -3613,7 +3613,7 @@ pub fn setBusinessAccountBio(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetBusinessAccountBio{
             .business_connection_id = options.business_connection_id,
             .bio = options.bio,
@@ -3634,7 +3634,7 @@ pub fn setBusinessAccountGiftSettings(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetBusinessAccountGiftSettings{
             .business_connection_id = options.business_connection_id,
             .show_gift_button = options.show_gift_button,
@@ -3656,7 +3656,7 @@ pub fn setBusinessAccountName(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetBusinessAccountName{
             .business_connection_id = options.business_connection_id,
             .first_name = options.first_name,
@@ -3678,7 +3678,7 @@ pub fn setBusinessAccountProfilePhoto(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetBusinessAccountProfilePhoto{
             .business_connection_id = options.business_connection_id,
             .photo = options.photo,
@@ -3699,7 +3699,7 @@ pub fn setBusinessAccountUsername(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetBusinessAccountUsername{
             .business_connection_id = options.business_connection_id,
             .username = options.username,
@@ -3720,7 +3720,7 @@ pub fn setChatAdministratorCustomTitle(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatAdministratorCustomTitle{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -3741,7 +3741,7 @@ pub fn setChatDescription(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatDescription{
             .chat_id = options.chat_id,
             .description = options.description,
@@ -3762,7 +3762,7 @@ pub fn setChatMemberTag(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatMemberTag{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -3783,7 +3783,7 @@ pub fn setChatMenuButton(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatMenuButton{
             .chat_id = options.chat_id,
             .menu_button = options.menu_button,
@@ -3804,7 +3804,7 @@ pub fn setChatPermissions(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatPermissions{
             .chat_id = options.chat_id,
             .permissions = options.permissions,
@@ -3825,7 +3825,7 @@ pub fn setChatPhoto(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatPhoto{
             .chat_id = options.chat_id,
             .photo = options.photo,
@@ -3845,7 +3845,7 @@ pub fn setChatStickerSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatStickerSet{
             .chat_id = options.chat_id,
             .sticker_set_name = options.sticker_set_name,
@@ -3865,7 +3865,7 @@ pub fn setChatTitle(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetChatTitle{
             .chat_id = options.chat_id,
             .title = options.title,
@@ -3885,7 +3885,7 @@ pub fn setCustomEmojiStickerSetThumbnail(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetCustomEmojiStickerSetThumbnail{
             .name = options.name,
             .custom_emoji_id = options.custom_emoji_id,
@@ -3910,7 +3910,7 @@ pub fn setGameScore(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetGameScore{
             .user_id = options.user_id,
             .score = options.score,
@@ -3936,7 +3936,7 @@ pub fn setManagedBotAccessSettings(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetManagedBotAccessSettings{
             .user_id = options.user_id,
             .is_access_restricted = options.is_access_restricted,
@@ -3959,7 +3959,7 @@ pub fn setMessageReaction(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMessageReaction{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -3982,7 +3982,7 @@ pub fn setMyCommands(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMyCommands{
             .commands = options.commands,
             .scope = options.scope,
@@ -4003,7 +4003,7 @@ pub fn setMyDefaultAdministratorRights(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMyDefaultAdministratorRights{
             .rights = options.rights,
             .for_channels = options.for_channels,
@@ -4023,7 +4023,7 @@ pub fn setMyDescription(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMyDescription{
             .description = options.description,
             .language_code = options.language_code,
@@ -4043,7 +4043,7 @@ pub fn setMyName(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMyName{
             .name = options.name,
             .language_code = options.language_code,
@@ -4062,7 +4062,7 @@ pub fn setMyProfilePhoto(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMyProfilePhoto{
             .photo = options.photo,
         },
@@ -4081,7 +4081,7 @@ pub fn setMyShortDescription(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetMyShortDescription{
             .short_description = options.short_description,
             .language_code = options.language_code,
@@ -4101,7 +4101,7 @@ pub fn setPassportDataErrors(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetPassportDataErrors{
             .user_id = options.user_id,
             .errors = options.errors,
@@ -4121,7 +4121,7 @@ pub fn setStickerEmojiList(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetStickerEmojiList{
             .sticker = options.sticker,
             .emoji_list = options.emoji_list,
@@ -4141,7 +4141,7 @@ pub fn setStickerKeywords(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetStickerKeywords{
             .sticker = options.sticker,
             .keywords = options.keywords,
@@ -4161,7 +4161,7 @@ pub fn setStickerMaskPosition(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetStickerMaskPosition{
             .sticker = options.sticker,
             .mask_position = options.mask_position,
@@ -4181,7 +4181,7 @@ pub fn setStickerPositionInSet(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetStickerPositionInSet{
             .sticker = options.sticker,
             .position = options.position,
@@ -4203,7 +4203,7 @@ pub fn setStickerSetThumbnail(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetStickerSetThumbnail{
             .name = options.name,
             .user_id = options.user_id,
@@ -4225,7 +4225,7 @@ pub fn setStickerSetTitle(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetStickerSetTitle{
             .name = options.name,
             .title = options.title,
@@ -4246,7 +4246,7 @@ pub fn setUserEmojiStatus(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetUserEmojiStatus{
             .user_id = options.user_id,
             .emoji_status_custom_emoji_id = options.emoji_status_custom_emoji_id,
@@ -4272,7 +4272,7 @@ pub fn setWebhook(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.SetWebhook{
             .url = options.url,
             .certificate = options.certificate,
@@ -4300,7 +4300,7 @@ pub fn stopMessageLiveLocation(
     },
 ) !types.MessageOrBool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.StopMessageLiveLocation{
             .business_connection_id = options.business_connection_id,
             .chat_id = options.chat_id,
@@ -4325,7 +4325,7 @@ pub fn stopPoll(
     },
 ) !types.Poll {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.StopPoll{
             .chat_id = options.chat_id,
             .message_id = options.message_id,
@@ -4347,7 +4347,7 @@ pub fn transferBusinessAccountStars(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.TransferBusinessAccountStars{
             .business_connection_id = options.business_connection_id,
             .star_count = options.star_count,
@@ -4369,7 +4369,7 @@ pub fn transferGift(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.TransferGift{
             .business_connection_id = options.business_connection_id,
             .owned_gift_id = options.owned_gift_id,
@@ -4392,7 +4392,7 @@ pub fn unbanChatMember(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnbanChatMember{
             .chat_id = options.chat_id,
             .user_id = options.user_id,
@@ -4413,7 +4413,7 @@ pub fn unbanChatSenderChat(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnbanChatSenderChat{
             .chat_id = options.chat_id,
             .sender_chat_id = options.sender_chat_id,
@@ -4432,7 +4432,7 @@ pub fn unhideGeneralForumTopic(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnhideGeneralForumTopic{
             .chat_id = options.chat_id,
         },
@@ -4450,7 +4450,7 @@ pub fn unpinAllChatMessages(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnpinAllChatMessages{
             .chat_id = options.chat_id,
         },
@@ -4469,7 +4469,7 @@ pub fn unpinAllForumTopicMessages(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnpinAllForumTopicMessages{
             .chat_id = options.chat_id,
             .message_thread_id = options.message_thread_id,
@@ -4488,7 +4488,7 @@ pub fn unpinAllGeneralForumTopicMessages(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnpinAllGeneralForumTopicMessages{
             .chat_id = options.chat_id,
         },
@@ -4508,7 +4508,7 @@ pub fn unpinChatMessage(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UnpinChatMessage{
             .chat_id = options.chat_id,
             .business_connection_id = options.business_connection_id,
@@ -4531,7 +4531,7 @@ pub fn upgradeGift(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UpgradeGift{
             .business_connection_id = options.business_connection_id,
             .owned_gift_id = options.owned_gift_id,
@@ -4554,7 +4554,7 @@ pub fn uploadStickerFile(
     },
 ) !types.File {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.UploadStickerFile{
             .user_id = options.user_id,
             .sticker = options.sticker,
@@ -4575,7 +4575,7 @@ pub fn verifyChat(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.VerifyChat{
             .chat_id = options.chat_id,
             .custom_description = options.custom_description,
@@ -4595,7 +4595,7 @@ pub fn verifyUser(
     },
 ) !bool {
     return self.call(
-        arena.allocator(),
+        arena,
         methods.VerifyUser{
             .user_id = options.user_id,
             .custom_description = options.custom_description,
