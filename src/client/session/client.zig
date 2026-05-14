@@ -6,7 +6,8 @@ const Bot = @import("../../client/bot.zig");
 const BaseSession = @import("./base.zig");
 const FilesMap = BaseSession.FilesMap;
 const isMetaField = BaseSession.isMetaField;
-const TelegramAPI = @import("../../client/telegram.zig");
+const TelegramApi = @import("../../client/server.zig");
+const production = TelegramApi.production;
 
 const errors = @import("errors");
 const ZiogramError = errors.ZiogramError;
@@ -17,7 +18,7 @@ const InputFile = types.InputFile;
 
 const Options = struct {
     pool: usize = 10,
-    api: TelegramAPI = TelegramAPI.server,
+    server: TelegramApi = production,
 };
 const default_timeout: i32 = 60;
 
@@ -167,7 +168,7 @@ pub fn makeRequest(
         method: Method,
 
         fn run(ctx: @This()) anyerror!Method.Result {
-            return ctx.session.request(
+            return ctx.session.makeRequestInner(
                 ctx.allocator,
                 ctx.bot,
                 ctx.method,
@@ -182,7 +183,7 @@ pub fn makeRequest(
         .method = method,
     }}) catch |err| switch (err) {
         error.ConcurrencyUnavailable => {
-            return self.request(
+            return self.makeRequestInner(
                 allocator,
                 bot,
                 method,
@@ -201,7 +202,7 @@ pub fn makeRequest(
     }.run, .{.{ .io = io, .timeout = timeout }}) catch |err| switch (err) {
         error.ConcurrencyUnavailable => {
             select.cancelDiscard();
-            return self.request(
+            return self.makeRequestInner(
                 allocator,
                 bot,
                 method,
@@ -220,7 +221,7 @@ pub fn makeRequest(
     };
 }
 
-pub fn request(
+pub fn makeRequestInner(
     self: *ClientSession,
     allocator: std.mem.Allocator,
     bot: Bot,
@@ -231,7 +232,11 @@ pub fn request(
     var arena = std.heap.ArenaAllocator.init(self.allocator);
     defer arena.deinit();
 
-    const url_str = try self.options.api.apiUrl(arena.allocator(), bot.token, Method.method_name);
+    const url_str = try self.options.server.apiUrl(
+        arena.allocator(),
+        bot.token,
+        Method.method_name,
+    );
 
     var has_files = false;
     inline for (std.meta.fields(Method)) |field| {
@@ -297,6 +302,69 @@ pub fn streamContent(
     self: *ClientSession,
     url: []const u8,
     writer: *std.Io.Writer,
+    request_timeout: ?i32,
+    chunk_size: usize,
+) !void {
+    const io = self.io;
+    const timeout = request_timeout orelse default_timeout;
+
+    const SelectResult = union(enum) {
+        stream: anyerror!void,
+        timeout: void,
+    };
+
+    var select_buf: [2]SelectResult = undefined;
+    var select = std.Io.Select(SelectResult).init(io, &select_buf);
+
+    const StreamCtx = struct {
+        session: *ClientSession,
+        url: []const u8,
+        writer: *std.Io.Writer,
+        chunk_size: usize,
+
+        fn run(ctx: @This()) anyerror!void {
+            return ctx.session.streamContentInner(ctx.url, ctx.writer, ctx.chunk_size);
+        }
+    };
+
+    select.concurrent(.stream, StreamCtx.run, .{.{
+        .session = self,
+        .url = url,
+        .writer = writer,
+        .chunk_size = chunk_size,
+    }}) catch |err| switch (err) {
+        error.ConcurrencyUnavailable => return self.streamContentInner(url, writer, chunk_size),
+    };
+
+    select.concurrent(.timeout, struct {
+        fn run(args: struct { io: std.Io, timeout: i32 }) void {
+            std.Io.sleep(
+                args.io,
+                std.Io.Duration.fromSeconds(args.timeout),
+                .awake,
+            ) catch {};
+        }
+    }.run, .{.{ .io = io, .timeout = timeout }}) catch |err| switch (err) {
+        error.ConcurrencyUnavailable => {
+            select.cancelDiscard();
+            return self.streamContentInner(url, writer, chunk_size);
+        },
+    };
+
+    const result = try select.await();
+    while (select.cancel()) |_| {}
+
+    return switch (result) {
+        .timeout => error.Timeout,
+        .stream => |r| r,
+    };
+}
+
+pub fn streamContentInner(
+    self: *ClientSession,
+    url: []const u8,
+    writer: *std.Io.Writer,
+    chunk_size: usize,
 ) !void {
     const uri = try std.Uri.parse(url);
 
@@ -324,8 +392,9 @@ pub fn streamContent(
         };
     }
 
-    var transfer_buf: [65536]u8 = undefined;
-    const reader = response.reader(&transfer_buf);
+    const transfer_buf = try self.allocator.alloc(u8, chunk_size);
+    defer self.allocator.free(transfer_buf);
+    const reader = response.reader(transfer_buf);
 
     _ = reader.streamRemaining(writer) catch |err| switch (err) {
         error.ReadFailed => return response.bodyErr().?,

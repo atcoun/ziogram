@@ -82,17 +82,17 @@ pub fn build(b: *std.Build) void {
     });
     const run_errors_tests = b.addRunArtifact(errors_tests);
 
-    const telegram_tests = b.addTest(.{
+    const server_tests = b.addTest(.{
         .root_module = b.createModule(.{
-            .root_source_file = b.path("src/client/telegram.zig"),
+            .root_source_file = b.path("src/client/server.zig"),
             .target = target,
             .optimize = optimize,
         }),
     });
-    const run_telegram_tests = b.addRunArtifact(telegram_tests);
+    const run_server_tests = b.addRunArtifact(server_tests);
 
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&run_ziogram_tests.step);
     test_step.dependOn(&run_errors_tests.step);
-    test_step.dependOn(&run_telegram_tests.step);
+    test_step.dependOn(&run_server_tests.step);
 }

@@ -185,7 +185,7 @@ fn downloadToFile(
     var write_buf: [64 * 1024]u8 = undefined;
     var file_writer = out_file.writer(io, &write_buf);
 
-    try bot.download(arena, file_id, &file_writer.interface);
+    try bot.download(arena, file_id, &file_writer.interface, .{});
 
     std.log.info("File saved: {s}", .{filename});
 }
@@ -197,7 +197,7 @@ fn downloadToFile(
 const file_meta = try bot.getFile(arena, .{ .file_id = some_file_id });
 const path = file_meta.file_path orelse return error.TelegramFileTooLarge;
 
-try bot.downloadFile(arena, path, &writer.interface);
+try bot.downloadFile(arena, path, &writer.interface, .{});
 ```
 
 ---
@@ -207,13 +207,18 @@ try bot.downloadFile(arena, path, &writer.interface);
 Running your own [Telegram Bot API server](https://github.com/tdlib/telegram-bot-api)? Ziogram supports it out of the box, including local file path remapping between the server and your machine:
 
 ```zig
-var api= try TelegramAPI.init(allocator, "http://localhost:8081", true, .{
-    .server_path = "/var/lib/telegram-bot-api/",
-    .local_path   = "/mnt/storage/",
+var session = try ClientSession.init(allocator, io, .{
+    .server = .{
+        .base = "http://127.0.0.1:8081",
+        .is_local = true,
+        .wrap_local_file = .{
+            .simple = .{
+                .server_path = "/var/lib/telegram-bot-api/",
+                .local_path = "/mnt/storage/",
+            },
+        },
+    },
 });
-defer api.deinit(allocator);
-
-var session = try ClientSession.init(allocator, io, .{ .api = api });
 defer session.deinit();
 ```
 

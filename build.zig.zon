@@ -1,6 +1,6 @@
 .{
     .name = .ziogram,
-    .version = "0.5.1",
+    .version = "0.6.0",
     .fingerprint = 0x5f8cda92a26e785d,
     .minimum_zig_version = "0.16.0",
     .dependencies = .{},

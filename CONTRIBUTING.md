@@ -40,7 +40,8 @@ src/
 │   ├── session/
 │   │   ├── base.zig      # BaseSession — HTTP client, JSON serialization, response validation
 │   │   └── client.zig    # ClientSession — request dispatching, timeout (via Io.Select), multipart/form-data, connection pool, proxy, file streaming
-│   ├── telegram.zig      # TelegramAPI — URL formatting, local server support
+│   ├── server.zig        # TelegramApi — URL formatting, local server support
+│   ├── simple.zig        # SimpleFilesPathWrapper — local file path remapping
 │   └── bot.zig           # Bot — public API, call dispatcher, download helpers
 ├── enums/                # All Telegram enums (ParseMode, ChatType, etc.)
 │   └── root.zig
@@ -51,9 +52,9 @@ src/
 ├── utils/                # Internal helpers (token parsing, etc.)
 │   └── token.zig
 ├── errors.zig            # ZiogramError set + DetailedError constructors
-└── root.zig              # Public exports: Bot, ClientSession, TelegramAPI, types, enums, errors, methods
+└── root.zig              # Public exports: Bot, ClientSession, types, enums, errors, methods
 build.zig                 # Build script — module graph + test steps
-build.zig.zon             # Package manifest — version 0.5.0, min Zig 0.16.0+
+build.zig.zon             # Package manifest — version 0.0.0, min Zig 0.0.0
 ```
 
 ### Module dependency graph
@@ -165,7 +166,8 @@ The test suite covers:
 
 | File | What is tested |
 |------|----------------|
-| `src/client/telegram.zig` | URL generation for server/test_server, `toLocal`/`toServer` path mapping, `init` with local paths |
+| `src/client/server.zig` | URL generation for production/testing, `toLocal`/`toServer` path mapping, local paths |
+| `src/client/simple.zig` | `toLocal`/`toServer` path remapping, unknown path returns as-is |
 | `src/errors.zig` | `makeTelegramError`, `makeRetryAfter`, `makeMigrateToChat`, `makeDecodeError` — message content, labels, url generation, extra fields |
 
 When adding a new feature, please add tests for any pure logic (string formatting, struct field logic, etc.) that does not require a network connection.
@@ -203,7 +205,7 @@ When adding a new feature, please add tests for any pure logic (string formattin
 feat: add sendPoll method
 fix: handle migrate_to_chat_id in checkResponse
 test: add tests for makeRetryAfter with username chat_id
-chore: bump version to 0.5.0 in build.zig.zon
+chore: bump version to 0.0.0 in build.zig.zon
 ```
 
 ---

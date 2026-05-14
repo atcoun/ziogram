@@ -1,4 +1,3 @@
-pub const TelegramAPI = @import("./client/telegram.zig");
 pub const Bot = @import("./client/bot.zig");
 pub const ClientSession = @import("./client/session/client.zig");
 pub const errors = @import("errors");

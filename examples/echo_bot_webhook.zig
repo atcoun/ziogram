@@ -3,7 +3,6 @@ const std = @import("std");
 const ziogram = @import("ziogram");
 const ClientSession = ziogram.ClientSession;
 const Bot = ziogram.Bot;
-// const TelegramAPI = ziogram.TelegramAPI;
 
 const enums = ziogram.enums;
 const ChatType = enums.ChatType;
@@ -23,10 +22,14 @@ pub fn main(init: std.process.Init) !void {
     const allocator = init.gpa;
     const io = init.io;
 
-    // var api = try TelegramAPI.init(allocator, "http://127.0.0.1:8081", true, .{});
-    // defer api.deinit(allocator);
-
-    var session = try ClientSession.init(allocator, io, .{}); // .{ .api = api }
+    // To use a local Bot API server (https://core.telegram.org/bots/api#using-a-local-bot-api-server):
+    // var session = try ClientSession.init(allocator, io, .{
+    //     .server = .{
+    //         .base = "http://127.0.0.1:8081",
+    //         .is_local = true,
+    //     },
+    // });
+    var session = try ClientSession.init(allocator, io, .{});
     defer session.deinit();
 
     var bot = try Bot.init("YOUR_BOT_TOKEN", &session);

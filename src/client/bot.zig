@@ -28,27 +28,42 @@ pub fn deinit(self: *Bot) void {
     self.session.allocator.free(self.token);
 }
 
+pub const DownloadOptions = struct {
+    chunk_size: usize = 64 * 1024,
+    request_timeout: ?i32 = null,
+};
+
 pub fn downloadFile(
     self: Bot,
     arena: *std.heap.ArenaAllocator,
     file_path: []const u8,
     writer: *std.Io.Writer,
+    options: DownloadOptions,
 ) !void {
-    if (self.session.options.api.is_local) {
-        const local_path = try self.session.options.api.wrap_local_file.toLocal(arena.allocator(), file_path);
-
-        const file = try std.Io.Dir.openFile(.cwd(), self.session.io, local_path, .{});
+    const allocator = arena.allocator();
+    const server = self.session.options.server;
+    if (server.is_local) {
+        const file = try std.Io.Dir.openFile(
+            .cwd(),
+            self.session.io,
+            try server.wrap_local_file.toLocal(allocator, file_path),
+            .{},
+        );
         defer file.close(self.session.io);
 
-        var read_buf: [64 * 1024]u8 = undefined;
-        var file_reader = file.reader(self.session.io, &read_buf);
+        const read_buf = try allocator.alloc(u8, options.chunk_size);
+        var file_reader = file.reader(self.session.io, read_buf);
 
         _ = try writer.sendFileReadingAll(&file_reader, .unlimited);
         return;
     }
 
-    const url_str = try self.session.options.api.fileUrl(arena.allocator(), self.token, file_path);
-    return self.session.streamContent(url_str, writer);
+    return self.session.streamContent(
+        try server.fileUrl(allocator, self.token, file_path),
+        writer,
+        options.request_timeout,
+        options.chunk_size,
+    );
 }
 
 pub fn download(
@@ -56,10 +71,11 @@ pub fn download(
     arena: *std.heap.ArenaAllocator,
     file_id: []const u8,
     writer: *std.Io.Writer,
+    options: DownloadOptions,
 ) !void {
     const file = try self.getFile(arena, .{ .file_id = file_id });
     const path = file.file_path orelse return error.TelegramFileTooLarge;
-    return self.downloadFile(arena, path, writer);
+    return self.downloadFile(arena, path, writer, options);
 }
 
 pub fn call(
