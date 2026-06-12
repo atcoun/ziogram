@@ -123,20 +123,21 @@ fn writeMultipart(
     method: anytype,
     boundary: []const u8,
 ) !void {
-    const MethodType = @TypeOf(method);
+    const Method = @TypeOf(method);
 
-    inline for (std.meta.fields(MethodType)) |field| {
-        if (comptime isMetaField(field.name)) continue;
+    const struct_info = @typeInfo(Method).@"struct";
+    inline for (struct_info.field_names, struct_info.field_types) |field_name, field_type| {
+        if (comptime isMetaField(field_name)) continue;
 
-        const value = @field(method, field.name);
-        const is_optional = comptime @typeInfo(field.type) == .optional;
+        const value = @field(method, field_name);
+        const is_optional = comptime @typeInfo(field_type) == .optional;
 
         if (comptime is_optional) {
             if (value) |final_value| {
-                try self.writePart(writer, field.name, final_value, boundary);
+                try self.writePart(writer, field_name, final_value, boundary);
             }
         } else {
-            try self.writePart(writer, field.name, value, boundary);
+            try self.writePart(writer, field_name, value, boundary);
         }
     }
     try writer.print("--{s}--\r\n", .{boundary});
@@ -239,8 +240,9 @@ pub fn makeRequestInner(
     );
 
     var has_files = false;
-    inline for (std.meta.fields(Method)) |field| {
-        if (field.type == InputFile or field.type == ?InputFile) {
+    const struct_info = @typeInfo(Method).@"struct";
+    inline for (struct_info.field_types) |field_type| {
+        if (field_type == InputFile or field_type == ?InputFile) {
             has_files = true;
             break;
         }

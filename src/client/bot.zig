@@ -140,6 +140,26 @@ pub fn answerCallbackQuery(
     );
 }
 
+/// Source: https://core.telegram.org/bots/api#answerchatjoinrequestquery
+pub fn answerChatJoinRequestQuery(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_join_request_query_id: []const u8,
+        result: enums.ChatJoinRequestQueryResult,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.AnswerChatJoinRequestQuery{
+            .chat_join_request_query_id = options.chat_join_request_query_id,
+            .result = options.result,
+        },
+        options.request_timeout,
+    );
+}
+
 /// Source: https://core.telegram.org/bots/api#answer_guest_query
 pub fn answerGuestQuery(
     self: *const Bot,
@@ -1214,6 +1234,7 @@ pub fn editMessageText(
         parse_mode: ?enums.ParseMode = null,
         entities: ?[]const types.MessageEntity = null,
         link_preview_options: ?types.LinkPreviewOptions = null,
+        rich_message: ?types.InputRichMessage = null,
         reply_markup: ?types.InlineKeyboardMarkup = null,
         request_timeout: ?i32 = null,
     },
@@ -1229,6 +1250,7 @@ pub fn editMessageText(
             .parse_mode = options.parse_mode,
             .entities = options.entities,
             .link_preview_options = options.link_preview_options,
+            .rich_message = options.rich_message,
             .reply_markup = options.reply_markup,
         },
         options.request_timeout,
@@ -2662,6 +2684,26 @@ pub fn sendChatAction(
     );
 }
 
+/// Source: https://core.telegram.org/bots/api#sendchatjoinrequestwebapp
+pub fn sendChatJoinRequestWebApp(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_join_request_query_id: []const u8,
+        web_app_url: []const u8,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.SendChatJoinRequestWebApp{
+            .chat_join_request_query_id = options.chat_join_request_query_id,
+            .web_app_url = options.web_app_url,
+        },
+        options.request_timeout,
+    );
+}
+
 /// Source: https://core.telegram.org/bots/api#sendchecklist
 pub fn sendChecklist(
     self: *const Bot,
@@ -3357,6 +3399,70 @@ pub fn sendPoll(
             .protect_content = options.protect_content,
             .allow_paid_broadcast = options.allow_paid_broadcast,
             .message_effect_id = options.message_effect_id,
+            .reply_parameters = options.reply_parameters,
+            .reply_markup = options.reply_markup,
+        },
+        options.request_timeout,
+    );
+}
+
+/// Source: https://core.telegram.org/bots/api#sendrichmessagedraft
+pub fn sendRichMessageDraft(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: i64,
+        draft_id: i32,
+        rich_message: types.InputRichMessage,
+        message_thread_id: ?i32 = null,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.SendRichMessageDraft{
+            .chat_id = options.chat_id,
+            .draft_id = options.draft_id,
+            .rich_message = options.rich_message,
+            .message_thread_id = options.message_thread_id,
+        },
+        options.request_timeout,
+    );
+}
+
+/// Source: https://core.telegram.org/bots/api#sendrichmessage
+pub fn sendRichMessage(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        rich_message: types.InputRichMessage,
+        business_connection_id: ?[]const u8 = null,
+        message_thread_id: ?i32 = null,
+        direct_messages_topic_id: ?i32 = null,
+        disable_notification: ?bool = null,
+        protect_content: ?bool = null,
+        allow_paid_broadcast: ?bool = null,
+        message_effect_id: ?[]const u8 = null,
+        suggested_post_parameters: ?types.SuggestedPostParameters = null,
+        reply_parameters: ?types.ReplyParameters = null,
+        reply_markup: ?types.ReplyMarkup = null,
+        request_timeout: ?i32 = null,
+    },
+) !types.Message {
+    return self.call(
+        arena,
+        methods.SendRichMessage{
+            .chat_id = options.chat_id,
+            .rich_message = options.rich_message,
+            .business_connection_id = options.business_connection_id,
+            .message_thread_id = options.message_thread_id,
+            .direct_messages_topic_id = options.direct_messages_topic_id,
+            .disable_notification = options.disable_notification,
+            .protect_content = options.protect_content,
+            .allow_paid_broadcast = options.allow_paid_broadcast,
+            .message_effect_id = options.message_effect_id,
+            .suggested_post_parameters = options.suggested_post_parameters,
             .reply_parameters = options.reply_parameters,
             .reply_markup = options.reply_markup,
         },

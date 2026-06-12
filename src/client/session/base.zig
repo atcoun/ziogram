@@ -8,6 +8,7 @@ const ZiogramError = errors.ZiogramError;
 const types = @import("types");
 const Response = types.Response;
 const InputFile = types.InputFile;
+const ChatId = types.ChatId;
 
 pub const FilesMap = std.StringHashMapUnmanaged(InputFile);
 
@@ -59,7 +60,23 @@ pub fn checkResponse(
     const error_code = response.error_code orelse 0;
 
     if (response.parameters) |parameters| {
-        const method_chat_id = if (@hasField(Method, "chat_id")) method.chat_id else null;
+        const method_chat_id: ?ChatId = blk: {
+            if (!@hasField(Method, "chat_id")) break :blk null;
+
+            const ChatIdFieldType = @TypeOf(method.chat_id);
+
+            if (ChatIdFieldType == types.ChatId) {
+                break :blk method.chat_id;
+            } else if (ChatIdFieldType == ?types.ChatId) {
+                break :blk method.chat_id;
+            } else if (ChatIdFieldType == i64) {
+                break :blk types.ChatId{ .id = method.chat_id };
+            } else if (ChatIdFieldType == ?i64) {
+                break :blk if (method.chat_id) |id| types.ChatId{ .id = id } else null;
+            } else {
+                break :blk null;
+            }
+        };
 
         if (parameters.retry_after) |retry_after| {
             var err_detail = try errors.makeRetryAfter(
@@ -160,19 +177,20 @@ pub fn prepareValue(
 
         .@"struct" => {
             try jw.beginObject();
-            inline for (std.meta.fields(T)) |field| {
-                if (comptime isMetaField(field.name)) continue;
+            const struct_info = @typeInfo(T).@"struct";
+            inline for (struct_info.field_names, struct_info.field_types) |field_name, field_type| {
+                if (comptime isMetaField(field_name)) continue;
 
-                const field_val = @field(value, field.name);
-                const is_optional = comptime @typeInfo(field.type) == .optional;
+                const field_val = @field(value, field_name);
+                const is_optional = comptime @typeInfo(field_type) == .optional;
 
                 if (comptime is_optional) {
                     if (field_val) |v| {
-                        try jw.objectField(field.name);
+                        try jw.objectField(field_name);
                         try self.prepareValue(allocator, io, jw, v, files);
                     }
                 } else {
-                    try jw.objectField(field.name);
+                    try jw.objectField(field_name);
                     try self.prepareValue(allocator, io, jw, field_val, files);
                 }
             }
