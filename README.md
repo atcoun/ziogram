@@ -28,7 +28,7 @@
 ### Prerequisites
 
 - Zig 0.16.0+ [(Download here)](https://ziglang.org/download/)
-- A valid [Telegram Bot Token](https://t.me/BotFather)
+- A valid [Telegram Bot Token](https://core.telegram.org/bots/features#botfather)
 
 ### Steps
 
