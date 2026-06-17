@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/ziogram.png" width="100%" alt="ziogram"/>
+<img src="assets/new_ziogram.png" width="100%" alt="ziogram"/>
 
 <p>
   <a href="https://ziglang.org/download/"><img src="https://img.shields.io/badge/Zig-0.16.0+-F7A41D?style=flat-square&logo=zig&logoColor=white" alt="Zig"/></a>
