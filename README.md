@@ -5,15 +5,12 @@
   <a href="COVERAGE.md"><img src="https://img.shields.io/badge/coverage-100%25-22c55e?style=flat-square" alt="Coverage"/></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-4ade80?style=flat-square" alt="License"/></a>
   <img src="assets/new_ziogram.png" width="100%" alt="ziogram"/>
-</p>
-<p>
   <a href="#-quick-start">🚀 Quick Start</a> ·
   <a href="#-downloading-a-file">📁 Downloading a File</a> ·
   <a href="#-local-bot-api-server-support">🖥 Local Bot API</a> ·
   <a href="#%EF%B8%8F-error-handling">⚠️ Error Handling</a> ·
   <a href="#-bots-using-ziogram">🤖 Bots using Ziogram</a>
 </p>
-
 </div>
 
 ---
