@@ -4,8 +4,8 @@
   <a href="https://core.telegram.org/bots/api"><img src="https://img.shields.io/badge/Telegram_Bot_API-10.1-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram Bot API"/></a>
   <a href="COVERAGE.md"><img src="https://img.shields.io/badge/coverage-100%25-22c55e?style=flat-square" alt="Coverage"/></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-4ade80?style=flat-square" alt="License"/></a>
+  <img src="assets/new_ziogram.png" width="100%" alt="ziogram"/>
 </p>
-<img src="assets/new_ziogram.png" width="100%" alt="ziogram"/>
 <p>
   <a href="#-quick-start">🚀 Quick Start</a> ·
   <a href="#-downloading-a-file">📁 Downloading a File</a> ·
