@@ -5,4 +5,5 @@ pub const InputMediaType = enum {
     live_photo,
     photo,
     video,
+    voice_note,
 };

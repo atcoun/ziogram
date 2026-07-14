@@ -37,6 +37,8 @@ pub fn checkResponse(
     const Method = @TypeOf(method);
     const T = Method.Result;
 
+    std.log.debug("Response: status={d} content={s}", .{ @intFromEnum(status_code), content });
+
     const response = std.json.parseFromSliceLeaky(
         Response(T),
         allocator,

@@ -1,6 +1,7 @@
 pub const BackgroundFillType = @import("background_fill_type.zig").BackgroundFillType;
 pub const BackgroundTypeKind = @import("background_type_kind.zig").BackgroundTypeKind;
 pub const BotCommandScopeType = @import("bot_command_scope_type.zig").BotCommandScopeType;
+pub const BotSubscriptionState = @import("bot_subscription_state.zig").BotSubscriptionState;
 pub const ChatAction = @import("chat_action.zig").ChatAction;
 pub const ChatBoostSourceType = @import("chat_boost_source_type.zig").ChatBoostSourceType;
 pub const ChatJoinRequestQueryResult = @import("chat_join_request_query_result.zig").ChatJoinRequestQueryResult;
@@ -15,6 +16,8 @@ pub const InlineQueryResultType = @import("inline_query_result_type.zig").Inline
 pub const InputMediaType = @import("input_media_type.zig").InputMediaType;
 pub const InputPaidMediaType = @import("input_paid_media_type.zig").InputPaidMediaType;
 pub const InputProfilePhotoType = @import("input_profile_photo_type.zig").InputProfilePhotoType;
+pub const InputRichBlockType = @import("input_rich_block_type.zig").InputRichBlockType;
+pub const InputRichMessageMediaType = @import("input_rich_message_media_type.zig").InputRichMessageMediaType;
 pub const InputStickerFormat = @import("input_sticker_format.zig").InputStickerFormat;
 pub const InputStoryContentType = @import("input_story_content_type.zig").InputStoryContentType;
 pub const KeyboardButtonStyle = @import("keyboard_button_style.zig").KeyboardButtonStyle;

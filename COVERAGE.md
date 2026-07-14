@@ -2,9 +2,9 @@
 
 Implementation progress of the **Telegram Bot API** in this Zig library.
 
-- **Bot API Version:** 10.1 (June 11, 2026)
+- **Bot API Version:** 10.2 (July 14, 2026)
 - **Language:** Zig 0.16.0+
-- **Coverage:** 180 / 180 methods · 336 / 336 types
+- **Coverage:** 185 / 185 methods · 371 / 371 types
 
 ---
 
@@ -59,6 +59,7 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`BotDescription`](src/types/bot_description.zig) | https://core.telegram.org/bots/api#botdescription | ✅ |
 | [`BotName`](src/types/bot_name.zig) | https://core.telegram.org/bots/api#botname | ✅ |
 | [`BotShortDescription`](src/types/bot_short_description.zig) | https://core.telegram.org/bots/api#botshortdescription | ✅ |
+| [`BotSubscriptionUpdated`](src/types/bot_subscription_updated.zig) | https://core.telegram.org/bots/api#botsubscriptionupdated | ✅ |
 | [`BusinessBotRights`](src/types/business_bot_rights.zig) | https://core.telegram.org/bots/api#businessbotrights | ✅ |
 | [`BusinessConnection`](src/types/business_connection.zig) | https://core.telegram.org/bots/api#businessconnection | ✅ |
 | [`BusinessIntro`](src/types/business_intro.zig) | https://core.telegram.org/bots/api#businessintro | ✅ |
@@ -99,6 +100,9 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`ChecklistTask`](src/types/checklist_task.zig) | https://core.telegram.org/bots/api#checklisttask | ✅ |
 | [`ChecklistTasksAdded`](src/types/checklist_tasks_added.zig) | https://core.telegram.org/bots/api#checklisttasksadded | ✅ |
 | [`ChecklistTasksDone`](src/types/checklist_tasks_done.zig) | https://core.telegram.org/bots/api#checklisttasksdone | ✅ |
+| [`Community`](src/types/community.zig) | https://core.telegram.org/bots/api#community | ✅ |
+| [`CommunityChatAdded`](src/types/community_chat_added.zig) | https://core.telegram.org/bots/api#communitychatadded | ✅ |
+| [`CommunityChatRemoved`](src/types/community_chat_removed.zig) | https://core.telegram.org/bots/api#communitychatremoved | ✅ |
 | [`Contact`](src/types/contact.zig) | https://core.telegram.org/bots/api#contact | ✅ |
 | [`CopyTextButton`](src/types/copy_text_button.zig) | https://core.telegram.org/bots/api#copytextbutton | ✅ |
 | [`Dice`](src/types/dice.zig) | https://core.telegram.org/bots/api#dice | ✅ |
@@ -364,8 +368,6 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`editStory`](src/methods/edit_story.zig) | https://core.telegram.org/bots/api#editstory | ✅ |
 | [`deleteStory`](src/methods/delete_story.zig) | https://core.telegram.org/bots/api#deletestory | ✅ |
 | [`repostStory`](src/methods/repost_story.zig) | https://core.telegram.org/bots/api#repoststory | ✅ |
-| [`approveSuggestedPost`](src/methods/approve_suggested_post.zig) | https://core.telegram.org/bots/api#approvesuggested post | ✅ |
-| [`declineSuggestedPost`](src/methods/decline_suggested_post.zig) | https://core.telegram.org/bots/api#declinesuggestedpost | ✅ |
 
 ---
 
@@ -383,10 +385,17 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`editMessageReplyMarkup`](src/methods/edit_message_reply_markup.zig) | https://core.telegram.org/bots/api#editmessagereplymarkup | ✅ |
 | [`editMessageChecklist`](src/methods/edit_message_checklist.zig) | https://core.telegram.org/bots/api#editmessagechecklist | ✅ |
 | [`stopPoll`](src/methods/stop_poll.zig) | https://core.telegram.org/bots/api#stoppoll | ✅ |
+| [`editEphemeralMessageText`](src/methods/edit_ephemeral_message_text.zig) | https://core.telegram.org/bots/api#editephemeralmessagetext | ✅ |
+| [`editEphemeralMessageMedia`](src/methods/edit_ephemeral_message_media.zig) | https://core.telegram.org/bots/api#editephemeralmessagemedia | ✅ |
+| [`editEphemeralMessageCaption`](src/methods/edit_ephemeral_message_caption.zig) | https://core.telegram.org/bots/api#editephemeralmessagecaption | ✅ |
+| [`editEphemeralMessageReplyMarkup`](src/methods/edit_ephemeral_message_reply_markup.zig) | https://core.telegram.org/bots/api#editephemeralmessagereplymarkup | ✅ |
+| [`approveSuggestedPost`](src/methods/approve_suggested_post.zig) | https://core.telegram.org/bots/api#approvesuggestedpost | ✅ |
+| [`declineSuggestedPost`](src/methods/decline_suggested_post.zig) | https://core.telegram.org/bots/api#declinesuggestedpost | ✅ |
 | [`deleteMessage`](src/methods/delete_message.zig) | https://core.telegram.org/bots/api#deletemessage | ✅ |
 | [`deleteMessages`](src/methods/delete_messages.zig) | https://core.telegram.org/bots/api#deletemessages | ✅ |
-| [`deleteAllMessageReactions`](src/methods/delete_all_message_reactions.zig) | https://core.telegram.org/bots/api#deleteallmessagereactions | ✅ |
+| [`deleteEphemeralMessage`](src/methods/delete_ephemeral_message.zig) | https://core.telegram.org/bots/api#deleteephemeralmessage | ✅ |
 | [`deleteMessageReaction`](src/methods/delete_message_reaction.zig) | https://core.telegram.org/bots/api#deletemessagereaction | ✅ |
+| [`deleteAllMessageReactions`](src/methods/delete_all_message_reactions.zig) | https://core.telegram.org/bots/api#deleteallmessagereactions | ✅ |
 
 ### Types
 
@@ -480,6 +489,9 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`RichTextAnchorLink`](src/types/rich_text_anchor_link.zig) | https://core.telegram.org/bots/api#richtextanchorlink | ✅ |
 | [`RichTextReference`](src/types/rich_text_reference.zig) | https://core.telegram.org/bots/api#richtextreference | ✅ |
 | [`RichTextReferenceLink`](src/types/rich_text_reference_link.zig) | https://core.telegram.org/bots/api#richtextreferencelink | ✅ |
+| [`RichBlockCaption`](src/types/rich_block_caption.zig) | https://core.telegram.org/bots/api#richblockcaption | ✅ |
+| [`RichBlockTableCell`](src/types/rich_block_table_cell.zig) | https://core.telegram.org/bots/api#richblocktablecell | ✅ |
+| [`RichBlockListItem`](src/types/rich_block_list_item.zig) | https://core.telegram.org/bots/api#richblocklistitem | ✅ |
 | [`RichBlock`](src/types/rich_block.zig) | https://core.telegram.org/bots/api#richblock | ✅ |
 | [`RichBlockParagraph`](src/types/rich_block_paragraph.zig) | https://core.telegram.org/bots/api#richblockparagraph | ✅ |
 | [`RichBlockSectionHeading`](src/types/rich_block_section_heading.zig) | https://core.telegram.org/bots/api#richblocksectionheading | ✅ |
@@ -489,13 +501,11 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`RichBlockMathematicalExpression`](src/types/rich_block_mathematical_expression.zig) | https://core.telegram.org/bots/api#richblockmathematicalexpression | ✅ |
 | [`RichBlockAnchor`](src/types/rich_block_anchor.zig) | https://core.telegram.org/bots/api#richblockanchor | ✅ |
 | [`RichBlockList`](src/types/rich_block_list.zig) | https://core.telegram.org/bots/api#richblocklist | ✅ |
-| [`RichBlockListItem`](src/types/rich_block_list_item.zig) | https://core.telegram.org/bots/api#richblocklistitem | ✅ |
 | [`RichBlockBlockQuotation`](src/types/rich_block_block_quotation.zig) | https://core.telegram.org/bots/api#richblockblockquotation | ✅ |
 | [`RichBlockPullQuotation`](src/types/rich_block_pull_quotation.zig) | https://core.telegram.org/bots/api#richblockpullquotation | ✅ |
 | [`RichBlockCollage`](src/types/rich_block_collage.zig) | https://core.telegram.org/bots/api#richblockcollage | ✅ |
 | [`RichBlockSlideshow`](src/types/rich_block_slideshow.zig) | https://core.telegram.org/bots/api#richblockslideshow | ✅ |
 | [`RichBlockTable`](src/types/rich_block_table.zig) | https://core.telegram.org/bots/api#richblocktable | ✅ |
-| [`RichBlockTableCell`](src/types/rich_block_table_cell.zig) | https://core.telegram.org/bots/api#richblocktablecell | ✅ |
 | [`RichBlockDetails`](src/types/rich_block_details.zig) | https://core.telegram.org/bots/api#richblockdetails | ✅ |
 | [`RichBlockMap`](src/types/rich_block_map.zig) | https://core.telegram.org/bots/api#richblockmap | ✅ |
 | [`RichBlockAnimation`](src/types/rich_block_animation.zig) | https://core.telegram.org/bots/api#richblockanimation | ✅ |
@@ -504,7 +514,31 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`RichBlockVideo`](src/types/rich_block_video.zig) | https://core.telegram.org/bots/api#richblockvideo | ✅ |
 | [`RichBlockVoiceNote`](src/types/rich_block_voice_note.zig) | https://core.telegram.org/bots/api#richblockvoicenote | ✅ |
 | [`RichBlockThinking`](src/types/rich_block_thinking.zig) | https://core.telegram.org/bots/api#richblockthinking | ✅ |
-| [`RichBlockCaption`](src/types/rich_block_caption.zig) | https://core.telegram.org/bots/api#richblockcaption | ✅ |
+| [`InputRichMessageMedia`](src/types/input_rich_message_media.zig) | https://core.telegram.org/bots/api#inputrichmessagemedia | ✅ |
+| [`InputMediaVoiceNote`](src/types/input_media_voice_note.zig) | https://core.telegram.org/bots/api#inputmediavoicenote | ✅ |
+| [`InputRichBlockListItem`](src/types/input_rich_block_list_item.zig) | https://core.telegram.org/bots/api#inputrichblocklistitem | ✅ |
+| [`InputRichBlock`](src/types/input_rich_block.zig) | https://core.telegram.org/bots/api#inputrichblock | ✅ |
+| [`InputRichBlockParagraph`](src/types/input_rich_block_paragraph.zig) | https://core.telegram.org/bots/api#inputrichblockparagraph | ✅ |
+| [`InputRichBlockSectionHeading`](src/types/input_rich_block_section_heading.zig) | https://core.telegram.org/bots/api#inputrichblocksectionheading | ✅ |
+| [`InputRichBlockPreformatted`](src/types/input_rich_block_preformatted.zig) | https://core.telegram.org/bots/api#inputrichblockpreformatted | ✅ |
+| [`InputRichBlockFooter`](src/types/input_rich_block_footer.zig) | https://core.telegram.org/bots/api#inputrichblockfooter | ✅ |
+| [`InputRichBlockDivider`](src/types/input_rich_block_divider.zig) | https://core.telegram.org/bots/api#inputrichblockdivider | ✅ |
+| [`InputRichBlockMathematicalExpression`](src/types/input_rich_block_mathematical_expression.zig) | https://core.telegram.org/bots/api#inputrichblockmathematicalexpression | ✅ |
+| [`InputRichBlockAnchor`](src/types/input_rich_block_anchor.zig) | https://core.telegram.org/bots/api#inputrichblockanchor | ✅ |
+| [`InputRichBlockList`](src/types/input_rich_block_list.zig) | https://core.telegram.org/bots/api#inputrichblocklist | ✅ |
+| [`InputRichBlockBlockQuotation`](src/types/input_rich_block_block_quotation.zig) | https://core.telegram.org/bots/api#inputrichblockblockquotation | ✅ |
+| [`InputRichBlockPullQuotation`](src/types/input_rich_block_pull_quotation.zig) | https://core.telegram.org/bots/api#inputrichblockpullquotation | ✅ |
+| [`InputRichBlockCollage`](src/types/input_rich_block_collage.zig) | https://core.telegram.org/bots/api#inputrichblockcollage | ✅ |
+| [`InputRichBlockSlideshow`](src/types/input_rich_block_slideshow.zig) | https://core.telegram.org/bots/api#inputrichblockslideshow | ✅ |
+| [`InputRichBlockTable`](src/types/input_rich_block_table.zig) | https://core.telegram.org/bots/api#inputrichblocktable | ✅ |
+| [`InputRichBlockDetails`](src/types/input_rich_block_details.zig) | https://core.telegram.org/bots/api#inputrichblockdetails | ✅ |
+| [`InputRichBlockMap`](src/types/input_rich_block_map.zig) | https://core.telegram.org/bots/api#inputrichblockmap | ✅ |
+| [`InputRichBlockAnimation`](src/types/input_rich_block_animation.zig) | https://core.telegram.org/bots/api#inputrichblockanimation | ✅ |
+| [`InputRichBlockAudio`](src/types/input_rich_block_audio.zig) | https://core.telegram.org/bots/api#inputrichblockaudio | ✅ |
+| [`InputRichBlockPhoto`](src/types/input_rich_block_photo.zig) | https://core.telegram.org/bots/api#inputrichblockphoto | ✅ |
+| [`InputRichBlockVideo`](src/types/input_rich_block_video.zig) | https://core.telegram.org/bots/api#inputrichblockvideo | ✅ |
+| [`InputRichBlockVoiceNote`](src/types/input_rich_block_voice_note.zig) | https://core.telegram.org/bots/api#inputrichblockvoicenote | ✅ |
+| [`InputRichBlockThinking`](src/types/input_rich_block_thinking.zig) | https://core.telegram.org/bots/api#inputrichblockthinking | ✅ |
 
 ---
 

@@ -270,6 +270,8 @@ pub fn makeRequestInner(
 
     const payload_data = payload_aw.written();
 
+    std.log.debug("Request payload for '{s}': {s}", .{ Method.method_name, payload_data });
+
     var response_aw = std.Io.Writer.Allocating.init(arena.allocator());
     defer response_aw.deinit();
 

@@ -5,17 +5,16 @@ const std = @import("std");
 const enums = @import("enums");
 const methods = @import("methods");
 const types = @import("types");
+const utils = @import("utils");
 
 const ClientSession = @import("../client/session/client.zig");
-
-const extractBotId = @import("../utils/token.zig").extractBotId;
 
 id: i64,
 token: []const u8,
 session: *ClientSession,
 
 pub fn init(token: []const u8, session: *ClientSession) !Bot {
-    const bot_id = try extractBotId(token);
+    const bot_id = try utils.token.extractBotId(token);
     const allocator = session.allocator;
     return .{
         .id = bot_id,
@@ -797,6 +796,28 @@ pub fn deleteChatStickerSet(
     );
 }
 
+/// Source: https://core.telegram.org/bots/api#deleteephemeralmessage
+pub fn deleteEphemeralMessage(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        receiver_user_id: i64,
+        ephemeral_message_id: i32,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.DeleteEphemeralMessage{
+            .chat_id = options.chat_id,
+            .receiver_user_id = options.receiver_user_id,
+            .ephemeral_message_id = options.ephemeral_message_id,
+        },
+        options.request_timeout,
+    );
+}
+
 /// Source: https://core.telegram.org/bots/api#deleteforumtopic
 pub fn deleteForumTopic(
     self: *const Bot,
@@ -1020,6 +1041,118 @@ pub fn editChatSubscriptionInviteLink(
             .chat_id = options.chat_id,
             .invite_link = options.invite_link,
             .name = options.name,
+        },
+        options.request_timeout,
+    );
+}
+
+/// Source: https://core.telegram.org/bots/api#editephemeralmessagecaption
+pub fn editEphemeralMessageCaption(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        receiver_user_id: i64,
+        ephemeral_message_id: i32,
+        caption: ?[]const u8 = null,
+        parse_mode: ?enums.ParseMode = null,
+        caption_entities: ?[]const types.MessageEntity = null,
+        reply_markup: ?types.InlineKeyboardMarkup = null,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.EditEphemeralMessageCaption{
+            .chat_id = options.chat_id,
+            .receiver_user_id = options.receiver_user_id,
+            .ephemeral_message_id = options.ephemeral_message_id,
+            .caption = options.caption,
+            .parse_mode = options.parse_mode,
+            .caption_entities = options.caption_entities,
+            .reply_markup = options.reply_markup,
+        },
+        options.request_timeout,
+    );
+}
+
+/// Source: https://core.telegram.org/bots/api#editephemeralmessagemedia
+pub fn editEphemeralMessageMedia(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        receiver_user_id: i64,
+        ephemeral_message_id: i32,
+        media: types.InputMedia,
+        reply_markup: ?types.InlineKeyboardMarkup = null,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.EditEphemeralMessageMedia{
+            .chat_id = options.chat_id,
+            .receiver_user_id = options.receiver_user_id,
+            .ephemeral_message_id = options.ephemeral_message_id,
+            .media = options.media,
+            .reply_markup = options.reply_markup,
+        },
+        options.request_timeout,
+    );
+}
+
+/// Source: https://core.telegram.org/bots/api#editephemeralmessagereplymarkup
+pub fn editEphemeralMessageReplyMarkup(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        receiver_user_id: i64,
+        ephemeral_message_id: i32,
+        reply_markup: ?types.InlineKeyboardMarkup = null,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.EditEphemeralMessageReplyMarkup{
+            .chat_id = options.chat_id,
+            .receiver_user_id = options.receiver_user_id,
+            .ephemeral_message_id = options.ephemeral_message_id,
+            .reply_markup = options.reply_markup,
+        },
+        options.request_timeout,
+    );
+}
+
+/// Source: https://core.telegram.org/bots/api#editephemeralmessagetext
+pub fn editEphemeralMessageText(
+    self: *const Bot,
+    arena: *std.heap.ArenaAllocator,
+    options: struct {
+        chat_id: types.ChatId,
+        receiver_user_id: i64,
+        ephemeral_message_id: i32,
+        text: []const u8,
+        parse_mode: ?enums.ParseMode = null,
+        entities: ?[]const types.MessageEntity = null,
+        link_preview_options: ?types.LinkPreviewOptions = null,
+        reply_markup: ?types.InlineKeyboardMarkup = null,
+        request_timeout: ?i32 = null,
+    },
+) !bool {
+    return self.call(
+        arena,
+        methods.EditEphemeralMessageText{
+            .chat_id = options.chat_id,
+            .receiver_user_id = options.receiver_user_id,
+            .ephemeral_message_id = options.ephemeral_message_id,
+            .text = options.text,
+            .parse_mode = options.parse_mode,
+            .entities = options.entities,
+            .link_preview_options = options.link_preview_options,
+            .reply_markup = options.reply_markup,
         },
         options.request_timeout,
     );
@@ -2558,6 +2691,8 @@ pub fn sendAnimation(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         duration: ?i32 = null,
         width: ?i32 = null,
         height: ?i32 = null,
@@ -2585,6 +2720,8 @@ pub fn sendAnimation(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .duration = options.duration,
             .width = options.width,
             .height = options.height,
@@ -2616,6 +2753,8 @@ pub fn sendAudio(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         caption: ?[]const u8 = null,
         parse_mode: ?enums.ParseMode = null,
         caption_entities: ?[]const types.MessageEntity = null,
@@ -2641,6 +2780,8 @@ pub fn sendAudio(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .caption = options.caption,
             .parse_mode = options.parse_mode,
             .caption_entities = options.caption_entities,
@@ -2747,6 +2888,8 @@ pub fn sendContact(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         last_name: ?[]const u8 = null,
         vcard: ?[]const u8 = null,
         disable_notification: ?bool = null,
@@ -2768,6 +2911,8 @@ pub fn sendContact(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .last_name = options.last_name,
             .vcard = options.vcard,
             .disable_notification = options.disable_notification,
@@ -2832,6 +2977,8 @@ pub fn sendDocument(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         thumbnail: ?types.InputFile = null,
         caption: ?[]const u8 = null,
         parse_mode: ?enums.ParseMode = null,
@@ -2855,6 +3002,8 @@ pub fn sendDocument(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .thumbnail = options.thumbnail,
             .caption = options.caption,
             .parse_mode = options.parse_mode,
@@ -3079,6 +3228,8 @@ pub fn sendLocation(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         horizontal_accuracy: ?f64 = null,
         live_period: ?i32 = null,
         heading: ?i32 = null,
@@ -3102,6 +3253,8 @@ pub fn sendLocation(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .horizontal_accuracy = options.horizontal_accuracy,
             .live_period = options.live_period,
             .heading = options.heading,
@@ -3192,6 +3345,8 @@ pub fn sendMessage(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         parse_mode: ?enums.ParseMode = null,
         entities: ?[]const types.MessageEntity = null,
         link_preview_options: ?types.LinkPreviewOptions = null,
@@ -3199,6 +3354,7 @@ pub fn sendMessage(
         protect_content: ?bool = null,
         allow_paid_broadcast: ?bool = null,
         message_effect_id: ?[]const u8 = null,
+        suggested_post_parameters: ?types.SuggestedPostParameters = null,
         reply_parameters: ?types.ReplyParameters = null,
         reply_markup: ?types.ReplyMarkup = null,
         request_timeout: ?i32 = null,
@@ -3212,6 +3368,8 @@ pub fn sendMessage(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .parse_mode = options.parse_mode,
             .entities = options.entities,
             .link_preview_options = options.link_preview_options,
@@ -3219,6 +3377,7 @@ pub fn sendMessage(
             .protect_content = options.protect_content,
             .allow_paid_broadcast = options.allow_paid_broadcast,
             .message_effect_id = options.message_effect_id,
+            .suggested_post_parameters = options.suggested_post_parameters,
             .reply_parameters = options.reply_parameters,
             .reply_markup = options.reply_markup,
         },
@@ -3286,6 +3445,8 @@ pub fn sendPhoto(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         caption: ?[]const u8 = null,
         parse_mode: ?enums.ParseMode = null,
         caption_entities: ?[]const types.MessageEntity = null,
@@ -3308,6 +3469,8 @@ pub fn sendPhoto(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .caption = options.caption,
             .parse_mode = options.parse_mode,
             .caption_entities = options.caption_entities,
@@ -3480,6 +3643,8 @@ pub fn sendSticker(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         emoji: ?[]const u8 = null,
         disable_notification: ?bool = null,
         protect_content: ?bool = null,
@@ -3499,6 +3664,8 @@ pub fn sendSticker(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .emoji = options.emoji,
             .disable_notification = options.disable_notification,
             .protect_content = options.protect_content,
@@ -3525,6 +3692,8 @@ pub fn sendVenue(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         foursquare_id: ?[]const u8 = null,
         foursquare_type: ?[]const u8 = null,
         google_place_id: ?[]const u8 = null,
@@ -3550,6 +3719,8 @@ pub fn sendVenue(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .foursquare_id = options.foursquare_id,
             .foursquare_type = options.foursquare_type,
             .google_place_id = options.google_place_id,
@@ -3576,6 +3747,8 @@ pub fn sendVideoNote(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         duration: ?i32 = null,
         length: ?i32 = null,
         thumbnail: ?types.InputFile = null,
@@ -3597,6 +3770,8 @@ pub fn sendVideoNote(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .duration = options.duration,
             .length = options.length,
             .thumbnail = options.thumbnail,
@@ -3622,6 +3797,8 @@ pub fn sendVideo(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         duration: ?i32 = null,
         width: ?i32 = null,
         height: ?i32 = null,
@@ -3652,6 +3829,8 @@ pub fn sendVideo(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .duration = options.duration,
             .width = options.width,
             .height = options.height,
@@ -3686,6 +3865,8 @@ pub fn sendVoice(
         business_connection_id: ?[]const u8 = null,
         message_thread_id: ?i32 = null,
         direct_messages_topic_id: ?i32 = null,
+        receiver_user_id: ?i32 = null,
+        callback_query_id: ?[]const u8 = null,
         caption: ?[]const u8 = null,
         parse_mode: ?enums.ParseMode = null,
         caption_entities: ?[]const types.MessageEntity = null,
@@ -3708,6 +3889,8 @@ pub fn sendVoice(
             .business_connection_id = options.business_connection_id,
             .message_thread_id = options.message_thread_id,
             .direct_messages_topic_id = options.direct_messages_topic_id,
+            .receiver_user_id = options.receiver_user_id,
+            .callback_query_id = options.callback_query_id,
             .caption = options.caption,
             .parse_mode = options.parse_mode,
             .caption_entities = options.caption_entities,

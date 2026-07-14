@@ -49,8 +49,9 @@ src/
 │   └── root.zig
 ├── types/                # All Telegram object types
 │   └── root.zig
-├── utils/                # Internal helpers (token parsing, etc.)
-│   └── token.zig
+├── utils/                # Internal helpers (token parsing, JSON tagged-union parsing, etc.)
+│   ├── token.zig
+│   └── json.zig          # parseTaggedUnion — generic helper for parsing tagged unions keyed by a "type" field
 ├── errors.zig            # ZiogramError set + DetailedError constructors
 └── root.zig              # Public exports: Bot, ClientSession, types, enums, errors, methods
 build.zig                 # Build script — module graph + test steps

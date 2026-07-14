@@ -28,6 +28,12 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const utils = b.addModule("utils", .{
+        .root_source_file = b.path("src/utils/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const ziogram = b.addModule("ziogram", .{
         .root_source_file = b.path("src/root.zig"),
         .target = target,
@@ -41,11 +47,13 @@ pub fn build(b: *std.Build) void {
 
     types.addImport("enums", enums);
     types.addImport("types", types);
+    types.addImport("utils", utils);
 
     ziogram.addImport("enums", enums);
     ziogram.addImport("errors", errors);
     ziogram.addImport("methods", methods);
     ziogram.addImport("types", types);
+    ziogram.addImport("utils", utils);
 
     const exe = b.addExecutable(.{
         .name = "ziogram",
