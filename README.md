@@ -1,6 +1,6 @@
 > [!WARNING]
-> **Stability Warning:** This library is fully functional and ready to use, but it is **NOT 100% stable yet**.
-> Since it is in a pre-stable state, you cannot trust it 100% for critical production environments. Breaking changes to the API or data structures may still occur. Use at your own risk.
+> This library is fully functional and ready to use, but it does not guarantee 100% stability at this stage. 
+> Since it is in a pre-stable state, you should not trust it for critical production environments. Breaking changes to the API or data structures may still occur. Use at your own risk.
 
 <div align="center">
 <p>
