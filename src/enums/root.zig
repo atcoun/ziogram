@@ -2,6 +2,7 @@ pub const BackgroundFillType = @import("background_fill_type.zig").BackgroundFil
 pub const BackgroundTypeKind = @import("background_type_kind.zig").BackgroundTypeKind;
 pub const BotCommandScopeType = @import("bot_command_scope_type.zig").BotCommandScopeType;
 pub const BotSubscriptionState = @import("bot_subscription_state.zig").BotSubscriptionState;
+pub const ButtonsAlign = @import("buttons_align.zig").ButtonsAlign;
 pub const ChatAction = @import("chat_action.zig").ChatAction;
 pub const ChatBoostSourceType = @import("chat_boost_source_type.zig").ChatBoostSourceType;
 pub const ChatJoinRequestQueryResult = @import("chat_join_request_query_result.zig").ChatJoinRequestQueryResult;

@@ -3,6 +3,9 @@ const types = @import("types");
 
 gift: types.UniqueGift,
 origin: enums.UniqueGiftOrigin,
+text: ?[]const u8 = null,
+entities: ?[]const types.MessageEntity = null,
+is_private: ?bool = null,
 last_resale_currency: ?[]const u8 = null,
 last_resale_amount: ?i32 = null,
 owned_gift_id: ?[]const u8 = null,

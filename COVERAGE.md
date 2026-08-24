@@ -2,9 +2,9 @@
 
 Implementation progress of the **Telegram Bot API** in this Zig library.
 
-- **Bot API Version:** 10.2 (July 14, 2026)
+- **Bot API Version:** 10.3 (August 24, 2026)
 - **Language:** Zig 0.16.0+
-- **Coverage:** 185 / 185 methods · 371 / 371 types
+- **Coverage:** 185 / 185 methods · 383 / 383 types
 
 ---
 
@@ -234,6 +234,10 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`WebAppData`](src/types/web_app_data.zig) | https://core.telegram.org/bots/api#webappdata | ✅ |
 | [`WebAppInfo`](src/types/web_app_info.zig) | https://core.telegram.org/bots/api#webappinfo | ✅ |
 | [`WriteAccessAllowed`](src/types/write_access_allowed.zig) | https://core.telegram.org/bots/api#writeaccessallowed | ✅ |
+| [`EphemeralMessageParameters`](src/types/ephemeral_message_parameters.zig) | https://core.telegram.org/bots/api#ephemeralmessageparameters | ✅ |
+| [`DisabledButton`](src/types/disabled_button.zig) | https://core.telegram.org/bots/api#disabledbutton | ✅ |
+| [`MessageGenerationStopped`](src/types/message_generation_stopped.zig) | https://core.telegram.org/bots/api#messagegenerationstopped | ✅ |
+| [`CommunityChatJoined`](src/types/community_chat_joined.zig) | https://core.telegram.org/bots/api#communitychatjoined | ✅ |
 
 ---
 
@@ -463,6 +467,7 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 |------|--------|--------|
 | [`RichMessage`](src/types/rich_message.zig) | https://core.telegram.org/bots/api#richmessage | ✅ |
 | [`InputRichMessage`](src/types/input_rich_message.zig) | https://core.telegram.org/bots/api#inputrichmessage | ✅ |
+| [`RichMessageButton`](src/types/rich_message_button.zig) | https://core.telegram.org/bots/api#richmessagebutton | ✅ |
 | [`RichText`](src/types/rich_text.zig) | https://core.telegram.org/bots/api#richtext | ✅ |
 | [`RichTextBold`](src/types/rich_text_bold.zig) | https://core.telegram.org/bots/api#richtextbold | ✅ |
 | [`RichTextItalic`](src/types/rich_text_italic.zig) | https://core.telegram.org/bots/api#richtextitalic | ✅ |
@@ -485,6 +490,7 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`RichTextHashtag`](src/types/rich_text_hashtag.zig) | https://core.telegram.org/bots/api#richtexthashtag | ✅ |
 | [`RichTextCashtag`](src/types/rich_text_cashtag.zig) | https://core.telegram.org/bots/api#richtextcashtag | ✅ |
 | [`RichTextBotCommand`](src/types/rich_text_bot_command.zig) | https://core.telegram.org/bots/api#richtextbotcommand | ✅ |
+| [`RichTextButton`](src/types/rich_text_button.zig) | https://core.telegram.org/bots/api#richtextbutton | ✅ |
 | [`RichTextAnchor`](src/types/rich_text_anchor.zig) | https://core.telegram.org/bots/api#richtextanchor | ✅ |
 | [`RichTextAnchorLink`](src/types/rich_text_anchor_link.zig) | https://core.telegram.org/bots/api#richtextanchorlink | ✅ |
 | [`RichTextReference`](src/types/rich_text_reference.zig) | https://core.telegram.org/bots/api#richtextreference | ✅ |
@@ -502,14 +508,17 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`RichBlockAnchor`](src/types/rich_block_anchor.zig) | https://core.telegram.org/bots/api#richblockanchor | ✅ |
 | [`RichBlockList`](src/types/rich_block_list.zig) | https://core.telegram.org/bots/api#richblocklist | ✅ |
 | [`RichBlockBlockQuotation`](src/types/rich_block_block_quotation.zig) | https://core.telegram.org/bots/api#richblockblockquotation | ✅ |
+| [`RichBlockExpandableBlockQuotationn`](src/types/rich_block_expandable_block_quotation.zig) | https://core.telegram.org/bots/api#richblockexpandableblockquotation | ✅ |
 | [`RichBlockPullQuotation`](src/types/rich_block_pull_quotation.zig) | https://core.telegram.org/bots/api#richblockpullquotation | ✅ |
 | [`RichBlockCollage`](src/types/rich_block_collage.zig) | https://core.telegram.org/bots/api#richblockcollage | ✅ |
 | [`RichBlockSlideshow`](src/types/rich_block_slideshow.zig) | https://core.telegram.org/bots/api#richblockslideshow | ✅ |
 | [`RichBlockTable`](src/types/rich_block_table.zig) | https://core.telegram.org/bots/api#richblocktable | ✅ |
 | [`RichBlockDetails`](src/types/rich_block_details.zig) | https://core.telegram.org/bots/api#richblockdetails | ✅ |
 | [`RichBlockMap`](src/types/rich_block_map.zig) | https://core.telegram.org/bots/api#richblockmap | ✅ |
+| [`RichBlockButtons`](src/types/rich_block_buttons.zig) | https://core.telegram.org/bots/api#richblockbuttons | ✅ |
 | [`RichBlockAnimation`](src/types/rich_block_animation.zig) | https://core.telegram.org/bots/api#richblockanimation | ✅ |
 | [`RichBlockAudio`](src/types/rich_block_audio.zig) | https://core.telegram.org/bots/api#richblockaudio | ✅ |
+| [`RichBlockDocument`](src/types/rich_block_document.zig) | https://core.telegram.org/bots/api#richblockdocument | ✅ |
 | [`RichBlockPhoto`](src/types/rich_block_photo.zig) | https://core.telegram.org/bots/api#richblockphoto | ✅ |
 | [`RichBlockVideo`](src/types/rich_block_video.zig) | https://core.telegram.org/bots/api#richblockvideo | ✅ |
 | [`RichBlockVoiceNote`](src/types/rich_block_voice_note.zig) | https://core.telegram.org/bots/api#richblockvoicenote | ✅ |
@@ -527,14 +536,17 @@ Implementation progress of the **Telegram Bot API** in this Zig library.
 | [`InputRichBlockAnchor`](src/types/input_rich_block_anchor.zig) | https://core.telegram.org/bots/api#inputrichblockanchor | ✅ |
 | [`InputRichBlockList`](src/types/input_rich_block_list.zig) | https://core.telegram.org/bots/api#inputrichblocklist | ✅ |
 | [`InputRichBlockBlockQuotation`](src/types/input_rich_block_block_quotation.zig) | https://core.telegram.org/bots/api#inputrichblockblockquotation | ✅ |
+| [`InputRichBlockExpandableBlockQuotation`](src/types/input_rich_block_expandable_block_quotation.zig) | https://core.telegram.org/bots/api#inputrichblockexpandableblockquotation | ✅ |
 | [`InputRichBlockPullQuotation`](src/types/input_rich_block_pull_quotation.zig) | https://core.telegram.org/bots/api#inputrichblockpullquotation | ✅ |
 | [`InputRichBlockCollage`](src/types/input_rich_block_collage.zig) | https://core.telegram.org/bots/api#inputrichblockcollage | ✅ |
 | [`InputRichBlockSlideshow`](src/types/input_rich_block_slideshow.zig) | https://core.telegram.org/bots/api#inputrichblockslideshow | ✅ |
 | [`InputRichBlockTable`](src/types/input_rich_block_table.zig) | https://core.telegram.org/bots/api#inputrichblocktable | ✅ |
 | [`InputRichBlockDetails`](src/types/input_rich_block_details.zig) | https://core.telegram.org/bots/api#inputrichblockdetails | ✅ |
 | [`InputRichBlockMap`](src/types/input_rich_block_map.zig) | https://core.telegram.org/bots/api#inputrichblockmap | ✅ |
+| [`InputRichBlockButtons`](src/types/input_rich_block_buttons.zig) | https://core.telegram.org/bots/api#inputrichblockbuttons | ✅ |
 | [`InputRichBlockAnimation`](src/types/input_rich_block_animation.zig) | https://core.telegram.org/bots/api#inputrichblockanimation | ✅ |
 | [`InputRichBlockAudio`](src/types/input_rich_block_audio.zig) | https://core.telegram.org/bots/api#inputrichblockaudio | ✅ |
+| [`InputRichBlockDocument`](src/types/input_rich_block_document.zig) | https://core.telegram.org/bots/api#inputrichblockdocument | ✅ |
 | [`InputRichBlockPhoto`](src/types/input_rich_block_photo.zig) | https://core.telegram.org/bots/api#inputrichblockphoto | ✅ |
 | [`InputRichBlockVideo`](src/types/input_rich_block_video.zig) | https://core.telegram.org/bots/api#inputrichblockvideo | ✅ |
 | [`InputRichBlockVoiceNote`](src/types/input_rich_block_voice_note.zig) | https://core.telegram.org/bots/api#inputrichblockvoicenote | ✅ |

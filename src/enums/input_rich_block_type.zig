@@ -20,4 +20,7 @@ pub const InputRichBlockType = enum {
     video,
     voice_note,
     thinking,
+    buttons,
+    expandable_blockquote,
+    document,
 };

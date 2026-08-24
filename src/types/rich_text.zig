@@ -31,6 +31,7 @@ pub const RichText = union(enum) {
     anchor_link: types.RichTextAnchorLink,
     reference: types.RichTextReference,
     reference_link: types.RichTextReferenceLink,
+    button: types.RichTextButton,
 
     pub fn parseTextPointer(allocator: std.mem.Allocator, value: std.json.Value, options: std.json.ParseOptions) !*const RichText {
         const text_value = value.object.get("text") orelse return error.MissingField;
@@ -86,6 +87,7 @@ pub const RichText = union(enum) {
                     .anchor_link => .{ .anchor_link = try std.json.innerParseFromValue(types.RichTextAnchorLink, allocator, value, options) },
                     .reference => .{ .reference = try std.json.innerParseFromValue(types.RichTextReference, allocator, value, options) },
                     .reference_link => .{ .reference_link = try std.json.innerParseFromValue(types.RichTextReferenceLink, allocator, value, options) },
+                    .button => .{ .button = try std.json.innerParseFromValue(types.RichTextButton, allocator, value, options) },
                 };
             },
             else => error.UnexpectedToken,

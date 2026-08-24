@@ -24,4 +24,5 @@ pub const RichTextType = enum {
     anchor_link,
     reference,
     reference_link,
+    button,
 };

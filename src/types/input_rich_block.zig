@@ -26,6 +26,9 @@ pub const InputRichBlock = union(enum) {
     video: types.InputRichBlockVideo,
     voice_note: types.InputRichBlockVoiceNote,
     thinking: types.InputRichBlockThinking,
+    buttons: types.InputRichBlockButtons,
+    expandable_blockquote: types.InputRichBlockExpandableBlockQuotation,
+    document: types.InputRichBlockDocument,
 
     const Self = @This();
 

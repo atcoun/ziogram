@@ -26,6 +26,9 @@ pub const RichBlock = union(enum) {
     video: types.RichBlockVideo,
     voice_note: types.RichBlockVoiceNote,
     thinking: types.RichBlockThinking,
+    buttons: types.RichBlockButtons,
+    expandable_blockquote: types.RichBlockExpandableBlockQuotation,
+    document: types.RichBlockDocument,
 
     const Self = @This();
 
