@@ -1,3 +1,7 @@
+> [!WARNING]
+> **Stability Warning:** This library is fully functional and ready to use, but it is **NOT 100% stable yet**.
+> Since it is in a pre-stable state, you cannot trust it 100% for critical production environments. Breaking changes to the API or data structures may still occur. Use at your own risk.
+
 <div align="center">
 <p>
   <img src="assets/new_ziogram.png" width="100%" alt="ziogram"/>
@@ -13,12 +17,6 @@
   <a href="#-bots-using-ziogram">🤖 Bots using Ziogram</a>
 </p>
 </div>
-
----
-
-> [!WARNING]
-> **Stability Warning:** This library is fully functional and ready to use, but it is **NOT 100% stable yet**.
-> Since it is in a pre-stable state, you cannot trust it 100% for critical production environments. Breaking changes to the API or data structures may still occur. Use at your own risk.
 
 ---
 
